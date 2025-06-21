@@ -1,0 +1,24 @@
+TITLE:
+2-Class LCA for Belonging Variables
+DATA:
+FILE = "/Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/enum/belonging.dat";
+ 
+VARIABLE:
+NAMES = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R; 
+ MISSING=.;
+ categorical = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+usevar = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+missing = all(999);
+classes = c(2);
+ANALYSIS:
+
+      estimator = mlr;
+      type = mixture;
+      starts = 1000 100;
+      processors = 10;
+OUTPUT:
+sampstat; residual; tech11; tech14;
+PLOT:
+
+      type = plot3;
+      series = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R(*);

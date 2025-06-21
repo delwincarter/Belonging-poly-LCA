@@ -1,0 +1,42 @@
+TITLE:
+4-Class LCA for Belonging Variables
+DATA:
+FILE = "/Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/3step/belonging.dat";
+ 
+VARIABLE:
+NAMES = SSAF1 SSAF2 SSAF4 SSAF7 SSAF11 AUS2 AUS3 AUS5 AUS6 ethnicity gpa Esteem
+     SSAF2R SSAF4R AUS2R AUS6R Stress firstgen latinx asian white; 
+ MISSING=.;
+ categorical = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+usevar = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+missing = all(999);
+classes = c(4);
+auxiliary = ethnicity GPA FIRSTGEN ESTEEM STRESS LATINX ASIAN WHITE (R);
+ANALYSIS:
+
+    estimator = mlr;
+    optseed = 846194;
+    type = mixture;
+    starts = 0;
+    processors = 10;
+  
+OUTPUT:
+
+    residual;
+    tech1;
+    tech8;
+    tech11;
+    tech14;
+    svalues (4 3 1 2);
+  
+SAVEDATA:
+
+    FILE = 4c_3step.dat;
+    SAVE = cprob;
+    MISSFLAG = 999;
+  
+PLOT:
+
+    type = plot3;
+    series = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R(*);
+  

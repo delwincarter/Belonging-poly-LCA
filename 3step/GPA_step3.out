@@ -1,0 +1,2517 @@
+Mplus VERSION 8.11 (Mac)
+MUTHEN & MUTHEN
+05/04/2025   9:13 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+  Step 3 - 3step Belonging LCA
+  DATA:
+  FILE = "/Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/3step/GPA_step3.dat"
+
+  VARIABLE:
+  NAMES = WHITE GPA FIRSTGEN ESTEEM STRESS LATINX ASIAN N;
+   MISSING=.;
+   nominal = N;
+       classes = c(4);
+  ANALYSIS:
+  estimator = mlr;
+       type = mixture;
+       starts = 0;
+       processors = 10;
+  MODEL:
+  %OVERALL%
+  C on FIRSTGEN WHITE LATINX ASIAN;
+  GPA ESTEEM STRESS on FIRSTGEN WHITE LATINX ASIAN;
+  [GPA];
+  GPA;
+  [STRESS];
+  STRESS;
+  [ESTEEM];
+  ESTEEM;
+
+  %C#1%
+  [N#1@9.699];
+  [N#2@4.809];
+  [N#3@7.068];
+  [GPA] (GPA1);
+  GPA;
+  [STRESS] (STRESS1);
+  STRESS;
+  [ESTEEM] (ESTEEM1);
+  ESTEEM;
+
+  %C#2%
+  [N#1@-0.348];
+  [N#2@3.008];
+  [N#3@0.509];
+  [GPA] (GPA2);
+  GPA;
+  [STRESS] (STRESS2);
+  STRESS;
+  [ESTEEM] (ESTEEM2);
+  ESTEEM;
+
+  %C#3%
+  [N#1@1.493];
+  [N#2@0.807];
+  [N#3@4.279];
+  [GPA] (GPA3);
+  GPA;
+  [STRESS] (STRESS3);
+  STRESS;
+  [ESTEEM] (ESTEEM3);
+  ESTEEM;
+
+  %C#4%
+  [N#1@-11.152];
+  [N#2@-2.775];
+  [N#3@-2.501];
+  [GPA] (GPA4);
+  GPA;
+  [STRESS] (STRESS4);
+  STRESS;
+  [ESTEEM] (ESTEEM4);
+  ESTEEM;
+  MODEL CONSTRAINT:
+  NEW(GPA12 GPA13 GPA14 GPA23 GPA24 GPA34 STRESS12 STRESS13 STRESS14
+          STRESS23 STRESS24 STRESS34 ESTEEM12 ESTEEM13 ESTEEM14
+          ESTEEM23 ESTEEM24 ESTEEM34);
+       GPA12 = GPA1-GPA2;
+       GPA13 = GPA1-GPA3;
+       GPA14 = GPA1-GPA4;
+       GPA23 = GPA2-GPA3;
+       GPA24 = GPA2-GPA4;
+       GPA34 = GPA3-GPA4;
+       STRESS12 = STRESS1-STRESS2;
+       STRESS13 = STRESS1-STRESS3;
+       STRESS14 = STRESS1-STRESS4;
+       STRESS23 = STRESS2-STRESS3;
+       STRESS24 = STRESS2-STRESS4;
+       STRESS34 = STRESS3-STRESS4;
+       ESTEEM12 = ESTEEM1-ESTEEM2;
+       ESTEEM13 = ESTEEM1-ESTEEM3;
+       ESTEEM14 = ESTEEM1-ESTEEM4;
+       ESTEEM23 = ESTEEM2-ESTEEM3;
+       ESTEEM24 = ESTEEM2-ESTEEM4;
+       ESTEEM34 = ESTEEM3-ESTEEM4;
+  MODEL TEST:
+  0 = GPA1-GPA2;
+       0 = GPA2-GPA3;
+       0 = GPA3-GPA4;
+       !0 = STRESS1-STRESS2;
+       !0 = STRESS1-STRESS3;
+       !0 = STRESS1-STRESS4;
+       !0 = ESTEEM1-ESTEEM2;
+       !0 = ESTEEM1-ESTEEM3;
+       !0 = ESTEEM1-ESTEEM4;
+  OUTPUT:
+  tech1 tech8 standardized;
+
+
+
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+  FILE = "/Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/3step/GPA_step3.dat";
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  10
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+Step 3 - 3step Belonging LCA
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         827
+
+Number of dependent variables                                    4
+Number of independent variables                                  4
+Number of continuous latent variables                            0
+Number of categorical latent variables                           1
+
+Observed dependent variables
+
+  Continuous
+   GPA         ESTEEM      STRESS
+
+  Unordered categorical (nominal)
+   N
+
+Observed independent variables
+   WHITE       FIRSTGEN    LATINX      ASIAN
+
+Categorical latent variables
+   C
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-06
+    Relative loglikelihood change                        0.100D-06
+    Derivative                                           0.100D-05
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-05
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-05
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  /Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/3step/GPA_step3.
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             2
+     Number of y missing data patterns           2
+     Number of u missing data patterns           0
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            0.636
+ ESTEEM         0.636         1.000
+ STRESS         0.636         1.000         1.000
+ WHITE          0.636         1.000         1.000         1.000
+ FIRSTGEN       0.636         1.000         1.000         1.000         1.000
+ LATINX         0.636         1.000         1.000         1.000         1.000
+ ASIAN          0.636         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              LATINX        ASIAN
+              ________      ________
+ LATINX         1.000
+ ASIAN          1.000         1.000
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    N
+      Category 1    0.356          294.000
+      Category 2    0.151          125.000
+      Category 3    0.380          314.000
+      Category 4    0.114           94.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     GPA                   3.140      -0.612       0.000    0.19%       2.700      3.020      3.175
+             526.000       0.268       1.801       4.700    0.19%       3.300      3.600
+     ESTEEM                4.140      -0.304       2.500    0.12%       3.800      4.000      4.200
+             827.000       0.193      -0.039       5.333    0.12%       4.300      4.500
+     STRESS                3.972      -0.038       1.000    0.24%       3.000      3.700      4.000
+             827.000       1.183      -0.454       7.000    0.12%       4.300      5.000
+     WHITE                 0.313       0.806       0.000   68.68%       0.000      0.000      0.000
+             827.000       0.215      -1.351       1.000   31.32%       0.000      1.000
+     FIRSTGEN              0.273       1.018       0.000   72.67%       0.000      0.000      0.000
+             827.000       0.199      -0.965       1.000   27.33%       0.000      1.000
+     LATINX                0.285       0.951       0.000   71.46%       0.000      0.000      0.000
+             827.000       0.204      -1.096       1.000   28.54%       0.000      1.000
+     ASIAN                 0.273       1.018       0.000   72.67%       0.000      0.000      0.000
+             827.000       0.199      -0.965       1.000   27.33%       0.000      1.000
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       54
+
+Loglikelihood
+
+          H0 Value                       -2888.310
+          H0 Scaling Correction Factor      1.0779
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    5884.621
+          Bayesian (BIC)                  6139.382
+          Sample-Size Adjusted BIC        5967.898
+            (n* = (n + 2) / 24)
+
+Wald Test of Parameter Constraints
+
+          Value                             15.657
+          Degrees of Freedom                     3
+          P-Value                           0.0013
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THE ESTIMATED MODEL
+
+    Latent
+   Classes
+
+       1        293.73055          0.35518
+       2        127.53148          0.15421
+       3        310.24284          0.37514
+       4         95.49513          0.11547
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON ESTIMATED POSTERIOR PROBABILITIES
+
+    Latent
+   Classes
+
+       1        293.73053          0.35518
+       2        127.53151          0.15421
+       3        310.24288          0.37514
+       4         95.49508          0.11547
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THEIR MOST LIKELY LATENT CLASS MEMBERSHIP
+
+Class Counts and Proportions
+
+    Latent
+   Classes
+
+       1              294          0.35550
+       2              127          0.15357
+       3              314          0.37969
+       4               92          0.11125
+
+
+CLASSIFICATION QUALITY
+
+     Entropy                         0.756
+
+
+Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
+by Latent Class (Column)
+
+           1        2        3        4
+
+    1   0.928    0.012    0.060    0.000
+    2   0.015    0.864    0.075    0.046
+    3   0.061    0.030    0.888    0.021
+    4   0.000    0.055    0.044    0.902
+
+
+Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+           1        2        3        4
+
+    1   0.929    0.007    0.065    0.000
+    2   0.028    0.860    0.073    0.039
+    3   0.057    0.031    0.899    0.013
+    4   0.000    0.061    0.070    0.869
+
+
+Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+              1        2        3        4
+
+    1      9.878    4.921    7.216    0.000
+    2     -0.358    3.084    0.613    0.000
+    3      1.484    0.861    4.240    0.000
+    4    -11.016   -2.653   -2.515    0.000
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ GPA        ON
+    FIRSTGEN          -0.243      0.063     -3.840      0.000
+    WHITE              0.147      0.070      2.092      0.036
+    LATINX            -0.086      0.079     -1.096      0.273
+    ASIAN              0.103      0.072      1.434      0.151
+
+ ESTEEM     ON
+    FIRSTGEN           0.028      0.037      0.754      0.451
+    WHITE             -0.044      0.044     -0.999      0.318
+    LATINX             0.056      0.049      1.129      0.259
+    ASIAN             -0.095      0.047     -2.029      0.042
+
+ STRESS     ON
+    FIRSTGEN          -0.023      0.085     -0.266      0.790
+    WHITE              0.059      0.113      0.522      0.602
+    LATINX            -0.085      0.121     -0.704      0.481
+    ASIAN              0.010      0.111      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.002      0.008      0.299      0.765
+
+ STRESS   WITH
+    GPA                0.046      0.020      2.336      0.019
+    ESTEEM            -0.081      0.014     -5.960      0.000
+
+ Means
+    N#1                9.699      0.000    999.000    999.000
+    N#2                4.809      0.000    999.000    999.000
+    N#3                7.068      0.000    999.000    999.000
+
+ Intercepts
+    GPA                3.228      0.063     50.931      0.000
+    ESTEEM             4.399      0.040    109.781      0.000
+    STRESS             3.260      0.108     30.158      0.000
+
+ Residual Variances
+    GPA                0.205      0.022      9.214      0.000
+    ESTEEM             0.106      0.010     10.584      0.000
+    STRESS             0.888      0.078     11.319      0.000
+
+Latent Class 2
+
+ GPA        ON
+    FIRSTGEN          -0.243      0.063     -3.840      0.000
+    WHITE              0.147      0.070      2.092      0.036
+    LATINX            -0.086      0.079     -1.096      0.273
+    ASIAN              0.103      0.072      1.434      0.151
+
+ ESTEEM     ON
+    FIRSTGEN           0.028      0.037      0.754      0.451
+    WHITE             -0.044      0.044     -0.999      0.318
+    LATINX             0.056      0.049      1.129      0.259
+    ASIAN             -0.095      0.047     -2.029      0.042
+
+ STRESS     ON
+    FIRSTGEN          -0.023      0.085     -0.266      0.790
+    WHITE              0.059      0.113      0.522      0.602
+    LATINX            -0.085      0.121     -0.704      0.481
+    ASIAN              0.010      0.111      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.002      0.008      0.299      0.765
+
+ STRESS   WITH
+    GPA                0.046      0.020      2.336      0.019
+    ESTEEM            -0.081      0.014     -5.960      0.000
+
+ Means
+    N#1               -0.348      0.000    999.000    999.000
+    N#2                3.008      0.000    999.000    999.000
+    N#3                0.509      0.000    999.000    999.000
+
+ Intercepts
+    GPA                3.282      0.089     36.874      0.000
+    ESTEEM             4.042      0.059     68.535      0.000
+    STRESS             4.039      0.139     29.128      0.000
+
+ Residual Variances
+    GPA                0.163      0.037      4.445      0.000
+    ESTEEM             0.216      0.031      6.933      0.000
+    STRESS             0.887      0.108      8.198      0.000
+
+Latent Class 3
+
+ GPA        ON
+    FIRSTGEN          -0.243      0.063     -3.840      0.000
+    WHITE              0.147      0.070      2.092      0.036
+    LATINX            -0.086      0.079     -1.096      0.273
+    ASIAN              0.103      0.072      1.434      0.151
+
+ ESTEEM     ON
+    FIRSTGEN           0.028      0.037      0.754      0.451
+    WHITE             -0.044      0.044     -0.999      0.318
+    LATINX             0.056      0.049      1.129      0.259
+    ASIAN             -0.095      0.047     -2.029      0.042
+
+ STRESS     ON
+    FIRSTGEN          -0.023      0.085     -0.266      0.790
+    WHITE              0.059      0.113      0.522      0.602
+    LATINX            -0.085      0.121     -0.704      0.481
+    ASIAN              0.010      0.111      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.002      0.008      0.299      0.765
+
+ STRESS   WITH
+    GPA                0.046      0.020      2.336      0.019
+    ESTEEM            -0.081      0.014     -5.960      0.000
+
+ Means
+    N#1                1.493      0.000    999.000    999.000
+    N#2                0.807      0.000    999.000    999.000
+    N#3                4.279      0.000    999.000    999.000
+
+ Intercepts
+    GPA                3.087      0.072     42.848      0.000
+    ESTEEM             4.060      0.046     87.940      0.000
+    STRESS             4.313      0.107     40.473      0.000
+
+ Residual Variances
+    GPA                0.213      0.022      9.517      0.000
+    ESTEEM             0.175      0.015     11.625      0.000
+    STRESS             0.847      0.079     10.771      0.000
+
+Latent Class 4
+
+ GPA        ON
+    FIRSTGEN          -0.243      0.063     -3.840      0.000
+    WHITE              0.147      0.070      2.092      0.036
+    LATINX            -0.086      0.079     -1.096      0.273
+    ASIAN              0.103      0.072      1.434      0.151
+
+ ESTEEM     ON
+    FIRSTGEN           0.028      0.037      0.754      0.451
+    WHITE             -0.044      0.044     -0.999      0.318
+    LATINX             0.056      0.049      1.129      0.259
+    ASIAN             -0.095      0.047     -2.029      0.042
+
+ STRESS     ON
+    FIRSTGEN          -0.023      0.085     -0.266      0.790
+    WHITE              0.059      0.113      0.522      0.602
+    LATINX            -0.085      0.121     -0.704      0.481
+    ASIAN              0.010      0.111      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.002      0.008      0.299      0.765
+
+ STRESS   WITH
+    GPA                0.046      0.020      2.336      0.019
+    ESTEEM            -0.081      0.014     -5.960      0.000
+
+ Means
+    N#1              -11.152      0.000    999.000    999.000
+    N#2               -2.775      0.000    999.000    999.000
+    N#3               -2.501      0.000    999.000    999.000
+
+ Intercepts
+    GPA                2.899      0.106     27.293      0.000
+    ESTEEM             3.878      0.060     64.819      0.000
+    STRESS             5.041      0.143     35.346      0.000
+
+ Residual Variances
+    GPA                0.436      0.178      2.448      0.014
+    ESTEEM             0.166      0.030      5.497      0.000
+    STRESS             0.580      0.133      4.378      0.000
+
+Categorical Latent Variables
+
+ C#1        ON
+    FIRSTGEN          -0.879      0.326     -2.694      0.007
+    WHITE              1.326      0.428      3.101      0.002
+    LATINX             0.253      0.431      0.586      0.558
+    ASIAN              0.351      0.418      0.838      0.402
+
+ C#2        ON
+    FIRSTGEN          -0.205      0.385     -0.534      0.594
+    WHITE              0.558      0.560      0.997      0.319
+    LATINX             0.230      0.540      0.426      0.670
+    ASIAN              0.816      0.502      1.625      0.104
+
+ C#3        ON
+    FIRSTGEN          -0.782      0.322     -2.431      0.015
+    WHITE              0.978      0.463      2.111      0.035
+    LATINX             0.879      0.450      1.952      0.051
+    ASIAN              0.629      0.445      1.413      0.158
+
+ Intercepts
+    C#1                0.829      0.309      2.680      0.007
+    C#2               -0.083      0.408     -0.203      0.839
+    C#3                0.747      0.340      2.198      0.028
+
+New/Additional Parameters
+    GPA12             -0.053      0.073     -0.726      0.468
+    GPA13              0.141      0.059      2.371      0.018
+    GPA14              0.330      0.103      3.209      0.001
+    GPA23              0.194      0.079      2.448      0.014
+    GPA24              0.383      0.119      3.222      0.001
+    GPA34              0.189      0.105      1.793      0.073
+    STRESS12          -0.780      0.127     -6.163      0.000
+    STRESS13          -1.053      0.097    -10.822      0.000
+    STRESS14          -1.782      0.131    -13.557      0.000
+    STRESS23          -0.274      0.129     -2.117      0.034
+    STRESS24          -1.002      0.159     -6.300      0.000
+    STRESS34          -0.728      0.127     -5.729      0.000
+    ESTEEM12           0.356      0.055      6.536      0.000
+    ESTEEM13           0.339      0.038      8.994      0.000
+    ESTEEM14           0.521      0.052     10.002      0.000
+    ESTEEM23          -0.017      0.058     -0.295      0.768
+    ESTEEM24           0.165      0.070      2.360      0.018
+    ESTEEM34           0.182      0.054      3.338      0.001
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.111E-04
+       (ratio of smallest to largest eigenvalue)
+
+
+RESULTS IN PROBABILITY SCALE
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ N
+    Category 1         0.926      0.000  39546.422      0.000
+    Category 2         0.007      0.000  39546.422      0.000
+    Category 3         0.067      0.000  39546.422      0.000
+    Category 4         0.000      0.000      2.247      0.025
+
+Latent Class 2
+
+ N
+    Category 1         0.030      0.001     53.069      0.000
+    Category 2         0.857      0.016     53.069      0.000
+    Category 3         0.070      0.001     53.069      0.000
+    Category 4         0.042      0.018      2.346      0.019
+
+Latent Class 3
+
+ N
+    Category 1         0.056      0.000    179.455      0.000
+    Category 2         0.028      0.000    179.455      0.000
+    Category 3         0.904      0.005    179.455      0.000
+    Category 4         0.013      0.006      2.276      0.023
+
+Latent Class 4
+
+ N
+    Category 1         0.000      0.000      2.572      0.010
+    Category 2         0.054      0.021      2.572      0.010
+    Category 3         0.072      0.028      2.572      0.010
+    Category 4         0.874      0.049     17.812      0.000
+
+
+LATENT CLASS INDICATOR ODDS RATIOS FOR THE LATENT CLASSES
+
+                                                95% C.I.
+                    Estimate       S.E.  Lower 2.5% Upper 2.5%
+
+Latent Class 1 Compared to Latent Class 2
+
+ N
+    Category = 1     407.676      7.779    392.711    423.211
+    Category = 2       0.001      0.000      0.001      0.002
+    Category = 3       0.943      0.019      0.906      0.981
+    Category = 4       0.001      0.000      0.001      0.001
+
+Latent Class 1 Compared to Latent Class 3
+
+ N
+    Category = 1     212.897      1.183    210.590    215.229
+    Category = 2       0.243      0.001      0.240      0.246
+    Category = 3       0.008      0.000      0.007      0.009
+    Category = 4       0.004      0.000      0.004      0.004
+
+Latent Class 1 Compared to Latent Class 4
+
+ N
+    Category = 1   *********  *********  *********  *********
+    Category = 2       0.122      0.050      0.054      0.273
+    Category = 3       0.926      0.388      0.407      2.104
+    Category = 4       0.000      0.000      0.000      0.000
+
+Latent Class 2 Compared to Latent Class 3
+
+ N
+    Category = 1       0.522      0.007      0.509      0.536
+    Category = 2     208.091     26.288    162.450    266.555
+    Category = 3       0.008      0.000      0.008      0.009
+    Category = 4       3.487      0.000      3.487      3.487
+
+Latent Class 2 Compared to Latent Class 4
+
+ N
+    Category = 1    2458.347    908.247   1191.673   5071.414
+    Category = 2     104.271     29.115     60.324    180.236
+    Category = 3       0.982      0.391      0.449      2.144
+    Category = 4       0.006      0.000      0.006      0.006
+
+Latent Class 3 Compared to Latent Class 4
+
+ N
+    Category = 1    4707.477   1802.856   2222.242   9972.060
+    Category = 2       0.501      0.203      0.226      1.109
+    Category = 3     121.555     43.885     59.904    246.656
+    Category = 4       0.002      0.000      0.002      0.002
+
+
+LOGISTIC REGRESSION ODDS RATIO RESULTS
+
+                                                95% C.I.
+                    Estimate       S.E.  Lower 2.5% Upper 2.5%
+
+Categorical Latent Variables
+
+ C#1      ON
+    FIRSTGEN           0.415      0.135      0.219      0.787
+    WHITE              3.765      1.610      1.629      8.704
+    LATINX             1.288      0.556      0.553      3.000
+    ASIAN              1.420      0.594      0.625      3.226
+
+ C#2      ON
+    FIRSTGEN           0.814      0.313      0.383      1.731
+    WHITE              1.747      0.979      0.583      5.237
+    LATINX             1.259      0.680      0.436      3.630
+    ASIAN              2.262      1.137      0.845      6.057
+
+ C#3      ON
+    FIRSTGEN           0.458      0.147      0.244      0.860
+    WHITE              2.659      1.232      1.072      6.594
+    LATINX             2.408      1.084      0.996      5.821
+    ASIAN              1.876      0.835      0.784      4.487
+
+
+ALTERNATIVE PARAMETERIZATIONS FOR THE CATEGORICAL LATENT VARIABLE REGRESSION
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Parameterization using Reference Class 1
+
+ C#2      ON
+    WHITE             -0.768      0.430     -1.784      0.074
+    FIRSTGEN           0.674      0.312      2.156      0.031
+    LATINX            -0.023      0.448     -0.051      0.959
+    ASIAN              0.466      0.404      1.151      0.250
+
+ C#3      ON
+    WHITE             -0.348      0.312     -1.114      0.265
+    FIRSTGEN           0.097      0.263      0.370      0.712
+    LATINX             0.626      0.349      1.793      0.073
+    ASIAN              0.278      0.332      0.838      0.402
+
+ C#4      ON
+    WHITE             -1.326      0.428     -3.101      0.002
+    FIRSTGEN           0.879      0.326      2.694      0.007
+    LATINX            -0.253      0.431     -0.586      0.558
+    ASIAN             -0.351      0.418     -0.838      0.402
+
+ Intercepts
+    C#2               -0.912      0.350     -2.605      0.009
+    C#3               -0.082      0.264     -0.309      0.757
+    C#4               -0.829      0.309     -2.680      0.007
+
+Parameterization using Reference Class 2
+
+ C#1      ON
+    WHITE              0.768      0.430      1.784      0.074
+    FIRSTGEN          -0.674      0.312     -2.156      0.031
+    LATINX             0.023      0.448      0.051      0.959
+    ASIAN             -0.466      0.404     -1.151      0.250
+
+ C#3      ON
+    WHITE              0.420      0.459      0.914      0.361
+    FIRSTGEN          -0.576      0.314     -1.835      0.066
+    LATINX             0.649      0.459      1.415      0.157
+    ASIAN             -0.188      0.417     -0.450      0.653
+
+ C#4      ON
+    WHITE             -0.558      0.560     -0.997      0.319
+    FIRSTGEN           0.205      0.385      0.534      0.594
+    LATINX            -0.230      0.540     -0.426      0.670
+    ASIAN             -0.816      0.502     -1.625      0.104
+
+ Intercepts
+    C#1                0.912      0.350      2.605      0.009
+    C#3                0.830      0.365      2.273      0.023
+    C#4                0.083      0.408      0.203      0.839
+
+Parameterization using Reference Class 3
+
+ C#1      ON
+    WHITE              0.348      0.312      1.114      0.265
+    FIRSTGEN          -0.097      0.263     -0.370      0.712
+    LATINX            -0.626      0.349     -1.793      0.073
+    ASIAN             -0.278      0.332     -0.838      0.402
+
+ C#2      ON
+    WHITE             -0.420      0.459     -0.914      0.361
+    FIRSTGEN           0.576      0.314      1.835      0.066
+    LATINX            -0.649      0.459     -1.415      0.157
+    ASIAN              0.188      0.417      0.450      0.653
+
+ C#4      ON
+    WHITE             -0.978      0.463     -2.111      0.035
+    FIRSTGEN           0.782      0.322      2.431      0.015
+    LATINX            -0.879      0.450     -1.952      0.051
+    ASIAN             -0.629      0.445     -1.413      0.158
+
+ Intercepts
+    C#1                0.082      0.264      0.309      0.757
+    C#2               -0.830      0.365     -2.273      0.023
+    C#4               -0.747      0.340     -2.198      0.028
+
+
+ODDS RATIO FOR THE ALTERNATIVE PARAMETERIZATIONS FOR THE CATEGORICAL LATENT VARIABLE REGRESSION
+
+                                                95% C.I.
+                    Estimate       S.E.  Lower 2.5% Upper 2.5%
+
+Parameterization using Reference Class 1
+
+ C#2      ON
+    WHITE              0.464      0.200      0.200      1.078
+    FIRSTGEN           1.961      0.613      1.063      3.618
+    LATINX             0.977      0.438      0.406      2.351
+    ASIAN              1.593      0.644      0.721      3.519
+
+ C#3      ON
+    WHITE              0.706      0.220      0.383      1.302
+    FIRSTGEN           1.102      0.290      0.658      1.846
+    LATINX             1.870      0.653      0.943      3.706
+    ASIAN              1.320      0.438      0.689      2.529
+
+ C#4      ON
+    WHITE              0.266      0.114      0.115      0.614
+    FIRSTGEN           2.408      0.785      1.271      4.564
+    LATINX             0.776      0.335      0.333      1.809
+    ASIAN              0.704      0.295      0.310      1.599
+
+Parameterization using Reference Class 2
+
+ C#1      ON
+    WHITE              2.155      0.927      0.927      5.007
+    FIRSTGEN           0.510      0.159      0.276      0.941
+    LATINX             1.023      0.458      0.425      2.461
+    ASIAN              0.628      0.254      0.284      1.387
+
+ C#3      ON
+    WHITE              1.522      0.699      0.619      3.743
+    FIRSTGEN           0.562      0.176      0.304      1.040
+    LATINX             1.913      0.877      0.779      4.700
+    ASIAN              0.829      0.346      0.366      1.877
+
+ C#4      ON
+    WHITE              0.572      0.320      0.191      1.715
+    FIRSTGEN           1.228      0.472      0.578      2.610
+    LATINX             0.794      0.429      0.275      2.291
+    ASIAN              0.442      0.222      0.165      1.183
+
+Parameterization using Reference Class 3
+
+ C#1      ON
+    WHITE              1.416      0.442      0.768      2.611
+    FIRSTGEN           0.907      0.239      0.542      1.520
+    LATINX             0.535      0.187      0.270      1.060
+    ASIAN              0.757      0.251      0.395      1.450
+
+ C#2      ON
+    WHITE              0.657      0.302      0.267      1.617
+    FIRSTGEN           1.779      0.559      0.962      3.293
+    LATINX             0.523      0.240      0.213      1.284
+    ASIAN              1.206      0.503      0.533      2.731
+
+ C#4      ON
+    WHITE              0.376      0.174      0.152      0.933
+    FIRSTGEN           2.185      0.702      1.163      4.103
+    LATINX             0.415      0.187      0.172      1.004
+    ASIAN              0.533      0.237      0.223      1.275
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ GPA        ON
+    FIRSTGEN          -0.199      0.051     -3.897      0.000
+    WHITE              0.153      0.074      2.078      0.038
+    LATINX            -0.072      0.066     -1.101      0.271
+    ASIAN              0.090      0.063      1.431      0.152
+
+ ESTEEM     ON
+    FIRSTGEN           0.033      0.044      0.759      0.448
+    WHITE             -0.067      0.067     -1.003      0.316
+    LATINX             0.068      0.060      1.121      0.262
+    ASIAN             -0.121      0.059     -2.030      0.042
+
+ STRESS     ON
+    FIRSTGEN          -0.009      0.035     -0.266      0.790
+    WHITE              0.031      0.060      0.521      0.602
+    LATINX            -0.036      0.051     -0.705      0.481
+    ASIAN              0.004      0.049      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.017      0.056      0.299      0.765
+
+ STRESS   WITH
+    GPA                0.108      0.047      2.302      0.021
+    ESTEEM            -0.264      0.041     -6.384      0.000
+
+ Intercepts
+    GPA                6.750      0.387     17.446      0.000
+    ESTEEM            13.341      0.644     20.722      0.000
+    STRESS             3.453      0.165     20.967      0.000
+
+ Residual Variances
+    GPA                0.896      0.025     36.005      0.000
+    ESTEEM             0.972      0.012     79.411      0.000
+    STRESS             0.996      0.005    210.285      0.000
+
+Latent Class 2
+
+ GPA        ON
+    FIRSTGEN          -0.266      0.083     -3.227      0.001
+    WHITE              0.135      0.063      2.162      0.031
+    LATINX            -0.088      0.080     -1.095      0.274
+    ASIAN              0.115      0.081      1.424      0.154
+
+ ESTEEM     ON
+    FIRSTGEN           0.029      0.038      0.751      0.453
+    WHITE             -0.038      0.038     -0.996      0.319
+    LATINX             0.053      0.047      1.129      0.259
+    ASIAN             -0.099      0.049     -2.006      0.045
+
+ STRESS     ON
+    FIRSTGEN          -0.011      0.043     -0.266      0.790
+    WHITE              0.025      0.048      0.520      0.603
+    LATINX            -0.040      0.057     -0.705      0.481
+    ASIAN              0.005      0.057      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.013      0.044      0.299      0.765
+
+ STRESS   WITH
+    GPA                0.121      0.056      2.171      0.030
+    ESTEEM            -0.185      0.034     -5.390      0.000
+
+ Intercepts
+    GPA                7.495      0.786      9.530      0.000
+    ESTEEM             8.611      0.617     13.951      0.000
+    STRESS             4.281      0.285     15.009      0.000
+
+ Residual Variances
+    GPA                0.850      0.054     15.716      0.000
+    ESTEEM             0.980      0.009    107.067      0.000
+    STRESS             0.996      0.004    224.497      0.000
+
+Latent Class 3
+
+ GPA        ON
+    FIRSTGEN          -0.220      0.056     -3.932      0.000
+    WHITE              0.134      0.064      2.082      0.037
+    LATINX            -0.083      0.076     -1.090      0.276
+    ASIAN              0.092      0.064      1.433      0.152
+
+ ESTEEM     ON
+    FIRSTGEN           0.029      0.039      0.753      0.452
+    WHITE             -0.047      0.047     -0.999      0.318
+    LATINX             0.063      0.055      1.132      0.258
+    ASIAN             -0.099      0.049     -2.018      0.044
+
+ STRESS     ON
+    FIRSTGEN          -0.011      0.041     -0.267      0.790
+    WHITE              0.029      0.055      0.522      0.601
+    LATINX            -0.044      0.062     -0.702      0.483
+    ASIAN              0.005      0.053      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.013      0.043      0.299      0.765
+
+ STRESS   WITH
+    GPA                0.108      0.046      2.365      0.018
+    ESTEEM            -0.210      0.035     -6.068      0.000
+
+ Intercepts
+    GPA                6.255      0.349     17.941      0.000
+    ESTEEM             9.594      0.424     22.648      0.000
+    STRESS             4.675      0.260     17.953      0.000
+
+ Residual Variances
+    GPA                0.876      0.031     27.858      0.000
+    ESTEEM             0.976      0.010     93.205      0.000
+    STRESS             0.995      0.006    175.084      0.000
+
+Latent Class 4
+
+ GPA        ON
+    FIRSTGEN          -0.175      0.051     -3.434      0.001
+    WHITE              0.081      0.042      1.917      0.055
+    LATINX            -0.060      0.057     -1.062      0.288
+    ASIAN              0.067      0.048      1.397      0.162
+
+ ESTEEM     ON
+    FIRSTGEN           0.033      0.044      0.752      0.452
+    WHITE             -0.041      0.041     -0.983      0.326
+    LATINX             0.065      0.057      1.140      0.254
+    ASIAN             -0.103      0.053     -1.951      0.051
+
+ STRESS     ON
+    FIRSTGEN          -0.015      0.055     -0.266      0.791
+    WHITE              0.029      0.056      0.526      0.599
+    LATINX            -0.054      0.078     -0.685      0.493
+    ASIAN              0.006      0.065      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.009      0.031      0.298      0.766
+
+ STRESS   WITH
+    GPA                0.091      0.042      2.165      0.030
+    ESTEEM            -0.260      0.051     -5.112      0.000
+
+ Intercepts
+    GPA                4.225      0.899      4.701      0.000
+    ESTEEM             9.374      0.879     10.670      0.000
+    STRESS             6.597      0.862      7.657      0.000
+
+ Residual Variances
+    GPA                0.926      0.031     29.456      0.000
+    ESTEEM             0.972      0.013     76.292      0.000
+    STRESS             0.994      0.009    115.948      0.000
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ GPA        ON
+    FIRSTGEN          -0.509      0.130     -3.913      0.000
+    WHITE              0.308      0.148      2.081      0.037
+    LATINX            -0.180      0.164     -1.101      0.271
+    ASIAN              0.216      0.151      1.432      0.152
+
+ ESTEEM     ON
+    FIRSTGEN           0.085      0.112      0.759      0.448
+    WHITE             -0.135      0.134     -1.003      0.316
+    LATINX             0.169      0.151      1.122      0.262
+    ASIAN             -0.289      0.142     -2.033      0.042
+
+ STRESS     ON
+    FIRSTGEN          -0.024      0.090     -0.266      0.790
+    WHITE              0.063      0.120      0.521      0.602
+    LATINX            -0.090      0.128     -0.705      0.481
+    ASIAN              0.010      0.117      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.017      0.056      0.299      0.765
+
+ STRESS   WITH
+    GPA                0.108      0.047      2.302      0.021
+    ESTEEM            -0.264      0.041     -6.384      0.000
+
+ Intercepts
+    GPA                6.750      0.387     17.446      0.000
+    ESTEEM            13.341      0.644     20.722      0.000
+    STRESS             3.453      0.165     20.967      0.000
+
+ Residual Variances
+    GPA                0.896      0.025     36.005      0.000
+    ESTEEM             0.972      0.012     79.411      0.000
+    STRESS             0.996      0.005    210.285      0.000
+
+Latent Class 2
+
+ GPA        ON
+    FIRSTGEN          -0.556      0.172     -3.234      0.001
+    WHITE              0.337      0.155      2.165      0.030
+    LATINX            -0.197      0.180     -1.095      0.273
+    ASIAN              0.236      0.165      1.425      0.154
+
+ ESTEEM     ON
+    FIRSTGEN           0.060      0.079      0.751      0.453
+    WHITE             -0.095      0.095     -0.996      0.319
+    LATINX             0.119      0.105      1.130      0.259
+    ASIAN             -0.203      0.101     -2.008      0.045
+
+ STRESS     ON
+    FIRSTGEN          -0.024      0.090     -0.266      0.790
+    WHITE              0.063      0.120      0.520      0.603
+    LATINX            -0.090      0.128     -0.705      0.481
+    ASIAN              0.010      0.117      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.013      0.044      0.299      0.765
+
+ STRESS   WITH
+    GPA                0.121      0.056      2.171      0.030
+    ESTEEM            -0.185      0.034     -5.390      0.000
+
+ Intercepts
+    GPA                7.495      0.786      9.530      0.000
+    ESTEEM             8.611      0.617     13.951      0.000
+    STRESS             4.281      0.285     15.009      0.000
+
+ Residual Variances
+    GPA                0.850      0.054     15.716      0.000
+    ESTEEM             0.980      0.009    107.067      0.000
+    STRESS             0.996      0.004    224.497      0.000
+
+Latent Class 3
+
+ GPA        ON
+    FIRSTGEN          -0.493      0.125     -3.948      0.000
+    WHITE              0.299      0.143      2.085      0.037
+    LATINX            -0.174      0.160     -1.090      0.276
+    ASIAN              0.209      0.146      1.434      0.152
+
+ ESTEEM     ON
+    FIRSTGEN           0.066      0.088      0.753      0.452
+    WHITE             -0.105      0.105     -0.999      0.318
+    LATINX             0.132      0.116      1.132      0.258
+    ASIAN             -0.225      0.111     -2.020      0.043
+
+ STRESS     ON
+    FIRSTGEN          -0.024      0.091     -0.267      0.790
+    WHITE              0.064      0.123      0.522      0.601
+    LATINX            -0.092      0.131     -0.702      0.483
+    ASIAN              0.011      0.120      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.013      0.043      0.299      0.765
+
+ STRESS   WITH
+    GPA                0.108      0.046      2.365      0.018
+    ESTEEM            -0.210      0.035     -6.068      0.000
+
+ Intercepts
+    GPA                6.255      0.349     17.941      0.000
+    ESTEEM             9.594      0.424     22.648      0.000
+    STRESS             4.675      0.260     17.953      0.000
+
+ Residual Variances
+    GPA                0.876      0.031     27.858      0.000
+    ESTEEM             0.976      0.010     93.205      0.000
+    STRESS             0.995      0.006    175.084      0.000
+
+Latent Class 4
+
+ GPA        ON
+    FIRSTGEN          -0.355      0.103     -3.445      0.001
+    WHITE              0.215      0.112      1.919      0.055
+    LATINX            -0.125      0.118     -1.063      0.288
+    ASIAN              0.150      0.108      1.398      0.162
+
+ ESTEEM     ON
+    FIRSTGEN           0.068      0.090      0.752      0.452
+    WHITE             -0.107      0.109     -0.983      0.326
+    LATINX             0.135      0.118      1.141      0.254
+    ASIAN             -0.230      0.118     -1.953      0.051
+
+ STRESS     ON
+    FIRSTGEN          -0.029      0.111     -0.266      0.791
+    WHITE              0.077      0.147      0.526      0.599
+    LATINX            -0.111      0.162     -0.686      0.493
+    ASIAN              0.013      0.145      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.009      0.031      0.298      0.766
+
+ STRESS   WITH
+    GPA                0.091      0.042      2.165      0.030
+    ESTEEM            -0.260      0.051     -5.112      0.000
+
+ Intercepts
+    GPA                4.225      0.899      4.701      0.000
+    ESTEEM             9.374      0.879     10.670      0.000
+    STRESS             6.597      0.862      7.657      0.000
+
+ Residual Variances
+    GPA                0.926      0.031     29.456      0.000
+    ESTEEM             0.972      0.013     76.292      0.000
+    STRESS             0.994      0.009    115.948      0.000
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ GPA        ON
+    FIRSTGEN          -0.243      0.063     -3.840      0.000
+    WHITE              0.147      0.070      2.092      0.036
+    LATINX            -0.086      0.079     -1.096      0.273
+    ASIAN              0.103      0.072      1.434      0.151
+
+ ESTEEM     ON
+    FIRSTGEN           0.028      0.037      0.754      0.451
+    WHITE             -0.044      0.044     -0.999      0.318
+    LATINX             0.056      0.049      1.129      0.259
+    ASIAN             -0.095      0.047     -2.029      0.042
+
+ STRESS     ON
+    FIRSTGEN          -0.023      0.085     -0.266      0.790
+    WHITE              0.059      0.113      0.522      0.602
+    LATINX            -0.085      0.121     -0.704      0.481
+    ASIAN              0.010      0.111      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.002      0.008      0.299      0.765
+
+ STRESS   WITH
+    GPA                0.046      0.020      2.336      0.019
+    ESTEEM            -0.081      0.014     -5.960      0.000
+
+ Intercepts
+    GPA                3.228      0.063     50.931      0.000
+    ESTEEM             4.399      0.040    109.781      0.000
+    STRESS             3.260      0.108     30.158      0.000
+
+ Residual Variances
+    GPA                0.205      0.022      9.214      0.000
+    ESTEEM             0.106      0.010     10.584      0.000
+    STRESS             0.888      0.078     11.319      0.000
+
+Latent Class 2
+
+ GPA        ON
+    FIRSTGEN          -0.243      0.063     -3.840      0.000
+    WHITE              0.147      0.070      2.092      0.036
+    LATINX            -0.086      0.079     -1.096      0.273
+    ASIAN              0.103      0.072      1.434      0.151
+
+ ESTEEM     ON
+    FIRSTGEN           0.028      0.037      0.754      0.451
+    WHITE             -0.044      0.044     -0.999      0.318
+    LATINX             0.056      0.049      1.129      0.259
+    ASIAN             -0.095      0.047     -2.029      0.042
+
+ STRESS     ON
+    FIRSTGEN          -0.023      0.085     -0.266      0.790
+    WHITE              0.059      0.113      0.522      0.602
+    LATINX            -0.085      0.121     -0.704      0.481
+    ASIAN              0.010      0.111      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.002      0.008      0.299      0.765
+
+ STRESS   WITH
+    GPA                0.046      0.020      2.336      0.019
+    ESTEEM            -0.081      0.014     -5.960      0.000
+
+ Intercepts
+    GPA                3.282      0.089     36.874      0.000
+    ESTEEM             4.042      0.059     68.535      0.000
+    STRESS             4.039      0.139     29.128      0.000
+
+ Residual Variances
+    GPA                0.163      0.037      4.445      0.000
+    ESTEEM             0.216      0.031      6.933      0.000
+    STRESS             0.887      0.108      8.198      0.000
+
+Latent Class 3
+
+ GPA        ON
+    FIRSTGEN          -0.243      0.063     -3.840      0.000
+    WHITE              0.147      0.070      2.092      0.036
+    LATINX            -0.086      0.079     -1.096      0.273
+    ASIAN              0.103      0.072      1.434      0.151
+
+ ESTEEM     ON
+    FIRSTGEN           0.028      0.037      0.754      0.451
+    WHITE             -0.044      0.044     -0.999      0.318
+    LATINX             0.056      0.049      1.129      0.259
+    ASIAN             -0.095      0.047     -2.029      0.042
+
+ STRESS     ON
+    FIRSTGEN          -0.023      0.085     -0.266      0.790
+    WHITE              0.059      0.113      0.522      0.602
+    LATINX            -0.085      0.121     -0.704      0.481
+    ASIAN              0.010      0.111      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.002      0.008      0.299      0.765
+
+ STRESS   WITH
+    GPA                0.046      0.020      2.336      0.019
+    ESTEEM            -0.081      0.014     -5.960      0.000
+
+ Intercepts
+    GPA                3.087      0.072     42.848      0.000
+    ESTEEM             4.060      0.046     87.940      0.000
+    STRESS             4.313      0.107     40.473      0.000
+
+ Residual Variances
+    GPA                0.213      0.022      9.517      0.000
+    ESTEEM             0.175      0.015     11.625      0.000
+    STRESS             0.847      0.079     10.771      0.000
+
+Latent Class 4
+
+ GPA        ON
+    FIRSTGEN          -0.243      0.063     -3.840      0.000
+    WHITE              0.147      0.070      2.092      0.036
+    LATINX            -0.086      0.079     -1.096      0.273
+    ASIAN              0.103      0.072      1.434      0.151
+
+ ESTEEM     ON
+    FIRSTGEN           0.028      0.037      0.754      0.451
+    WHITE             -0.044      0.044     -0.999      0.318
+    LATINX             0.056      0.049      1.129      0.259
+    ASIAN             -0.095      0.047     -2.029      0.042
+
+ STRESS     ON
+    FIRSTGEN          -0.023      0.085     -0.266      0.790
+    WHITE              0.059      0.113      0.522      0.602
+    LATINX            -0.085      0.121     -0.704      0.481
+    ASIAN              0.010      0.111      0.089      0.929
+
+ ESTEEM   WITH
+    GPA                0.002      0.008      0.299      0.765
+
+ STRESS   WITH
+    GPA                0.046      0.020      2.336      0.019
+    ESTEEM            -0.081      0.014     -5.960      0.000
+
+ Intercepts
+    GPA                2.899      0.106     27.293      0.000
+    ESTEEM             3.878      0.060     64.819      0.000
+    STRESS             5.041      0.143     35.346      0.000
+
+ Residual Variances
+    GPA                0.436      0.178      2.448      0.014
+    ESTEEM             0.166      0.030      5.497      0.000
+    STRESS             0.580      0.133      4.378      0.000
+
+
+R-SQUARE
+
+Latent Class 1
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    GPA                0.104      0.025      4.180      0.000
+    ESTEEM             0.028      0.012      2.302      0.021
+    STRESS             0.004      0.005      0.798      0.425
+
+Latent Class 2
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    GPA                0.150      0.054      2.776      0.006
+    ESTEEM             0.020      0.009      2.180      0.029
+    STRESS             0.004      0.004      0.816      0.415
+
+Latent Class 3
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    GPA                0.124      0.031      3.957      0.000
+    ESTEEM             0.024      0.010      2.323      0.020
+    STRESS             0.005      0.006      0.824      0.410
+
+Latent Class 4
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    GPA                0.074      0.031      2.338      0.019
+    ESTEEM             0.028      0.013      2.161      0.031
+    STRESS             0.006      0.009      0.740      0.459
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS 1
+
+
+           NU
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU
+              LATINX        ASIAN
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA                0             0             0             0             0
+ ESTEEM             0             0             0             0             0
+ STRESS             0             0             0             0             0
+ WHITE              0             0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           LAMBDA
+              LATINX        ASIAN
+              ________      ________
+ GPA                0             0
+ ESTEEM             0             0
+ STRESS             0             0
+ WHITE              0             0
+ FIRSTGEN           0             0
+ LATINX             0             0
+ ASIAN              0             0
+
+
+           THETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA                0
+ ESTEEM             0             0
+ STRESS             0             0             0
+ WHITE              0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           THETA
+              LATINX        ASIAN
+              ________      ________
+ LATINX             0
+ ASIAN              0             0
+
+
+           ALPHA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                    1             2             3             0             0
+
+
+           ALPHA
+              LATINX        ASIAN
+              ________      ________
+                    0             0
+
+
+           BETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA                0             0             0             4             5
+ ESTEEM             0             0             0             8             9
+ STRESS             0             0             0            12            13
+ WHITE              0             0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           BETA
+              LATINX        ASIAN
+              ________      ________
+ GPA                6             7
+ ESTEEM            10            11
+ STRESS            14            15
+ WHITE              0             0
+ FIRSTGEN           0             0
+ LATINX             0             0
+ ASIAN              0             0
+
+
+           PSI
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA               16
+ ESTEEM            17            18
+ STRESS            19            20            21
+ WHITE              0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           PSI
+              LATINX        ASIAN
+              ________      ________
+ LATINX             0
+ ASIAN              0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS 2
+
+
+           NU
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU
+              LATINX        ASIAN
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA                0             0             0             0             0
+ ESTEEM             0             0             0             0             0
+ STRESS             0             0             0             0             0
+ WHITE              0             0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           LAMBDA
+              LATINX        ASIAN
+              ________      ________
+ GPA                0             0
+ ESTEEM             0             0
+ STRESS             0             0
+ WHITE              0             0
+ FIRSTGEN           0             0
+ LATINX             0             0
+ ASIAN              0             0
+
+
+           THETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA                0
+ ESTEEM             0             0
+ STRESS             0             0             0
+ WHITE              0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           THETA
+              LATINX        ASIAN
+              ________      ________
+ LATINX             0
+ ASIAN              0             0
+
+
+           ALPHA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                   22            23            24             0             0
+
+
+           ALPHA
+              LATINX        ASIAN
+              ________      ________
+                    0             0
+
+
+           BETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA                0             0             0             4             5
+ ESTEEM             0             0             0             8             9
+ STRESS             0             0             0            12            13
+ WHITE              0             0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           BETA
+              LATINX        ASIAN
+              ________      ________
+ GPA                6             7
+ ESTEEM            10            11
+ STRESS            14            15
+ WHITE              0             0
+ FIRSTGEN           0             0
+ LATINX             0             0
+ ASIAN              0             0
+
+
+           PSI
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA               25
+ ESTEEM            17            26
+ STRESS            19            20            27
+ WHITE              0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           PSI
+              LATINX        ASIAN
+              ________      ________
+ LATINX             0
+ ASIAN              0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS 3
+
+
+           NU
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU
+              LATINX        ASIAN
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA                0             0             0             0             0
+ ESTEEM             0             0             0             0             0
+ STRESS             0             0             0             0             0
+ WHITE              0             0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           LAMBDA
+              LATINX        ASIAN
+              ________      ________
+ GPA                0             0
+ ESTEEM             0             0
+ STRESS             0             0
+ WHITE              0             0
+ FIRSTGEN           0             0
+ LATINX             0             0
+ ASIAN              0             0
+
+
+           THETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA                0
+ ESTEEM             0             0
+ STRESS             0             0             0
+ WHITE              0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           THETA
+              LATINX        ASIAN
+              ________      ________
+ LATINX             0
+ ASIAN              0             0
+
+
+           ALPHA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                   28            29            30             0             0
+
+
+           ALPHA
+              LATINX        ASIAN
+              ________      ________
+                    0             0
+
+
+           BETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA                0             0             0             4             5
+ ESTEEM             0             0             0             8             9
+ STRESS             0             0             0            12            13
+ WHITE              0             0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           BETA
+              LATINX        ASIAN
+              ________      ________
+ GPA                6             7
+ ESTEEM            10            11
+ STRESS            14            15
+ WHITE              0             0
+ FIRSTGEN           0             0
+ LATINX             0             0
+ ASIAN              0             0
+
+
+           PSI
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA               31
+ ESTEEM            17            32
+ STRESS            19            20            33
+ WHITE              0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           PSI
+              LATINX        ASIAN
+              ________      ________
+ LATINX             0
+ ASIAN              0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS 4
+
+
+           NU
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU
+              LATINX        ASIAN
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA                0             0             0             0             0
+ ESTEEM             0             0             0             0             0
+ STRESS             0             0             0             0             0
+ WHITE              0             0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           LAMBDA
+              LATINX        ASIAN
+              ________      ________
+ GPA                0             0
+ ESTEEM             0             0
+ STRESS             0             0
+ WHITE              0             0
+ FIRSTGEN           0             0
+ LATINX             0             0
+ ASIAN              0             0
+
+
+           THETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA                0
+ ESTEEM             0             0
+ STRESS             0             0             0
+ WHITE              0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           THETA
+              LATINX        ASIAN
+              ________      ________
+ LATINX             0
+ ASIAN              0             0
+
+
+           ALPHA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                   34            35            36             0             0
+
+
+           ALPHA
+              LATINX        ASIAN
+              ________      ________
+                    0             0
+
+
+           BETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA                0             0             0             4             5
+ ESTEEM             0             0             0             8             9
+ STRESS             0             0             0            12            13
+ WHITE              0             0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           BETA
+              LATINX        ASIAN
+              ________      ________
+ GPA                6             7
+ ESTEEM            10            11
+ STRESS            14            15
+ WHITE              0             0
+ FIRSTGEN           0             0
+ LATINX             0             0
+ ASIAN              0             0
+
+
+           PSI
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA               37
+ ESTEEM            17            38
+ STRESS            19            20            39
+ WHITE              0             0             0             0
+ FIRSTGEN           0             0             0             0             0
+ LATINX             0             0             0             0             0
+ ASIAN              0             0             0             0             0
+
+
+           PSI
+              LATINX        ASIAN
+              ________      ________
+ LATINX             0
+ ASIAN              0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS REGRESSION MODEL PART
+
+
+           ALPHA(C)
+              C#1           C#2           C#3           C#4
+              ________      ________      ________      ________
+                   40            41            42             0
+
+
+           GAMMA(C)
+              WHITE         FIRSTGEN      LATINX        ASIAN
+              ________      ________      ________      ________
+ C#1               43            44            45            46
+ C#2               47            48            49            50
+ C#3               51            52            53            54
+ C#4                0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR THE CENSORED/NOMINAL/COUNT MODEL PART
+
+
+           NU(P) FOR LATENT CLASS 1
+              N#1           N#2           N#3
+              ________      ________      ________
+                    0             0             0
+
+
+           KAPPA(P) FOR LATENT CLASS 1
+              WHITE         FIRSTGEN      LATINX        ASIAN
+              ________      ________      ________      ________
+ N#1                0             0             0             0
+ N#2                0             0             0             0
+ N#3                0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS 2
+              N#1           N#2           N#3
+              ________      ________      ________
+                    0             0             0
+
+
+           KAPPA(P) FOR LATENT CLASS 2
+              WHITE         FIRSTGEN      LATINX        ASIAN
+              ________      ________      ________      ________
+ N#1                0             0             0             0
+ N#2                0             0             0             0
+ N#3                0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS 3
+              N#1           N#2           N#3
+              ________      ________      ________
+                    0             0             0
+
+
+           KAPPA(P) FOR LATENT CLASS 3
+              WHITE         FIRSTGEN      LATINX        ASIAN
+              ________      ________      ________      ________
+ N#1                0             0             0             0
+ N#2                0             0             0             0
+ N#3                0             0             0             0
+
+
+           NU(P) FOR LATENT CLASS 4
+              N#1           N#2           N#3
+              ________      ________      ________
+                    0             0             0
+
+
+           KAPPA(P) FOR LATENT CLASS 4
+              WHITE         FIRSTGEN      LATINX        ASIAN
+              ________      ________      ________      ________
+ N#1                0             0             0             0
+ N#2                0             0             0             0
+ N#3                0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              GPA12         GPA13         GPA14         GPA23         GPA24
+              ________      ________      ________      ________      ________
+                   55            56            57            58            59
+
+
+           NEW/ADDITIONAL PARAMETERS
+              GPA34         STRESS12      STRESS13      STRESS14      STRESS23
+              ________      ________      ________      ________      ________
+                   60            61            62            63            64
+
+
+           NEW/ADDITIONAL PARAMETERS
+              STRESS24      STRESS34      ESTEEM12      ESTEEM13      ESTEEM14
+              ________      ________      ________      ________      ________
+                   65            66            67            68            69
+
+
+           NEW/ADDITIONAL PARAMETERS
+              ESTEEM23      ESTEEM24      ESTEEM34
+              ________      ________      ________
+                   70            71            72
+
+
+     STARTING VALUES FOR LATENT CLASS 1
+
+
+           NU
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              LATINX        ASIAN
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            1.000         0.000         0.000         0.000         0.000
+ ESTEEM         0.000         1.000         0.000         0.000         0.000
+ STRESS         0.000         0.000         1.000         0.000         0.000
+ WHITE          0.000         0.000         0.000         1.000         0.000
+ FIRSTGEN       0.000         0.000         0.000         0.000         1.000
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              LATINX        ASIAN
+              ________      ________
+ GPA            0.000         0.000
+ ESTEEM         0.000         0.000
+ STRESS         0.000         0.000
+ WHITE          0.000         0.000
+ FIRSTGEN       0.000         0.000
+ LATINX         1.000         0.000
+ ASIAN          0.000         1.000
+
+
+           THETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            0.000
+ ESTEEM         0.000         0.000
+ STRESS         0.000         0.000         0.000
+ WHITE          0.000         0.000         0.000         0.000
+ FIRSTGEN       0.000         0.000         0.000         0.000         0.000
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              LATINX        ASIAN
+              ________      ________
+ LATINX         0.000
+ ASIAN          0.000         0.000
+
+
+           ALPHA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                2.622         3.701         2.884         0.000         0.000
+
+
+           ALPHA
+              LATINX        ASIAN
+              ________      ________
+                0.000         0.000
+
+
+           BETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            0.000         0.000         0.000         0.000         0.000
+ ESTEEM         0.000         0.000         0.000         0.000         0.000
+ STRESS         0.000         0.000         0.000         0.000         0.000
+ WHITE          0.000         0.000         0.000         0.000         0.000
+ FIRSTGEN       0.000         0.000         0.000         0.000         0.000
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              LATINX        ASIAN
+              ________      ________
+ GPA            0.000         0.000
+ ESTEEM         0.000         0.000
+ STRESS         0.000         0.000
+ WHITE          0.000         0.000
+ FIRSTGEN       0.000         0.000
+ LATINX         0.000         0.000
+ ASIAN          0.000         0.000
+
+
+           PSI
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            0.134
+ ESTEEM         0.000         0.096
+ STRESS         0.000         0.000         0.592
+ WHITE          0.000         0.000         0.000         0.108
+ FIRSTGEN       0.000         0.000         0.000         0.000         0.099
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              LATINX        ASIAN
+              ________      ________
+ LATINX         0.102
+ ASIAN          0.000         0.099
+
+
+     STARTING VALUES FOR LATENT CLASS 2
+
+
+           NU
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              LATINX        ASIAN
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            1.000         0.000         0.000         0.000         0.000
+ ESTEEM         0.000         1.000         0.000         0.000         0.000
+ STRESS         0.000         0.000         1.000         0.000         0.000
+ WHITE          0.000         0.000         0.000         1.000         0.000
+ FIRSTGEN       0.000         0.000         0.000         0.000         1.000
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              LATINX        ASIAN
+              ________      ________
+ GPA            0.000         0.000
+ ESTEEM         0.000         0.000
+ STRESS         0.000         0.000
+ WHITE          0.000         0.000
+ FIRSTGEN       0.000         0.000
+ LATINX         1.000         0.000
+ ASIAN          0.000         1.000
+
+
+           THETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            0.000
+ ESTEEM         0.000         0.000
+ STRESS         0.000         0.000         0.000
+ WHITE          0.000         0.000         0.000         0.000
+ FIRSTGEN       0.000         0.000         0.000         0.000         0.000
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              LATINX        ASIAN
+              ________      ________
+ LATINX         0.000
+ ASIAN          0.000         0.000
+
+
+           ALPHA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                3.140         4.140         3.972         0.000         0.000
+
+
+           ALPHA
+              LATINX        ASIAN
+              ________      ________
+                0.000         0.000
+
+
+           BETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            0.000         0.000         0.000         0.000         0.000
+ ESTEEM         0.000         0.000         0.000         0.000         0.000
+ STRESS         0.000         0.000         0.000         0.000         0.000
+ WHITE          0.000         0.000         0.000         0.000         0.000
+ FIRSTGEN       0.000         0.000         0.000         0.000         0.000
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              LATINX        ASIAN
+              ________      ________
+ GPA            0.000         0.000
+ ESTEEM         0.000         0.000
+ STRESS         0.000         0.000
+ WHITE          0.000         0.000
+ FIRSTGEN       0.000         0.000
+ LATINX         0.000         0.000
+ ASIAN          0.000         0.000
+
+
+           PSI
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            0.134
+ ESTEEM         0.000         0.096
+ STRESS         0.000         0.000         0.592
+ WHITE          0.000         0.000         0.000         0.108
+ FIRSTGEN       0.000         0.000         0.000         0.000         0.099
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              LATINX        ASIAN
+              ________      ________
+ LATINX         0.102
+ ASIAN          0.000         0.099
+
+
+     STARTING VALUES FOR LATENT CLASS 3
+
+
+           NU
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              LATINX        ASIAN
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            1.000         0.000         0.000         0.000         0.000
+ ESTEEM         0.000         1.000         0.000         0.000         0.000
+ STRESS         0.000         0.000         1.000         0.000         0.000
+ WHITE          0.000         0.000         0.000         1.000         0.000
+ FIRSTGEN       0.000         0.000         0.000         0.000         1.000
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              LATINX        ASIAN
+              ________      ________
+ GPA            0.000         0.000
+ ESTEEM         0.000         0.000
+ STRESS         0.000         0.000
+ WHITE          0.000         0.000
+ FIRSTGEN       0.000         0.000
+ LATINX         1.000         0.000
+ ASIAN          0.000         1.000
+
+
+           THETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            0.000
+ ESTEEM         0.000         0.000
+ STRESS         0.000         0.000         0.000
+ WHITE          0.000         0.000         0.000         0.000
+ FIRSTGEN       0.000         0.000         0.000         0.000         0.000
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              LATINX        ASIAN
+              ________      ________
+ LATINX         0.000
+ ASIAN          0.000         0.000
+
+
+           ALPHA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                3.140         4.140         3.972         0.000         0.000
+
+
+           ALPHA
+              LATINX        ASIAN
+              ________      ________
+                0.000         0.000
+
+
+           BETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            0.000         0.000         0.000         0.000         0.000
+ ESTEEM         0.000         0.000         0.000         0.000         0.000
+ STRESS         0.000         0.000         0.000         0.000         0.000
+ WHITE          0.000         0.000         0.000         0.000         0.000
+ FIRSTGEN       0.000         0.000         0.000         0.000         0.000
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              LATINX        ASIAN
+              ________      ________
+ GPA            0.000         0.000
+ ESTEEM         0.000         0.000
+ STRESS         0.000         0.000
+ WHITE          0.000         0.000
+ FIRSTGEN       0.000         0.000
+ LATINX         0.000         0.000
+ ASIAN          0.000         0.000
+
+
+           PSI
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            0.134
+ ESTEEM         0.000         0.096
+ STRESS         0.000         0.000         0.592
+ WHITE          0.000         0.000         0.000         0.108
+ FIRSTGEN       0.000         0.000         0.000         0.000         0.099
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              LATINX        ASIAN
+              ________      ________
+ LATINX         0.102
+ ASIAN          0.000         0.099
+
+
+     STARTING VALUES FOR LATENT CLASS 4
+
+
+           NU
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              LATINX        ASIAN
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            1.000         0.000         0.000         0.000         0.000
+ ESTEEM         0.000         1.000         0.000         0.000         0.000
+ STRESS         0.000         0.000         1.000         0.000         0.000
+ WHITE          0.000         0.000         0.000         1.000         0.000
+ FIRSTGEN       0.000         0.000         0.000         0.000         1.000
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              LATINX        ASIAN
+              ________      ________
+ GPA            0.000         0.000
+ ESTEEM         0.000         0.000
+ STRESS         0.000         0.000
+ WHITE          0.000         0.000
+ FIRSTGEN       0.000         0.000
+ LATINX         1.000         0.000
+ ASIAN          0.000         1.000
+
+
+           THETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            0.000
+ ESTEEM         0.000         0.000
+ STRESS         0.000         0.000         0.000
+ WHITE          0.000         0.000         0.000         0.000
+ FIRSTGEN       0.000         0.000         0.000         0.000         0.000
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              LATINX        ASIAN
+              ________      ________
+ LATINX         0.000
+ ASIAN          0.000         0.000
+
+
+           ALPHA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+                3.658         4.579         5.060         0.000         0.000
+
+
+           ALPHA
+              LATINX        ASIAN
+              ________      ________
+                0.000         0.000
+
+
+           BETA
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            0.000         0.000         0.000         0.000         0.000
+ ESTEEM         0.000         0.000         0.000         0.000         0.000
+ STRESS         0.000         0.000         0.000         0.000         0.000
+ WHITE          0.000         0.000         0.000         0.000         0.000
+ FIRSTGEN       0.000         0.000         0.000         0.000         0.000
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              LATINX        ASIAN
+              ________      ________
+ GPA            0.000         0.000
+ ESTEEM         0.000         0.000
+ STRESS         0.000         0.000
+ WHITE          0.000         0.000
+ FIRSTGEN       0.000         0.000
+ LATINX         0.000         0.000
+ ASIAN          0.000         0.000
+
+
+           PSI
+              GPA           ESTEEM        STRESS        WHITE         FIRSTGEN
+              ________      ________      ________      ________      ________
+ GPA            0.134
+ ESTEEM         0.000         0.096
+ STRESS         0.000         0.000         0.592
+ WHITE          0.000         0.000         0.000         0.108
+ FIRSTGEN       0.000         0.000         0.000         0.000         0.099
+ LATINX         0.000         0.000         0.000         0.000         0.000
+ ASIAN          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              LATINX        ASIAN
+              ________      ________
+ LATINX         0.102
+ ASIAN          0.000         0.099
+
+
+     STARTING VALUES FOR LATENT CLASS REGRESSION MODEL PART
+
+
+           ALPHA(C)
+              C#1           C#2           C#3           C#4
+              ________      ________      ________      ________
+                0.000         0.000         0.000         0.000
+
+
+           GAMMA(C)
+              WHITE         FIRSTGEN      LATINX        ASIAN
+              ________      ________      ________      ________
+ C#1            0.000         0.000         0.000         0.000
+ C#2            0.000         0.000         0.000         0.000
+ C#3            0.000         0.000         0.000         0.000
+ C#4            0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR THE CENSORED/NOMINAL/COUNT MODEL PART
+
+
+           NU(P) FOR LATENT CLASS 1
+              N#1           N#2           N#3
+              ________      ________      ________
+                9.699         4.809         7.068
+
+
+           KAPPA(P) FOR LATENT CLASS 1
+              WHITE         FIRSTGEN      LATINX        ASIAN
+              ________      ________      ________      ________
+ N#1            0.000         0.000         0.000         0.000
+ N#2            0.000         0.000         0.000         0.000
+ N#3            0.000         0.000         0.000         0.000
+
+
+           NU(P) FOR LATENT CLASS 2
+              N#1           N#2           N#3
+              ________      ________      ________
+               -0.348         3.008         0.509
+
+
+           KAPPA(P) FOR LATENT CLASS 2
+              WHITE         FIRSTGEN      LATINX        ASIAN
+              ________      ________      ________      ________
+ N#1            0.000         0.000         0.000         0.000
+ N#2            0.000         0.000         0.000         0.000
+ N#3            0.000         0.000         0.000         0.000
+
+
+           NU(P) FOR LATENT CLASS 3
+              N#1           N#2           N#3
+              ________      ________      ________
+                1.493         0.807         4.279
+
+
+           KAPPA(P) FOR LATENT CLASS 3
+              WHITE         FIRSTGEN      LATINX        ASIAN
+              ________      ________      ________      ________
+ N#1            0.000         0.000         0.000         0.000
+ N#2            0.000         0.000         0.000         0.000
+ N#3            0.000         0.000         0.000         0.000
+
+
+           NU(P) FOR LATENT CLASS 4
+              N#1           N#2           N#3
+              ________      ________      ________
+              -11.152        -2.775        -2.501
+
+
+           KAPPA(P) FOR LATENT CLASS 4
+              WHITE         FIRSTGEN      LATINX        ASIAN
+              ________      ________      ________      ________
+ N#1            0.000         0.000         0.000         0.000
+ N#2            0.000         0.000         0.000         0.000
+ N#3            0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              GPA12         GPA13         GPA14         GPA23         GPA24
+              ________      ________      ________      ________      ________
+                0.500         0.500         0.500         0.500         0.500
+
+
+           NEW/ADDITIONAL PARAMETERS
+              GPA34         STRESS12      STRESS13      STRESS14      STRESS23
+              ________      ________      ________      ________      ________
+                0.500         0.500         0.500         0.500         0.500
+
+
+           NEW/ADDITIONAL PARAMETERS
+              STRESS24      STRESS34      ESTEEM12      ESTEEM13      ESTEEM14
+              ________      ________      ________      ________      ________
+                0.500         0.500         0.500         0.500         0.500
+
+
+           NEW/ADDITIONAL PARAMETERS
+              ESTEEM23      ESTEEM24      ESTEEM34
+              ________      ________      ________
+                0.500         0.500         0.500
+
+
+TECHNICAL 8 OUTPUT
+
+
+   E STEP  ITER  LOGLIKELIHOOD    ABS CHANGE   REL CHANGE  ALGORITHM
+              1 -0.41128330D+04    0.0000000    0.0000000  EM
+              2 -0.31380144D+04  974.8185727    0.2370188  EM
+              3 -0.29463016D+04  191.7128377    0.0610937  EM
+              4 -0.28992764D+04   47.0251253    0.0159607  EM
+              5 -0.28911806D+04    8.0958945    0.0027924  EM
+              6 -0.28893103D+04    1.8702123    0.0006469  EM
+              7 -0.28887048D+04    0.6055317    0.0002096  EM
+              8 -0.28884684D+04    0.2364499    0.0000819  EM
+              9 -0.28883717D+04    0.0966554    0.0000335  EM
+             10 -0.28883335D+04    0.0382141    0.0000132  EM
+             11 -0.28883190D+04    0.0144918    0.0000050  EM
+             12 -0.28883136D+04    0.0053603    0.0000019  EM
+             13 -0.28883117D+04    0.0019687    0.0000007  EM
+             14 -0.28883109D+04    0.0007272    0.0000003  EM
+             15 -0.28883107D+04    0.0002726    0.0000001  EM
+             16 -0.28883106D+04    0.0001039    0.0000000  EM
+             17 -0.28883105D+04    0.0000403    0.0000000  EM
+             18 -0.28883105D+04    0.0000159    0.0000000  EM
+             19 -0.28883105D+04    0.0000064    0.0000000  EM
+             20 -0.28883105D+04    0.0000026    0.0000000  EM
+             21 -0.28883105D+04    0.0000011    0.0000000  EM
+             22 -0.28883105D+04    0.0000004    0.0000000  EM
+             23 -0.28883105D+04    0.0000002    0.0000000  EM
+             24 -0.28883105D+04    0.0000001    0.0000000  EM
+             25 -0.28883105D+04    0.0000000    0.0000000  EM
+             26 -0.28883105D+04    0.0000000    0.0000000  EM
+             27 -0.28883105D+04    0.0000000    0.0000000  EM
+
+
+     Beginning Time:  21:13:46
+        Ending Time:  21:13:47
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2024 Muthen & Muthen

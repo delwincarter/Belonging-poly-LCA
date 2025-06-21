@@ -1,0 +1,621 @@
+Mplus VERSION 8.11 (Mac)
+MUTHEN & MUTHEN
+05/01/2025   7:40 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+  2-Class LCA for Belonging Variables
+  DATA:
+  FILE = "/Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/enum/belonging.dat";
+
+  VARIABLE:
+  NAMES = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+   MISSING=.;
+   categorical = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+  usevar = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+  missing = all(999);
+  classes = c(2);
+  ANALYSIS:
+
+        estimator = mlr;
+        type = mixture;
+        starts = 1000 100;
+        processors = 10;
+  OUTPUT:
+  sampstat; residual; tech11; tech14;
+  PLOT:
+
+        type = plot3;
+        series = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R(*);
+
+
+
+*** WARNING in OUTPUT command
+  SAMPSTAT option is not available when all outcomes are censored, ordered
+  categorical, unordered categorical (nominal), count or continuous-time
+  survival variables.  Request for SAMPSTAT is ignored.
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+2-Class LCA for Belonging Variables
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         837
+
+Number of dependent variables                                    8
+Number of independent variables                                  0
+Number of continuous latent variables                            0
+Number of categorical latent variables                           1
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   SSAF2R      SSAF4R      SSAF7       SSAF11      AUS3        AUS2R
+   AUS5        AUS6R
+
+Categorical latent variables
+   C
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-06
+    Relative loglikelihood change                        0.100D-06
+    Derivative                                           0.100D-05
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-05
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-05
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Random Starts Specifications
+  Number of initial stage random starts                       1000
+  Number of final stage optimizations                          100
+  Number of initial stage iterations                            10
+  Initial stage convergence criterion                    0.100D+01
+  Random starts scale                                    0.500D+01
+  Random seed for generating random starts                       0
+Link                                                         LOGIT
+
+Input data file(s)
+  /Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/enum/belonging.d
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+     Number of y missing data patterns           0
+     Number of u missing data patterns           1
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    SSAF2R
+      Category 1    0.239          200.000
+      Category 2    0.123          103.000
+      Category 3    0.638          534.000
+    SSAF4R
+      Category 1    0.142          119.000
+      Category 2    0.134          112.000
+      Category 3    0.724          606.000
+    SSAF7
+      Category 1    0.050           42.000
+      Category 2    0.097           81.000
+      Category 3    0.853          714.000
+    SSAF11
+      Category 1    0.057           48.000
+      Category 2    0.186          156.000
+      Category 3    0.756          633.000
+    AUS3
+      Category 1    0.234          196.000
+      Category 2    0.219          183.000
+      Category 3    0.547          458.000
+    AUS2R
+      Category 1    0.570          477.000
+      Category 2    0.098           82.000
+      Category 3    0.332          278.000
+    AUS5
+      Category 1    0.166          139.000
+      Category 2    0.170          142.000
+      Category 3    0.664          556.000
+    AUS6R
+      Category 1    0.299          250.000
+      Category 2    0.179          150.000
+      Category 3    0.522          437.000
+
+
+RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST LOGLIKELIHOOD VALUES
+
+Final stage loglikelihood values at local maxima, seeds, and initial stage start numbers:
+
+           -5103.434  331681           549
+           -5103.434  580405           286
+           -5103.434  805768           879
+           -5103.434  851945           18
+           -5103.434  546943           865
+           -5103.434  617243           237
+           -5103.434  375590           438
+           -5103.434  322790           636
+           -5103.434  77210            712
+           -5103.434  301428           885
+           -5103.434  231281           542
+           -5103.434  392751           480
+           -5103.434  535804           111
+           -5103.434  605358           321
+           -5103.434  951709           348
+           -5103.434  887580           493
+           -5103.434  850112           922
+           -5103.434  358074           560
+           -5103.434  193847           354
+           -5103.434  730868           977
+           -5103.434  485256           371
+           -5103.434  25127            107
+           -5103.434  566687           597
+           -5103.434  817298           967
+           -5103.434  829540           324
+           -5103.434  967237           48
+           -5103.434  209031           632
+           -5103.434  648035           836
+           -5103.434  605161           409
+           -5103.434  391179           78
+           -5103.434  712702           684
+           -5103.434  72344            897
+           -5103.434  597614           284
+           -5103.434  629320           222
+           -5103.434  937068           982
+           -5103.434  549244           756
+           -5103.434  878749           728
+           -5103.434  195353           225
+           -5103.434  647617           725
+           -5103.434  496881           192
+           -5103.434  220492           743
+           -5103.434  263221           447
+           -5103.434  666720           671
+           -5103.434  859432           770
+           -5103.434  942358           644
+           -5103.434  451258           848
+           -5103.434  506886           576
+           -5103.434  965639           463
+           -5103.434  903369           134
+           -5103.434  453915           975
+           -5103.434  195873           6
+           -5103.434  124999           96
+           -5103.434  298201           903
+           -5103.434  252949           487
+           -5103.434  638977           643
+           -5103.434  22089            143
+           -5103.434  312587           775
+           -5103.434  121425           511
+           -5103.434  481835           57
+           -5103.434  216565           474
+           -5103.434  699810           571
+           -5103.434  792389           746
+           -5103.434  760599           832
+           -5103.434  7886             804
+           -5103.434  40340            188
+           -5103.434  871851           257
+           -5103.434  568859           49
+           -5103.434  853195           431
+           -5103.434  760531           550
+           -5103.434  73576            213
+           -5103.434  93468            3
+           -5103.434  836515           341
+           -5103.434  478421           311
+           -5103.434  797594           234
+           -5103.434  679615           942
+           -5103.434  232559           136
+           -5103.434  508445           946
+           -5103.434  920593           611
+           -5103.434  847088           750
+           -5103.434  945065           255
+           -5103.434  130011           587
+           -5103.434  267983           228
+           -5103.434  117587           572
+           -5103.434  948615           140
+           -5103.434  985387           381
+           -5103.434  383902           673
+           -5103.434  576783           866
+           -5103.434  783110           72
+           -5103.434  798839           312
+           -5103.434  568534           961
+           -5103.434  106561           686
+           -5103.434  292884           103
+           -5103.434  420910           928
+           -5103.434  166851           638
+           -5103.434  301717           823
+           -5103.434  1548             384
+           -5103.434  791285           416
+           -5103.434  136842           58
+           -5103.434  127362           757
+           -5103.434  991329           182
+
+
+
+THE BEST LOGLIKELIHOOD VALUE HAS BEEN REPLICATED.  RERUN WITH AT LEAST TWICE THE
+RANDOM STARTS TO CHECK THAT THE BEST LOGLIKELIHOOD IS STILL OBTAINED AND REPLICATED.
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       33
+
+Loglikelihood
+
+          H0 Value                       -5103.434
+          H0 Scaling Correction Factor      1.0815
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   10272.867
+          Bayesian (BIC)                 10428.951
+          Sample-Size Adjusted BIC       10324.154
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit for the Binary and Ordered Categorical
+(Ordinal) Outcomes**
+
+          Pearson Chi-Square
+
+          Value                           5504.957
+          Degrees of Freedom                  6513
+          P-Value                           1.0000
+
+          Likelihood Ratio Chi-Square
+
+          Value                           1858.309
+          Degrees of Freedom                  6513
+          P-Value                           1.0000
+
+** Of the 6561 cells in the latent class indicator table, 14
+   were deleted in the calculation of chi-square due to extreme values.
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THE ESTIMATED MODEL
+
+    Latent
+   Classes
+
+       1        592.18327          0.70751
+       2        244.81673          0.29249
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON ESTIMATED POSTERIOR PROBABILITIES
+
+    Latent
+   Classes
+
+       1        592.18327          0.70751
+       2        244.81673          0.29249
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THEIR MOST LIKELY LATENT CLASS MEMBERSHIP
+
+Class Counts and Proportions
+
+    Latent
+   Classes
+
+       1              600          0.71685
+       2              237          0.28315
+
+
+CLASSIFICATION QUALITY
+
+     Entropy                         0.828
+
+
+Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
+by Latent Class (Column)
+
+           1        2
+
+    1   0.960    0.040
+    2   0.067    0.933
+
+
+Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+           1        2
+
+    1   0.973    0.027
+    2   0.097    0.903
+
+
+Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+              1        2
+
+    1      3.585    0.000
+    2     -2.229    0.000
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ Thresholds
+    SSAF2R$1          -2.853      0.250    -11.413      0.000
+    SSAF2R$2          -1.737      0.183     -9.481      0.000
+    SSAF4R$1          -4.543      0.667     -6.808      0.000
+    SSAF4R$2          -2.615      0.303     -8.627      0.000
+    SSAF7$1           -6.174      1.300     -4.748      0.000
+    SSAF7$2           -3.959      0.499     -7.938      0.000
+    SSAF11$1          -6.068      1.017     -5.966      0.000
+    SSAF11$2          -2.462      0.202    -12.161      0.000
+    AUS3$1            -1.753      0.148    -11.862      0.000
+    AUS3$2            -0.572      0.106     -5.395      0.000
+    AUS2R$1           -0.019      0.100     -0.188      0.851
+    AUS2R$2            0.397      0.102      3.870      0.000
+    AUS5$1            -1.914      0.137    -13.931      0.000
+    AUS5$2            -1.039      0.111     -9.343      0.000
+    AUS6R$1           -1.289      0.122    -10.557      0.000
+    AUS6R$2           -0.490      0.104     -4.694      0.000
+
+Latent Class 2
+
+ Thresholds
+    SSAF2R$1           0.777      0.258      3.009      0.003
+    SSAF2R$2           1.951      0.368      5.306      0.000
+    SSAF4R$1          -0.158      0.207     -0.763      0.445
+    SSAF4R$2           1.258      0.275      4.576      0.000
+    SSAF7$1           -1.610      0.209     -7.689      0.000
+    SSAF7$2           -0.172      0.187     -0.919      0.358
+    SSAF11$1          -1.447      0.211     -6.853      0.000
+    SSAF11$2           0.589      0.224      2.628      0.009
+    AUS3$1            -0.227      0.164     -1.382      0.167
+    AUS3$2             0.732      0.177      4.142      0.000
+    AUS2R$1            1.100      0.184      5.979      0.000
+    AUS2R$2            1.637      0.215      7.622      0.000
+    AUS5$1            -1.063      0.172     -6.165      0.000
+    AUS5$2             0.062      0.161      0.383      0.701
+    AUS6R$1           -0.006      0.152     -0.038      0.970
+    AUS6R$2            0.920      0.174      5.292      0.000
+
+Categorical Latent Variables
+
+ Means
+    C#1                0.883      0.145      6.080      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.843E-03
+       (ratio of smallest to largest eigenvalue)
+
+
+RESULTS IN PROBABILITY SCALE
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ SSAF2R
+    Category 1         0.055      0.013      4.232      0.000
+    Category 2         0.095      0.017      5.624      0.000
+    Category 3         0.850      0.023     36.464      0.000
+ SSAF4R
+    Category 1         0.011      0.007      1.515      0.130
+    Category 2         0.058      0.016      3.618      0.000
+    Category 3         0.932      0.019     48.391      0.000
+ SSAF7
+    Category 1         0.002      0.003      0.771      0.441
+    Category 2         0.017      0.008      1.998      0.046
+    Category 3         0.981      0.009    107.044      0.000
+ SSAF11
+    Category 1         0.002      0.002      0.985      0.324
+    Category 2         0.076      0.014      5.306      0.000
+    Category 3         0.921      0.015     62.865      0.000
+ AUS3
+    Category 1         0.148      0.019      7.937      0.000
+    Category 2         0.213      0.018     11.957      0.000
+    Category 3         0.639      0.024     26.158      0.000
+ AUS2R
+    Category 1         0.495      0.025     19.879      0.000
+    Category 2         0.103      0.013      7.866      0.000
+    Category 3         0.402      0.025     16.322      0.000
+ AUS5
+    Category 1         0.129      0.015      8.354      0.000
+    Category 2         0.133      0.016      8.564      0.000
+    Category 3         0.739      0.021     34.410      0.000
+ AUS6R
+    Category 1         0.216      0.021     10.449      0.000
+    Category 2         0.164      0.016     10.099      0.000
+    Category 3         0.620      0.025     25.208      0.000
+
+Latent Class 2
+
+ SSAF2R
+    Category 1         0.685      0.056     12.295      0.000
+    Category 2         0.191      0.034      5.612      0.000
+    Category 3         0.124      0.040      3.106      0.002
+ SSAF4R
+    Category 1         0.461      0.051      8.959      0.000
+    Category 2         0.318      0.035      9.207      0.000
+    Category 3         0.221      0.047      4.673      0.000
+ SSAF7
+    Category 1         0.167      0.029      5.729      0.000
+    Category 2         0.291      0.035      8.375      0.000
+    Category 3         0.543      0.046     11.691      0.000
+ SSAF11
+    Category 1         0.190      0.033      5.851      0.000
+    Category 2         0.453      0.039     11.555      0.000
+    Category 3         0.357      0.051      6.933      0.000
+ AUS3
+    Category 1         0.444      0.041     10.949      0.000
+    Category 2         0.232      0.030      7.745      0.000
+    Category 3         0.325      0.039      8.387      0.000
+ AUS2R
+    Category 1         0.750      0.034     21.763      0.000
+    Category 2         0.087      0.020      4.258      0.000
+    Category 3         0.163      0.029      5.561      0.000
+ AUS5
+    Category 1         0.257      0.033      7.806      0.000
+    Category 2         0.259      0.031      8.384      0.000
+    Category 3         0.485      0.040     12.053      0.000
+ AUS6R
+    Category 1         0.499      0.038     13.082      0.000
+    Category 2         0.217      0.029      7.397      0.000
+    Category 3         0.285      0.035      8.040      0.000
+
+
+LATENT CLASS INDICATOR ODDS RATIOS FOR THE LATENT CLASSES
+
+                                                95% C.I.
+                    Estimate       S.E.  Lower 2.5% Upper 2.5%
+
+Latent Class 1 Compared to Latent Class 2
+
+ SSAF2R
+    Category > 1      37.689     11.072     21.191     67.033
+    Category > 2      39.962     13.613     20.497     77.914
+ SSAF4R
+    Category > 1      80.225     52.159     22.433    286.903
+    Category > 2      48.080     15.756     25.294     91.391
+ SSAF7
+    Category > 1      95.949    124.524      7.539   1221.133
+    Category > 2      44.104     21.242     17.160    113.357
+ SSAF11
+    Category > 1     101.587    105.019     13.393    770.563
+    Category > 2      21.139      5.458     12.745     35.063
+ AUS3
+    Category > 1       4.602      1.081      2.904      7.293
+    Category > 2       3.681      0.794      2.411      5.618
+ AUS2R
+    Category > 1       3.062      0.686      1.974      4.749
+    Category > 2       3.458      0.882      2.097      5.701
+ AUS5
+    Category > 1       2.342      0.551      1.476      3.715
+    Category > 2       3.005      0.626      1.998      4.519
+ AUS6R
+    Category > 1       3.607      0.741      2.411      5.397
+    Category > 2       4.099      0.865      2.711      6.198
+
+
+RESIDUAL OUTPUT
+
+
+     RESIDUAL OUTPUT IS NOT AVAILABLE FOR THIS MODEL.  ADDITIONAL OUTPUT FOR
+     CATEGORICAL, COUNT, AND NOMINAL VARIABLES MAY BE AVAILABLE USING TECH10.
+
+
+TECHNICAL 11 OUTPUT
+
+     Random Starts Specifications for the k-1 Class Analysis Model
+        Number of initial stage random starts                1000
+        Number of final stage optimizations                   100
+
+
+
+     VUONG-LO-MENDELL-RUBIN LIKELIHOOD RATIO TEST FOR 1 (H0) VERSUS 2 CLASSES
+
+          H0 Loglikelihood Value                        -5576.542
+          2 Times the Loglikelihood Difference            946.217
+          Difference in the Number of Parameters               17
+          Mean                                             30.212
+          Standard Deviation                               23.847
+          P-Value                                          0.0000
+
+     LO-MENDELL-RUBIN ADJUSTED LRT TEST
+
+          Value                                           938.018
+          P-Value                                          0.0000
+
+
+TECHNICAL 14 OUTPUT
+
+     Random Starts Specifications for the k-1 Class Analysis Model
+        Number of initial stage random starts                1000
+        Number of final stage optimizations                   100
+
+     Random Starts Specification for the k-1 Class Model for Generated Data
+        Number of initial stage random starts                   0
+        Number of final stage optimizations for the
+           initial stage random starts                          0
+     Random Starts Specification for the k Class Model for Generated Data
+        Number of initial stage random starts                  40
+        Number of final stage optimizations                     8
+     Number of bootstrap draws requested                   Varies
+
+
+     PARAMETRIC BOOTSTRAPPED LIKELIHOOD RATIO TEST FOR 1 (H0) VERSUS 2 CLASSES
+
+          H0 Loglikelihood Value                        -5576.542
+          2 Times the Loglikelihood Difference            946.217
+          Difference in the Number of Parameters               17
+          Approximate P-Value                              0.0000
+          Successful Bootstrap Draws                            0
+
+     WARNING:  100 OUT OF 100 BOOTSTRAP DRAWS DID NOT CONVERGE.
+     THE P-VALUE MAY NOT BE TRUSTWORTHY.
+     INCREASE THE NUMBER OF RANDOM STARTS USING THE LRTSTARTS OPTION.
+
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+  Sample proportions and estimated probabilities
+
+     Beginning Time:  19:40:54
+        Ending Time:  19:40:56
+       Elapsed Time:  00:00:02
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2024 Muthen & Muthen

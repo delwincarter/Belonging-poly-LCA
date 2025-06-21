@@ -1,0 +1,380 @@
+Mplus VERSION 8.11 (Mac)
+MUTHEN & MUTHEN
+05/04/2025   9:13 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+  Step 2 - 3step Belonging LCA
+  DATA:
+  FILE = "/Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/3step/4c_step2.dat";
+
+  VARIABLE:
+  NAMES = WHITE GPA FIRSTGEN ESTEEM STRESS LATINX ASIAN N;
+   MISSING=.;
+   NOMINAL = N;
+    USEVARIABLES = N;
+    CLASSES = C(4);
+
+  ANALYSIS:
+  estimator = mlr;
+       type = mixture;
+       starts = 0;
+       processors = 10;
+  MODEL:
+  %C#1%
+  [N#1@9.699];
+  [N#2@4.809];
+  [N#3@7.068];
+
+  %C#2%
+  [N#1@-0.348];
+  [N#2@3.008];
+  [N#3@0.509];
+
+  %C#3%
+  [N#1@1.493];
+  [N#2@0.807];
+  [N#3@4.279];
+
+  %C#4%
+  [N#1@-11.152];
+  [N#2@-2.775];
+  [N#3@-2.501];
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+
+Step 2 - 3step Belonging LCA
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         837
+
+Number of dependent variables                                    1
+Number of independent variables                                  0
+Number of continuous latent variables                            0
+Number of categorical latent variables                           1
+
+Observed dependent variables
+
+  Unordered categorical (nominal)
+   N
+
+Categorical latent variables
+   C
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-06
+    Relative loglikelihood change                        0.100D-06
+    Derivative                                           0.100D-05
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-05
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-05
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  /Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/3step/4c_step2.d
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    N
+      Category 1    0.352          295.000
+      Category 2    0.149          125.000
+      Category 3    0.380          318.000
+      Category 4    0.118           99.000
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                        3
+
+Loglikelihood
+
+          H0 Value                       -1064.417
+          H0 Scaling Correction Factor      1.0000
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    2134.833
+          Bayesian (BIC)                  2149.023
+          Sample-Size Adjusted BIC        2139.496
+            (n* = (n + 2) / 24)
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THE ESTIMATED MODEL
+
+    Latent
+   Classes
+
+       1        295.61459          0.35318
+       2        126.66228          0.15133
+       3        312.05932          0.37283
+       4        102.66380          0.12266
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON ESTIMATED POSTERIOR PROBABILITIES
+
+    Latent
+   Classes
+
+       1        295.61459          0.35318
+       2        126.66228          0.15133
+       3        312.05932          0.37283
+       4        102.66380          0.12266
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THEIR MOST LIKELY LATENT CLASS MEMBERSHIP
+
+Class Counts and Proportions
+
+    Latent
+   Classes
+
+       1              295          0.35245
+       2              125          0.14934
+       3              318          0.37993
+       4               99          0.11828
+
+
+CLASSIFICATION QUALITY
+
+     Entropy                         0.710
+
+
+Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
+by Latent Class (Column)
+
+           1        2        3        4
+
+    1   0.928    0.013    0.059    0.000
+    2   0.016    0.869    0.070    0.045
+    3   0.062    0.028    0.887    0.023
+    4   0.000    0.054    0.039    0.906
+
+
+Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+           1        2        3        4
+
+    1   0.926    0.007    0.067    0.000
+    2   0.030    0.857    0.070    0.042
+    3   0.056    0.028    0.904    0.013
+    4   0.000    0.054    0.072    0.874
+
+
+Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+              1        2        3        4
+
+    1      9.699    4.809    7.068    0.000
+    2     -0.348    3.008    0.509    0.000
+    3      1.493    0.807    4.279    0.000
+    4    -11.152   -2.775   -2.501    0.000
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ Means
+    N#1                9.699      0.000    999.000    999.000
+    N#2                4.809      0.000    999.000    999.000
+    N#3                7.068      0.000    999.000    999.000
+
+Latent Class 2
+
+ Means
+    N#1               -0.348      0.000    999.000    999.000
+    N#2                3.008      0.000    999.000    999.000
+    N#3                0.509      0.000    999.000    999.000
+
+Latent Class 3
+
+ Means
+    N#1                1.493      0.000    999.000    999.000
+    N#2                0.807      0.000    999.000    999.000
+    N#3                4.279      0.000    999.000    999.000
+
+Latent Class 4
+
+ Means
+    N#1              -11.152      0.000    999.000    999.000
+    N#2               -2.775      0.000    999.000    999.000
+    N#3               -2.501      0.000    999.000    999.000
+
+Categorical Latent Variables
+
+ Means
+    C#1                1.058      0.128      8.281      0.000
+    C#2                0.210      0.160      1.311      0.190
+    C#3                1.112      0.132      8.420      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.973E-01
+       (ratio of smallest to largest eigenvalue)
+
+
+RESULTS IN PROBABILITY SCALE
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ N
+    Category 1         0.926      0.000  *********      0.000
+    Category 2         0.007      0.000  *********      0.000
+    Category 3         0.067      0.000  *********      0.000
+    Category 4         0.000      0.000      7.574      0.000
+
+Latent Class 2
+
+ N
+    Category 1         0.030      0.000    178.857      0.000
+    Category 2         0.857      0.005    178.857      0.000
+    Category 3         0.070      0.000    178.857      0.000
+    Category 4         0.042      0.005      7.908      0.000
+
+Latent Class 3
+
+ N
+    Category 1         0.056      0.000    604.807      0.000
+    Category 2         0.028      0.000    604.807      0.000
+    Category 3         0.904      0.001    604.807      0.000
+    Category 4         0.013      0.002      7.669      0.000
+
+Latent Class 4
+
+ N
+    Category 1         0.000      0.000      8.667      0.000
+    Category 2         0.054      0.006      8.667      0.000
+    Category 3         0.072      0.008      8.667      0.000
+    Category 4         0.874      0.015     60.032      0.000
+
+
+LATENT CLASS INDICATOR ODDS RATIOS FOR THE LATENT CLASSES
+
+                                                95% C.I.
+                    Estimate       S.E.  Lower 2.5% Upper 2.5%
+
+Latent Class 1 Compared to Latent Class 2
+
+ N
+    Category = 1     407.676      2.308    403.177    412.225
+    Category = 2       0.001      0.000      0.001      0.001
+    Category = 3       0.943      0.006      0.932      0.954
+    Category = 4       0.001      0.000      0.001      0.001
+
+Latent Class 1 Compared to Latent Class 3
+
+ N
+    Category = 1     212.897      0.351    212.210    213.586
+    Category = 2       0.243      0.000      0.242      0.244
+    Category = 3       0.008      0.000      0.007      0.008
+    Category = 4       0.004      0.000      0.004      0.004
+
+Latent Class 1 Compared to Latent Class 4
+
+ N
+    Category = 1   *********  *********  *********  *********
+    Category = 2       0.122      0.015      0.096      0.155
+    Category = 3       0.926      0.115      0.726      1.181
+    Category = 4       0.000      0.000      0.000      0.000
+
+Latent Class 2 Compared to Latent Class 3
+
+ N
+    Category = 1       0.522      0.002      0.518      0.526
+    Category = 2     208.091      7.800    193.351    223.955
+    Category = 3       0.008      0.000      0.008      0.008
+    Category = 4       3.487      0.000      3.487      3.487
+
+Latent Class 2 Compared to Latent Class 4
+
+ N
+    Category = 1    2458.347    269.490   1983.036   3047.584
+    Category = 2     104.271      8.639     88.643    122.655
+    Category = 3       0.982      0.116      0.779      1.238
+    Category = 4       0.006      0.000      0.006      0.006
+
+Latent Class 3 Compared to Latent Class 4
+
+ N
+    Category = 1    4707.477    534.933   3767.562   5881.877
+    Category = 2       0.501      0.060      0.396      0.634
+    Category = 3     121.555     13.021     98.534    149.954
+    Category = 4       0.002      0.000      0.002      0.002
+
+
+     Beginning Time:  21:13:34
+        Ending Time:  21:13:34
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2024 Muthen & Muthen

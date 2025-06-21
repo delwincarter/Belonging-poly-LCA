@@ -1,0 +1,2561 @@
+---
+title: "A Tale of Two Belongings"
+subtitle: "Exploring Social and Academic Belonging in University Students"
+author: "Delwin Carter"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+format:
+  html:
+    toc: true
+    toc-title: "Overview"
+    toc-depth: 3
+    toc-float:
+      collapsed: false
+      smooth-scroll: true
+    theme: flatly
+    fig-format: svg
+    font:
+      main: "Avenir Next LT Pro, Arial, sans-serif"
+    page-layout: full
+    code-tools: true
+    table-html: true
+    fig-path: "figures/"
+    code-fold: true
+    code-summary: "Show code"
+    wrap: auto
+    htmlwidgets:
+      renderer: "canvas"
+editor: visual
+knitr:
+  opts_chunk:
+    echo: true
+    out.width: "100%"
+    fig.align: "center"
+    fig.path: "figures/"
+    fig.height: 8
+    fig.width: 6
+---
+
+## Introduction
+
+This study uses Latent Class Analysis (LCA) to identify distinct profiles of social and academic belonging among 837 university students, based on polytomous (categorical) survey responses. Unlike prior research that combined these dimensions, we uncover four unique profiles: High Social, High Academic; Low Social, High Academic; High Social, Low Academic; and Low Social, Low Academic. By analyzing how these profiles predict GPA, self-esteem, and stress, we demonstrate the pivotal role of academic belonging in academic success and the joint impact of both belonging types on emotional well-being. These findings provide a roadmap for researchers and educators to support students with tailored interventions, using LCA to model polytomous data effectively.
+
+```{r}
+#| label: "load-libraries"
+#| echo: true
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(haven)
+library(glue)
+library(MplusAutomation)
+library(here)
+library(janitor)
+library(gt)
+library(cowplot)
+library(DiagrammeR) 
+library(webshot2)
+library(stringr)
+library(flextable)
+library(officer)
+library(dplyr)
+library(tidyr)
+library(haven)
+```
+
+### **Latent Class Analysis Model Visualization of Social and Academic Belonging**
+
+This section presents a directed graph to visualize the Latent Class Analysis (LCA) model, illustrating how polytomous social and academic belonging indicators, covariates (e.g., gender, ethnicity), and distal outcomes (GPA, self-esteem, stress) are linked. The diagram clarifies the structure of the LCA model, helping researchers understand how latent classes are formed from categorical data and how they relate to key variables in the context of university student experiences.
+
+```{r}
+diagram <- grViz("
+digraph LCA_Model {
+
+  graph [layout = neato, overlap = false]
+  node [fontname=\"Avenir\", fontsize=10]
+
+  // ---------------------------
+  // LCA Items
+  node [shape = box, style = filled, fillcolor = midnightblue,
+        fontcolor = white, fixedsize = true, width = 1.0, height = 0.6]
+  Item1 [pos=\"0,8!\",  label=\"Feel like\\nOutsider\"];
+  Item2 [pos=\"1.2,8!\",label=\"Feel\\nAlienated\"];
+  Item3 [pos=\"2.4,8!\",label=\"Get Along\\nwell with People\"];
+  Item4 [pos=\"3.6,8!\",label=\"People\\nLike Me\"];
+  Item5 [pos=\"4.8,8!\",label=\"Wonder if\\nhave what Takes\"];
+  Item6 [pos=\"6.0,8!\",label=\"Confident\\nAbout Abilities\"];
+  Item7 [pos=\"7.2,8!\",label=\"Doubt\\nPossess Abilities\"];
+  Item8 [pos=\"8.4,8!\",label=\"Not Sure\\nI fit In\"];
+
+  // ---------------------------
+  // Latent class
+  node [shape = circle, style = filled, fillcolor = gold,
+        fontcolor = black, fixedsize = true, width = 1.0, height = 1.0]
+  Belonging [pos=\"4.2,6!\", label=\"Social &\\nAcademic\\nBelonging\\nC\"];
+
+  // ---------------------------
+  // Covariates
+  node [shape = box, style = filled, fillcolor = firebrick,
+        fontcolor = white, fixedsize = true, width = 1.1, height = 0.6]
+  GenStatus [pos=\"-2,4.5!\", label=\"Generation\\nStatus\"];
+  Asian     [pos=\"-2,3.5!\", label=\"Asian\"];
+  Latino    [pos=\"-2,2.5!\", label=\"Latino/a\"];
+  EuroAm    [pos=\"-2,1.5!\", label=\"European\\nAmerican\"];
+
+  // ---------------------------
+  // Distal outcomes
+  GPA     [pos=\"10.5,4!\", label=\"GPA\"];
+  Esteem  [pos=\"10.5,3!\", label=\"Self-\\nEsteem\"];
+  Stress  [pos=\"10.5,2!\", label=\"Stress\"];
+
+  // ---------------------------
+  // Hub just to the right of covariates
+  node [shape = point, width = 0.01, label = \"\", style = invis]
+  CovariateHub [pos=\"-1.4,3!\"];
+
+  // ---------------------------
+  // Arrows from Belonging to items
+  Belonging -> Item1;
+  Belonging -> Item2;
+  Belonging -> Item3;
+  Belonging -> Item4;
+  Belonging -> Item5;
+  Belonging -> Item6;
+  Belonging -> Item7;
+  Belonging -> Item8;
+
+  // ---------------------------
+  // Core arrows (now cleanly routed)
+  CovariateHub -> Belonging;
+  Belonging -> Esteem;
+  CovariateHub -> Esteem;
+}
+")
+
+
+```
+
+### Create Diagram
+
+```{r}
+#| label: "show-diagram"
+#| echo: true
+#| message: false
+#| warning: false
+
+library(webshot2)
+temp_html <- tempfile(fileext = ".html")
+htmlwidgets::saveWidget(diagram, temp_html, selfcontained = TRUE)
+invisible(webshot2::webshot(temp_html, file = here("figures", "lca_model.png"), vwidth = 1000, vheight = 600, zoom = 1.5))
+knitr::include_graphics(here("figures", "lca_model.png"))
+```
+
+### **Import and Inspect SPSS Data** 
+
+This step imports the SPSS dataset and examines its polytomous variables, checking response ranges, missing values, and data structure to ensure readiness for Latent Class Analysis (LCA). Thorough inspection guarantees that categorical indicators, such as Likert-scale responses for social and academic belonging, are correctly formatted for accurate modeling.
+
+```{r}
+#| label: "read-data-and-unique-values-inspection"
+#| echo: true
+#| message: false
+#| warning: false
+
+
+library(haven)
+library(dplyr)
+library(purrr)
+library(tibble)
+library(gt)
+
+# Read SPSS data
+belonging_spss <- read_sav(here("data", "BELONGING_NEW 2-10-2020.sav")) %>%
+  mutate(
+    gpa = as.numeric(as.character(gpa)),
+    gpa = ifelse(gpa > 5 | gpa < 0 | gpa == 999, NA, gpa),
+    age = as.numeric(as.character(age)),  # Convert age to numeric
+    across(.cols = everything(), ~ifelse(. == 999, NA, .))  # Handle 999
+  )
+
+# Helper function to get unique values
+extract_block <- function(data, vars) {
+  # Check which variables exist
+  missing_vars <- vars[!vars %in% names(data)]
+  if (length(missing_vars) > 0) {
+    warning("Missing variables: ", paste(missing_vars, collapse = ", "))
+  }
+  # Only process existing variables
+  vars <- vars[vars %in% names(data)]
+  map_chr(vars, ~ paste(sort(unique(na.omit(data[[.]]))), collapse = ", "))
+}
+
+# Define variable blocks
+ssaf_vars <- paste0("SSAF", 1:13)  # SSAF1 to SSAF13
+ais_vars  <- paste0("AIS", 1:3)
+se_vars   <- paste0("SE", 1:10)
+pss_vars  <- paste0("PSS", 1:10)
+gender    <- c("gender")
+ethnicity <- c("ethnicity")
+year      <- c("year")
+age       <- c("age")
+lca_vars  <- c("SSAF2", "SSAF4", "SSAF7", "SSAF11", "AUS2", "AUS3", "AUS5", "AUS6") 
+
+# Extract unique values
+ssaf <- extract_block(belonging_spss, ssaf_vars)
+ais  <- extract_block(belonging_spss, ais_vars)
+se   <- extract_block(belonging_spss, se_vars)
+pss  <- extract_block(belonging_spss, pss_vars)
+gender_vals  <- extract_block(belonging_spss, gender)
+ethnicity_vals  <- extract_block(belonging_spss, ethnicity)
+year_vals  <- extract_block(belonging_spss, year)
+age_vals  <- extract_block(belonging_spss, age)
+lca_vals  <- extract_block(belonging_spss, lca_vars)
+
+# Create summary table, including all ssaf_vars (no exclusion of SSAF2, SSAF4)
+summary_table <- tibble(
+  Variable = c(
+    ssaf_vars,  # Include all SSAF1-SSAF13, including SSAF2 and SSAF4
+    ais_vars, se_vars, pss_vars, "Gender", "Ethnicity", "Year", "Age", lca_vars
+  ),
+  Unique_Values = c(
+    ssaf,  # Include unique values for all ssaf_vars
+    ais, se, pss, gender_vals, ethnicity_vals, year_vals, age_vals, lca_vals
+  )
+)
+
+# Show summary table
+summary_table %>%
+  gt() %>%
+  tab_header(title = "Unique Values by Variable Block") %>%
+  tab_options(table.width = pct(100))
+
+# Check missing values
+all_vars <- c(ssaf_vars, ais_vars, se_vars, pss_vars, lca_vars, "gender", "ethnicity", "year", "age", "gpa")
+missing_summary <- belonging_spss %>%
+  summarise(across(.cols = all_vars, ~sum(is.na(.)))) %>%
+  pivot_longer(everything(), names_to = "Variable", values_to = "Missing_Count") %>%
+  mutate(Missing_Percent = round((Missing_Count / nrow(belonging_spss)) * 100, 2))
+
+# Check data structure
+structure_summary <- tibble(
+  Variable = names(belonging_spss),
+  Type = map_chr(belonging_spss, ~class(.)[1]),
+  Non_Missing = map_int(belonging_spss, ~sum(!is.na(.)))
+)
+
+# Display missing values table
+missing_summary %>%
+  gt() %>%
+  tab_header(title = "Missing Values Summary") %>%
+  tab_options(table.width = pct(100))
+
+# Display data structure table
+structure_summary %>%
+  gt() %>%
+  tab_header(title = "Data Structure Summary") %>%
+  tab_options(table.width = pct(100))
+```
+
+### **Clean SPSS Data** 
+
+This step cleans the SPSS dataset by correcting errors, standardizing polytomous variable formats, and verifying response ranges to prepare for Latent Class Analysis (LCA). A clean dataset ensures that categorical indicators, like social and academic belonging items, are reliable for identifying distinct student profiles.
+
+```{r}
+#| label: "data-cleaning"
+#| echo: true
+#| message: false
+#| warning: false
+
+library(dplyr)
+library(flextable)
+library(glue)
+
+# Initialize belonging_spss_clean
+belonging_spss_clean <- belonging_spss
+
+# Sample size
+n_sample <- nrow(belonging_spss_clean)
+
+# ------------------------
+# Age
+# ------------------------
+belonging_spss_clean <- belonging_spss_clean %>%
+  mutate(age = ifelse(age < 15 | age > 30, NA, age))
+
+age_mean <- mean(belonging_spss_clean$age, na.rm = TRUE)
+age_sd <- sd(belonging_spss_clean$age, na.rm = TRUE)
+age_range <- range(belonging_spss_clean$age, na.rm = TRUE)
+
+# ------------------------
+# Gender
+# ------------------------
+belonging_spss_clean <- belonging_spss_clean %>%
+  mutate(gender_label = case_when(
+    gender == 1 ~ "Male",
+    gender == 2 ~ "Female",
+    gender == 3 | is.na(gender) ~ "Missing",
+    TRUE ~ "Missing"
+  ))
+
+gender_table <- prop.table(table(belonging_spss_clean$gender_label, useNA = "ifany")) * 100
+
+gender_stats <- tibble(
+  Characteristic = c("Male", "Female", "Missing"),
+  Description = c(
+    paste0(round(gender_table["Male"], 1), "%"),
+    paste0(round(gender_table["Female"], 1), "%"),
+    paste0(round(gender_table["Missing"], 1), "%")
+  )
+)
+
+# ------------------------
+# Ethnicity
+# ------------------------
+ethnicity_table <- prop.table(table(belonging_spss_clean$ethnicity, useNA = "ifany")) * 100
+
+ethnicity_stats <- tibble(
+  Characteristic = c(
+    "Asian; Asian American", 
+    "Black; African American", 
+    "Hispanic; Latino American",
+    "Native American", 
+    "Native Pacific Islander", 
+    "White; Caucasian American", 
+    "Other", 
+    "Missing"
+  ),
+  Description = c(
+    paste0(round(ethnicity_table["1"], 1), "%"),
+    paste0(round(ethnicity_table["2"], 1), "%"),
+    paste0(round(ethnicity_table["3"], 1), "%"),
+    paste0(round(ethnicity_table["4"], 1), "%"),
+    paste0(round(ethnicity_table["5"], 1), "%"),
+    paste0(round(ethnicity_table["6"], 1), "%"),
+    paste0(round(ethnicity_table["8"], 1), "%"),
+    paste0(round(ethnicity_table[is.na(names(ethnicity_table))], 1), "%")  # Access NA value
+  )
+)
+
+# ------------------------
+# Year in School
+# ------------------------
+belonging_spss_clean <- belonging_spss_clean %>%
+  mutate(year_label = case_when(
+    year == 1 ~ "Freshman",
+    year == 2 ~ "Sophomore",
+    year == 3 ~ "Junior",
+    year == 4 ~ "Senior",
+    is.na(year) ~ "Missing",
+    TRUE ~ "Missing"
+  ))
+
+year_table <- prop.table(table(belonging_spss_clean$year_label, useNA = "ifany")) * 100
+
+year_stats <- tibble(
+  Characteristic = c("Freshman", "Sophomore", "Junior", "Senior", "Missing"),
+  Description = c(
+    paste0(round(year_table["Freshman"], 1), "%"),
+    paste0(round(year_table["Sophomore"], 1), "%"),
+    paste0(round(year_table["Junior"], 1), "%"),
+    paste0(round(year_table["Senior"], 1), "%"),
+    paste0(round(year_table["Missing"], 1), "%")
+  )
+)
+
+# ------------------------
+# Create Age rows
+# ------------------------
+age_stats_table <- tibble(
+  Characteristic = c(glue("Age ({age_range[1]} - {age_range[2]})")),
+  Description = c("")
+)
+
+age_m_table <- tibble(
+  Characteristic = "M",
+  Description = round(age_mean, 2) %>% as.character()
+)
+
+age_sd_table <- tibble(
+  Characteristic = "SD",
+  Description = round(age_sd, 2) %>% as.character()
+)
+
+# ------------------------
+# Combine all into final cleaned table
+# ------------------------
+cleaned_data <- list(
+  age_stats_table,
+  age_m_table,
+  age_sd_table,
+  tibble(Characteristic = "Gender", Description = ""),
+  gender_stats,
+  tibble(Characteristic = "Race/Ethnicity", Description = ""),
+  ethnicity_stats,
+  tibble(Characteristic = "Year in School", Description = ""),
+  year_stats
+)
+
+# ------------------------
+# Create final flextable data
+# ------------------------
+final_table <- bind_rows(cleaned_data)
+```
+
+Create Sample Characteristics Table
+
+```{r}
+#| label: "create-sample-table"
+#| echo: false
+#| message: false
+#| warning: false
+
+sample_table <- flextable(final_table) %>%
+  set_header_labels(Characteristic = "Characteristics", Description = glue("N = {n_sample}")) %>%
+  border_remove() %>%
+  border(part = "header", border.top = fp_border(color = "black"), border.bottom = fp_border(color = "black")) %>%
+  border(part = "body", border.bottom = fp_border(color = "black")) %>%
+  border_inner_h(part = "body", border = fp_border(color = "white")) %>%
+  bg(i = c(1, 4, 8, 17), bg = "gray90") %>%
+  set_table_properties(layout = "fixed") %>%
+  autofit()
+
+# Print table
+sample_table
+```
+
+Save table
+
+```{r}
+#| label: "save-sample-table"
+#| echo: false
+#| message: false
+#| warning: false
+
+# Save the flextable as an image in the 'figures' folder
+invisible(save_as_image(sample_table, path = here("figures", "sample_table.png")))
+```
+
+### Reverse Code Appropriate Variables
+
+```{r}
+#| label: "calculate-variables"
+#| echo: true
+#| message: false
+#| warning: false
+
+
+# Reverse code for Esteem (Rosenberg Self-Esteem Scale — SE2, SE4–SE7 are reversed)
+belonging_spss_clean$SE2R <- 8 - belonging_spss_clean$SE2
+belonging_spss_clean$SE4R <- 8 - belonging_spss_clean$SE4
+belonging_spss_clean$SE5R <- 8 - belonging_spss_clean$SE5
+belonging_spss_clean$SE6R <- 8 - belonging_spss_clean$SE6
+belonging_spss_clean$SE7R <- 8 - belonging_spss_clean$SE7
+
+# Create Esteem_R as the mean of all 10 items with reversed SE2, SE4–SE7
+belonging_spss_clean$Esteem <- rowMeans(belonging_spss_clean[c(
+  "SE1", "SE2R", "SE3", "SE4R", "SE5R", "SE6R", "SE7R", "SE8", "SE9", "SE10"
+)], na.rm = TRUE)
+
+# Reverse code for Stress (PSS4, PSS5, PSS7, PSS8 are reversed)
+belonging_spss_clean$PSS4R <- 8 - belonging_spss_clean$PSS4
+belonging_spss_clean$PSS5R <- 8 - belonging_spss_clean$PSS5
+belonging_spss_clean$PSS7R <- 8 - belonging_spss_clean$PSS7
+belonging_spss_clean$PSS8R <- 8 - belonging_spss_clean$PSS8
+
+# Reverse code for SSAF2 and SSAF4
+belonging_spss_clean$SSAF2R <- 8 - belonging_spss_clean$SSAF2
+belonging_spss_clean$SSAF4R <- 8 - belonging_spss_clean$SSAF4
+
+# Reverse code AUS2 and AUS6
+belonging_spss_clean$AUS2R <- ifelse(belonging_spss_clean$AUS2 %in% 1:7, 
+                                     8 - belonging_spss_clean$AUS2, NA)
+belonging_spss_clean$AUS6R <- ifelse(belonging_spss_clean$AUS6 %in% 1:7, 
+                                     8 - belonging_spss_clean$AUS6, NA)
+
+# Create Stress_R as the mean of all 10 items with reversed PSS4, PSS5, PSS7, PSS8
+belonging_spss_clean$Stress <- rowMeans(belonging_spss_clean[c(
+  "PSS1", "PSS2", "PSS3", "PSS4R", "PSS5R", "PSS6", "PSS7R", "PSS8R", "PSS9", "PSS10"
+)], na.rm = TRUE)
+
+# Create firstgen based on momedu and dadedu
+belonging_spss_clean$firstgen <- ifelse(
+  belonging_spss_clean$momedu <= 3 & belonging_spss_clean$dadedu <= 3,
+  1, 0
+)
+belonging_spss_clean$latinx <- ifelse(is.na(belonging_spss_clean$ethnicity), NA,
+                                     ifelse(belonging_spss_clean$ethnicity == 3, 1, 0))
+belonging_spss_clean$asian <- ifelse(is.na(belonging_spss_clean$ethnicity), NA,
+                                    ifelse(belonging_spss_clean$ethnicity == 1, 1, 0))
+belonging_spss_clean$white <- ifelse(is.na(belonging_spss_clean$ethnicity), NA,
+                                    ifelse(belonging_spss_clean$ethnicity == 6, 1, 0))
+
+```
+
+### Trichotomize LCA Variables
+
+This step trichotomizes eight Latent Class Analysis (LCA) variables (social belonging: SSAF2R, SSAF4R, SSAF7, SSAF11; academic belonging: AUS2R, AUS3, AUS5, AUS6R) from the BELONGING_NEW 2-10-2020.sav dataset, following Lawrie et al. (2024). The 7-point Likert scale (1 = strongly disagree, 7 = strongly agree) is recoded into three categories—1–3 (disagree), 4 (neutral), 5–7 (agree)—to simplify polytomous data for LCA, enabling clear identification of distinct social and academic belonging profiles among university students.
+
+```{r}
+#| label: "trichotomize-specific-items"
+#| echo: true
+#| message: false
+#| warning: false
+
+library(dplyr)
+
+# Trichotomize function
+trichotomize_in_place <- function(data, var_name) {
+  if (!(var_name %in% names(data))) {
+    stop(paste("Variable", var_name, "not found in data"))
+  }
+  data[[var_name]] <- case_when(
+    data[[var_name]] %in% 1:3 ~ 1,
+    data[[var_name]] == 4     ~ 2,
+    data[[var_name]] %in% 5:7 ~ 3,
+    TRUE                      ~ NA_real_
+  )
+  return(data)
+}
+
+# List of vars to trichotomize
+vars_to_trich <- c("SSAF2R", "SSAF4R", "SSAF7", "SSAF11", 
+                   "AUS3", "AUS2R", "AUS5", "AUS6R")
+
+# Apply to all
+for (var in vars_to_trich) {
+  belonging_spss_clean <- trichotomize_in_place(belonging_spss_clean, var)
+}
+# Variables to show
+vars <- c("SSAF2R", "SSAF4R", "SSAF7", "SSAF11", "AUS3", "AUS2R", "AUS5", "AUS6R")
+
+# Calculate trichotomized ranges
+ranges <- sapply(vars, function(var) {
+  vals <- belonging_spss_clean[[var]]
+  paste(min(vals, na.rm = TRUE), "-", max(vals, na.rm = TRUE))
+})
+
+# Create table
+data.frame(Variable = vars, Trichotomized_Range = ranges) %>%
+  gt() %>%
+  tab_header(title = "Trichotomized Ranges") %>%
+  cols_label(Variable = "Variable", Trichotomized_Range = "Range") %>%
+  tab_style(style = cell_text(align = "center"), locations = cells_body())
+```
+
+### Conduct LCA on Social and Belonging Items using MplusAutomation
+
+This step employs MplusAutomation to conduct Latent Class Analysis (LCA) on polytomous social and academic belonging items, estimating models to identify the optimal number of latent classes. By analyzing categorical response patterns, this process uncovers distinct student profiles that reflect varying levels of belonging in a university setting.
+
+```{r}
+#| label: "run-initial-lca"
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+
+lca_belonging <- lapply(1:6, function(k) {
+  lca_enum <- mplusObject(
+    TITLE = glue("{k}-Class LCA for Belonging Variables"),
+
+    VARIABLE = glue(
+      "categorical = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+       usevar = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+       missing = all(999);
+       classes = c({k});"
+    ),
+
+    ANALYSIS = "
+      estimator = mlr;
+      type = mixture;
+      starts = 1000 100;
+      processors = 10;",
+
+    OUTPUT = "sampstat; residual; tech11; tech14;",
+
+    PLOT = "
+      type = plot3;
+      series = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R(*);",
+
+    usevariables = c("SSAF2R", "SSAF4R", "SSAF7", "SSAF11",
+                     "AUS3", "AUS2R", "AUS5", "AUS6R"),
+
+    rdata = belonging_spss_clean
+  )
+
+  lca_enum_fit <- mplusModeler(
+    lca_enum,
+    dataout = glue(here("enum", "belonging.dat")),
+    modelout = glue(here("enum", "c{k}_belonging.inp")),
+    check = TRUE,
+    run = TRUE,
+    hashfilename = FALSE
+  )
+})
+
+```
+
+### Examine and extract Mplus files for:
+
+1.  Warnings
+2.  Errors
+3.  Convergence and Loglikelihood Replication Information
+
+This step reviews Mplus output for warnings, errors, and convergence to ensure the reliability of the Latent Class Analysis (LCA) models. Checking these diagnostics confirms that the polytomous data models are stable and trustworthy, addressing potential issues in model estimation for accurate class identification.
+
+First scrape information from LCA models
+
+```{r}
+#| label: "extract-mplus-info"
+#| echo: true
+#| message: false
+#| warning: false
+# LCA Extraction
+source(here("functions", "extract_mplus_info.R"))
+output_dir_lca <- here("enum")
+output_files_lca <- list.files(output_dir_lca, pattern = "\\.out$", full.names = TRUE)
+final_data_lca <- map_dfr(output_files_lca, extract_mplus_info_extended) %>% 
+  mutate(Model_Type = "LCA")
+
+
+```
+
+### 1) Examine Mplus Warnings:
+
+```{r}
+#| label: "print-warnings"
+#| echo: true
+#| message: false
+#| warning: false
+
+# Generate warnings table for combined data
+source(here("functions", "extract_warnings.R"))
+warnings_table_data_lca <- extract_warnings(final_data_lca)
+
+warnings_table_data_lca <- extract_warnings(final_data_lca) %>%
+  left_join(select(final_data_lca, File_Name), by = "File_Name")
+
+library(gt)
+warnings_table_all <- warnings_table_data_lca %>%
+  gt() %>%
+  tab_header(title = md("**Model Warnings (LCA & GMM)**")) %>%
+  cols_label(
+    File_Name = "Output File",
+    Warning_Summary = "# of Warnings",
+    Warnings = "Warning Message(s)",
+  ) %>%
+  cols_align(align = "left", columns = everything()) %>%
+  cols_width(
+    File_Name ~ px(150),
+    Warning_Summary ~ px(150),
+    Warnings ~ px(400),
+  ) %>%
+  tab_options(table.width = pct(100))
+
+warnings_table_all
+
+```
+
+Save warnings table
+
+```{r,eval=FALSE}
+#| label: "save-warnings"
+#| echo: false
+#| message: false
+#| warning: false
+# Save the warnings table to the hard drive
+invisible(gtsave(warnings_table_all, here("figures", "warnings_table_all.png")))
+```
+
+### 2) Examine Mplus Errors
+
+```{r}
+#| label: "scrape-errors"
+#| echo: true
+#| message: false
+#| warning: false
+source(here("functions", "error_visualization.R"))
+
+# Process errors
+error_table_data <- process_error_data(final_data_lca)
+
+```
+
+Create table of errors
+
+```{r}
+#| label: "plot-errors"
+#| echo: true
+#| message: false
+#| warning: false
+# Visualize Errors If Any Exist
+if (nrow(error_table_data) > 0) {
+  error_table <- error_table_data %>%
+    gt() %>%
+    tab_header(title = md("**Model Estimation Errors**")) %>%
+    cols_label(
+      File_Name     = "Output File",
+      Class_Model   = "Model Type",
+      Error_Message = "Error Message"
+    ) %>%
+    cols_align(align = "left", columns = everything()) %>%
+    cols_width(
+      File_Name     ~ px(150),
+      Class_Model   ~ px(100),
+      Error_Message ~ px(400)
+    ) %>%
+    tab_options(table.width = px(600)) %>%
+    fmt(
+      columns = "Error_Message",
+      fns = function(x) gsub("\n", "<br>", x)  # Convert \n to HTML breaks
+    )
+  
+  error_table  # Display the table
+} else {
+  cat("No errors detected in any output files.\n")
+}
+```
+
+Save the Error Table
+
+```{r}
+#| label: "save-errors"
+#| message: false
+#| warning: false
+#| echo: false
+invisible(gtsave(error_table, here("figures", "Error_Table.png"), vwidth = 600, vheight = 400))
+```
+
+### 3) Examine Convergence and Loglikelihood Replications
+
+```{r, results='asis', out.width="95%"}
+#| label: "create-convergence-tables"
+#| echo: true
+#| message: false
+#| warning: false
+#| 
+# Load function
+source(here("functions", "summary_table.R"))
+
+# Set sample_size from final_data_lca$Sample_Size (first row, assuming it’s the total N)
+sample_size <- final_data_lca$Sample_Size[1]
+
+# 🔥 Create flat version of the data for flextable
+final_data_lca_flextable <- final_data_lca %>%
+  select(-LogLikelihoods, -Errors, -Warnings)
+
+# 🔥 Strip comma-formatted numerics and convert to proper numeric types
+final_data_lca_flextable <- final_data_lca_flextable %>%
+  mutate(across(
+    c(
+      Best_LogLikelihood,
+      Perc_Convergence,
+      Replicated_LL_Perc,
+      Smallest_Class_Perc,
+      Condition_Number
+    ),
+    ~ as.numeric(gsub(",", "", .))
+  ))
+options(error = function() { rlang::last_trace(); invokeRestart("abort") })
+
+# Now build the table
+summary_table_lca <- create_flextable(final_data_lca_flextable, sample_size) %>%
+  set_caption("**Latent Class Analysis (LCA) Fit Table**")
+
+# Print table
+summary_table_lca
+
+```
+
+Save convergence table
+
+```{r, eval = FALSE}
+#| label: "save-convergence-table"
+#| echo: true
+#| message: false
+#| warning: false
+# Save the flextable as a PNG image
+invisible(save_as_image(summary_table_lca, path = here("figures", "housekeeping_lca.png")))
+
+```
+
+### Check for Loglikelihood Replication
+
+Visualize and examine loglikelihood replication values for each ouptut file individually
+
+```{r}
+#| label: "scrape-replication-information"
+#| echo: true
+#| message: false
+#| warning: false
+
+# Load the function file containing generate_ll_replication_plots and create_ll_replication_table_all
+source(here("functions", "ll_replication_plots.R"))
+# Load the second function from ll_replication_processing.R
+source(here("functions", "ll_replication_processing.R"))
+```
+
+Generate Loglikelihood replication table
+
+```{r}
+#| label: "generate-replication-table"
+#| echo: true
+#| message: false
+#| warning: false
+
+# Generate individual log-likelihood replication tables for LCA and GMM data
+ll_replication_tables_lca <- generate_ll_replication_plots(final_data_lca)
+# Create combined log-likelihood replication tables for LCA and GMM data, adding captions
+ll_replication_table_lca <- create_ll_replication_table_all(final_data_lca) %>% set_caption("**LL Replication Table for LCA Models**")
+
+# Display the combined tables with their captions
+ll_replication_table_lca
+
+
+```
+
+Save Tables
+
+```{r}
+#| label: "save-ll-replication-table"
+#| echo: true
+#| message: false
+#| warning: false
+
+# Save the flextables as PNG images
+invisible(save_as_image(ll_replication_table_lca, path = here("figures", "ll_replication_table_lca.png")))
+
+
+```
+
+### Create Table of Fit
+
+First, extract data
+
+```{r}
+#| label: "extract-fit-data-lca"
+#| echo: true
+#| message: false
+#| warning: false
+
+# === First Section: Read Data and Initial Table Setup ===
+
+# Get all .out files from the directory
+out_files <- list.files(here("enum"), pattern = "\\.out$", full.names = TRUE)
+
+# Read Mplus output files one-by-one
+output_models <- list()
+for (file in out_files) {
+  model <- readModels(file, quiet = TRUE)
+  if (!is.null(model) && length(model) > 0) {
+    output_models[[basename(file)]] <- model
+  }
+}
+
+# Extract summary table from Mplus output
+model_extract <- LatexSummaryTable(output_models,
+  keepCols = c("Title", "Parameters", "LL", "BIC", "aBIC",
+               "BLRT_PValue", "T11_VLMR_PValue", "Observations"),
+  sortBy = "Title")
+
+# Compute additional fit indices
+allFit <- model_extract %>%
+  mutate(CAIC = -2 * LL + Parameters * (log(Observations) + 1)) %>%
+  mutate(AWE = -2 * LL + 2 * Parameters * (log(Observations) + 1.5)) %>%
+  mutate(SIC = -.5 * BIC) %>%
+  mutate(expSIC = exp(SIC - max(SIC))) %>%
+  mutate(BF = exp(SIC - lead(SIC))) %>%
+  mutate(cmPk = expSIC / sum(expSIC)) %>%
+  dplyr::select(1:5, 9:10, 6:7, 13, 14) %>%
+  arrange(Parameters)
+```
+
+Add Convergence percentage, LL Replication percentage, and smallest class (%) Columns
+
+```{r}
+# === Second Section: Merge Data and Convergence Information ===
+allFit <- allFit %>%
+  mutate(Title = str_remove(str_trim(Title), "\\s+LCA.*$")) %>%
+  left_join(
+    final_data_lca %>%
+      select(Class_Model, Perc_Convergence, Replicated_LL_Perc, 
+             Smallest_Class, Smallest_Class_Perc),
+    by = c("Title" = "Class_Model")
+  ) %>%
+  mutate(Smallest_Class = coalesce(Smallest_Class, 
+                                   final_data_lca$Smallest_Class[match(Title, final_data_lca$Class_Model)])) %>%
+  relocate(Perc_Convergence, Replicated_LL_Perc, .after = LL) %>%
+  mutate(Smallest_Class_Combined = paste0(Smallest_Class, "\u00A0(", Smallest_Class_Perc, "%)")) %>%
+  select(-Smallest_Class, -Smallest_Class_Perc)
+```
+
+Then, create table
+
+```{r}
+#| label: "generate-lca-fit-table"
+#| echo: true
+#| message: false
+#| warning: false
+
+# === Third Section: Reorder Columns for Final Table ===
+# To remove the convergence columns, comment out the one line below.
+allFit <- allFit %>%
+  select(
+    Title, Parameters, LL,  
+   #Perc_Convergence, Replicated_LL_Perc,  # COMMENT OUT THIS LINE  
+    BIC, aBIC, CAIC, AWE,  
+    T11_VLMR_PValue, BLRT_PValue,  
+    Smallest_Class_Combined,  
+    BF, cmPk  
+  )
+
+# === Fourth Section: Create the Table ===
+# To remove the convergence columns, comment out the one line below.
+fit_table_lca <- allFit %>%
+  select(Title, Parameters, LL,  
+        # Perc_Convergence, Replicated_LL_Perc,  # COMMENT OUT THIS LINE  
+         BIC, aBIC, CAIC, AWE,  
+         T11_VLMR_PValue, BLRT_PValue,  
+         Smallest_Class_Combined  
+         # BF,  # Optional: Comment out if not needed  
+         # cmPk  # Optional: Comment out if not needed  
+  ) %>%
+  gt() %>%
+  tab_header(title = md("**Model Fit Summary Table**")) %>%
+  tab_spanner(label = "Model Fit Indices", columns = c(BIC, aBIC, CAIC, AWE)) %>%
+  tab_spanner(label = "LRTs", columns = c(T11_VLMR_PValue, BLRT_PValue)) %>%
+  tab_spanner(label = md("Smallest\u00A0Class"), columns = c(Smallest_Class_Combined)) %>%  
+  cols_label(
+    Title = "Classes",
+    Parameters = md("npar"),
+    LL = md("*LL*"),
+    #Perc_Convergence = "% Converged",  # COMMENT OUT THIS LINE  
+    #Replicated_LL_Perc = "% Replicated",  # COMMENT OUT THIS LINE  
+    BIC = "BIC",
+    aBIC = "aBIC",
+    CAIC = "CAIC",
+    AWE = "AWE",
+    T11_VLMR_PValue = "VLMR",
+    BLRT_PValue = "BLRT",
+    Smallest_Class_Combined = "n (%)"
+  ) %>%
+  tab_footnote(
+    footnote = md(
+      "*Note.* Par = Parameters; *LL* = model log likelihood;
+      BIC = Bayesian information criterion;
+      aBIC = sample size adjusted BIC; CAIC = consistent Akaike information criterion;
+      AWE = approximate weight of evidence criterion;
+      BLRT = bootstrapped likelihood ratio test p-value;
+      VLMR = Vuong-Lo-Mendell-Rubin adjusted likelihood ratio test p-value;
+      Smallest K = Number of cases in the smallest class (n (%))."
+    ),
+    locations = cells_title()
+  ) %>%
+  tab_options(column_labels.font.weight = "bold") %>%
+  fmt_number(
+    columns = c(3, 6:9),  
+    decimals = 2
+  ) %>%
+  fmt(
+    columns = c(T11_VLMR_PValue, BLRT_PValue),  
+    fns = function(x) ifelse(is.na(x), "—", ifelse(x < 0.001, "<.001", scales::number(x, accuracy = .01)))
+  ) %>%
+  #fmt_percent(
+   # columns = c(Perc_Convergence, Replicated_LL_Perc),  
+  #  decimals = 0,
+  #  scale_values = FALSE  
+  #) %>%
+  cols_align(align = "center", columns = everything()) %>%
+  tab_style(
+    style = list(cell_text(weight = "bold")),
+    locations = list(
+      cells_body(columns = BIC, row = BIC == min(BIC)),
+      cells_body(columns = aBIC, row = aBIC == min(aBIC)),
+      cells_body(columns = CAIC, row = CAIC == min(CAIC)),
+      cells_body(columns = AWE, row = AWE == min(AWE)),
+      cells_body(columns = T11_VLMR_PValue, 
+                 row = ifelse(T11_VLMR_PValue < .05 & lead(T11_VLMR_PValue) > .05, T11_VLMR_PValue < .05, NA)),
+      cells_body(columns = BLRT_PValue, 
+                 row = ifelse(BLRT_PValue < .05 & lead(BLRT_PValue) > .05, BLRT_PValue < .05, NA))
+    )
+  )
+fit_table_lca
+```
+
+Save LCA fit Table
+
+```{r, eval=FALSE}
+#| label: "save-lca-final-fit-table"
+#| echo: true
+#| message: false
+#| warning: false
+
+# === Save Table as PNG ===
+invisible(gtsave(fit_table_lca, filename = here("figures", "fit_table_lca.png")))
+```
+
+### Prepare data for Creation of Probality Plot:
+
+#### Reorder Classes using SVALUES
+
+Here, we conduct a latent class analysis (LCA) for four classes to reorder the classes. After manually inspecting the output file for the four-class model (C4), we identified the optimal start seed ensuring model convergence. Subsequently, we utilized the SVALUES (4 3 1 2) command in the OUTPUT section of the Mplus syntax to reorder the latent classes, aligning them correctly with the expected profiles of social and academic belonging for enhanced interpretability.
+
+```{r}
+#| label: "save-lca-fit-table"
+#| echo: true
+#| message: false
+#| warning: false
+#| eval: false
+
+lca_belonging <- lapply(4, function(k) {
+  lca_enum <- mplusObject(
+    TITLE = glue("{k}-Class LCA for Belonging Variables"),
+
+    VARIABLE = glue(
+      "categorical = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+       usevar = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+       missing = all(999);
+       classes = c({k});"
+    ),
+
+    ANALYSIS = "
+      estimator = mlr;
+      optseed = 846194;
+      type = mixture;
+      starts = 0;
+      processors = 10;",
+
+    OUTPUT = "sampstat; residual; tech1; tech8; tech11; standardized; tech14; SVALUES (4 3 1 2);",
+
+    PLOT = "
+      type = plot3;
+      series = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R(*);",
+
+    usevariables = c("SSAF2R", "SSAF4R", "SSAF7", "SSAF11",
+                     "AUS3", "AUS2R", "AUS5", "AUS6R"),
+
+    rdata = belonging_spss_clean
+  )
+
+  lca_enum_fit <- mplusModeler(
+    lca_enum,
+    dataout = glue(here("enum2", "belonging.dat")),
+    modelout = glue(here("enum2", "c{k}_belonging_reordered.inp")),
+    check = TRUE,
+    run = TRUE,
+    hashfilename = FALSE
+  )
+})
+
+```
+
+### Plot Social and Academic Belonging Probability Plot
+
+First: create a fucntion: "extract_probability_scale_strict" to scrape the probabilities
+
+```{r}
+#| label: "extract-probability-scale-strict"
+#| echo: true
+#| message: false
+#| warning: false
+
+extract_probability_scale_strict <- function(file_path) {
+  lines <- readLines(file_path)
+
+  # Narrow to probability section
+  start <- grep("^RESULTS IN PROBABILITY SCALE", lines)
+  end <- grep("^LATENT CLASS INDICATOR ODDS RATIOS", lines)
+  if (length(start) == 0 || length(end) == 0) stop("Section markers not found.")
+
+  prob_lines <- lines[(start + 1):(end - 1)]
+
+  # Init
+  current_class <- NA
+  current_var <- NA
+  out <- list()
+
+  for (line in prob_lines) {
+    line <- trimws(line)
+    if (line == "") next
+
+    # Class header
+    if (grepl("^Latent Class", line)) {
+      current_class <- as.integer(gsub("[^0-9]", "", line))
+      next
+    }
+
+    # Variable header
+    if (grepl("^[A-Z]", line) && !grepl("^Category", line)) {
+      current_var <- line
+      next
+    }
+
+    # Probability line
+    if (grepl("^Category [1-3]", line)) {
+      parts <- strsplit(gsub("\\s+", " ", line), " ")[[1]]
+      cat_num <- as.integer(parts[2])
+      est <- as.numeric(parts[3])
+
+      out[[length(out) + 1]] <- tibble(
+        Class = current_class,
+        Variable = current_var,
+        Category = cat_num,
+        Probability = est
+      )
+    }
+  }
+
+  bind_rows(out)
+}
+
+```
+
+Use the function: "extract_probability_scale_strict" to scrape the probabilities
+
+```{r}
+#| label: "scrape-prob-data"
+#| echo: true
+#| message: false
+#| warning: false
+
+# Scrape probability scale from the 4-class reordered output file
+prob_data <- extract_probability_scale_strict(here("enum2", "c4_belonging_reordered.out"))
+
+```
+
+### Create Probability Plot
+
+```{r}
+#| label: "plot-lca-reordered-linebreaks"
+#| echo: true
+#| message: false
+#| warning: false
+#| fig.width: 10
+#| fig.height: 6
+
+library(dplyr)
+library(ggplot2)
+library(glue)
+library(forcats)
+library(stringr)
+
+plot_lca_from_parsed_probs <- function(prob_data, class_n_values) {
+  class_labels <- c(
+    "High Social, High Academic (n = 295, 35.3%)",
+    "Low Social, High Academic (n = 125, 15.1%)",
+    "High Social, Low Academic (n = 318, 37.9%)",
+    "Low Social, Low Academic (n = 99, 11.8%)"
+  )
+
+  # X-axis labels with line breaks
+  variable_labels <- c(
+    "Feel like\noutsider",
+    "Feel\nalienated",
+    "Get along\nwell with\npeople",
+    "People are\nlike me",
+    "I wonder if\nI have what\nit takes",
+    "Confident\nabout my\nabilities",
+    "I doubt I\npossess\nabilities",
+    "Not sure I\nfit in"
+  )
+
+  prob_data <- prob_data %>%
+    mutate(
+      Category = factor(Category, levels = c(3, 2, 1), labels = c("Agree", "Neutral", "Disagree")),
+      Variable = factor(Variable, levels = unique(Variable), labels = variable_labels),
+      Class_Label = factor(Class, levels = 1:4, labels = class_labels)
+    )
+
+  ggplot(prob_data, aes(x = Variable, y = Probability, fill = Category)) +
+    geom_bar(stat = "identity", position = "stack", width = 0.9) +
+    facet_wrap(~ Class_Label, ncol = 1) +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1), expand = c(0, 0)) +
+    scale_fill_manual(
+      values = c("Agree" = "#E03C31", "Neutral" = "#FDB515", "Disagree" = "#002855")
+    ) +
+    theme_minimal(base_size = 12, base_family = "Avenir Next") +
+    theme(
+      panel.grid = element_blank(),
+      axis.text.x = element_text(angle = 0, hjust = 0.5, vjust = 1),
+      strip.text = element_text(size = 12, face = "bold"),
+      legend.position = "bottom",
+      legend.title = element_blank()
+    ) +
+    labs(x = NULL, y = "Probability")
+}
+
+# 🔥 Run the plot
+plot_lca_from_parsed_probs(prob_data, class_n_values = NULL)
+
+```
+
+Save Probability Plot
+
+```{r}
+#| label: "save-lca-belonging-plot"
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+invisible(
+  ggsave(
+    filename = here("figures", "C4_Belonging_LCA_Plot.png"),
+    plot = last_plot(),
+    dpi = 300,
+    width = 10,
+    height = 6,
+    units = "in"
+  )
+)
+
+```
+
+### Conduct the Manual 3-Step
+
+Step 1
+
+```{r}
+#| label: "step-1"
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+library(MplusAutomation)
+library(glue)
+
+# Define the Mplus model for 4 classes
+step1 <- mplusObject(
+  TITLE = "4-Class LCA for Belonging Variables",
+
+  VARIABLE = glue(
+    "categorical = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+     usevar = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+     missing = all(999);
+     classes = c(4);
+     auxiliary = ethnicity GPA FIRSTGEN ESTEEM STRESS LATINX ASIAN WHITE (R);"
+  ),
+
+  ANALYSIS = "
+    estimator = mlr;
+    optseed = 846194;
+    type = mixture;
+    starts = 0;
+    processors = 10;
+  ",
+
+  SAVEDATA = "
+    FILE = 4c_3step.dat;
+    SAVE = cprob;
+    MISSFLAG = 999;
+  ",
+
+  OUTPUT = "
+    residual;
+    tech1;
+    tech8;
+    tech11;
+    tech14;
+    svalues (4 3 1 2);
+  ",
+
+  PLOT = "
+    type = plot3;
+    series = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R(*);
+  ",
+
+  rdata = belonging_spss_clean
+)
+
+# Run the model
+step1_fit <- mplusModeler(
+  step1,
+  dataout = glue(here("3step", "belonging.dat")),
+  modelout = glue(here("3step", "c4_step1.inp")),
+  check = TRUE,
+  run = TRUE,
+  hashfilename = FALSE
+)
+
+# Return step1_fit explicitly
+step1_fit
+```
+
+Scrape logits to use in Step 2
+
+```{r}
+#| label: "extract-logits-savedata"
+#| echo: false
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+# Assuming step1_fit is the object returned from readModels or mplusModeler
+logit_cprobs <- as.data.frame(step1_fit[["results"]]
+                              [["class_counts"]]
+                              [["logitProbs.mostLikely"]])
+savedata <- as.data.frame(step1_fit[["results"]]
+                          [["savedata"]])
+logit_cprobs <- as.data.frame(step1_fit[["results"]][["class_counts"]][["logitProbs.mostLikely"]])
+
+```
+
+Change "C" to "N" in the dataframe select only variables for the 3 step
+
+```{r}
+#| label: "rename-c-to-n-and-fix-names"
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+# Rename C to N in savedata
+colnames(savedata)[colnames(savedata) == "C"] <- "N"
+
+# Keep only the modeling variables, and rename STRESS and ESTEEM_R
+savedata <- savedata %>%
+  select(WHITE, GPA, FIRSTGEN, ESTEEM, STRESS, LATINX, ASIAN, N) %>%
+  mutate(across(everything(), ~replace(., . == 999, NA)))  # Replace 999 with NA
+
+```
+
+Conduct STEP 2
+
+```{r}
+#| label: "step-2"
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+library(MplusAutomation)
+library(glue)
+
+# Define the Mplus model for Step 2
+step2 <- mplusObject(
+  TITLE = "Step 2 - 3step Belonging LCA",
+
+  VARIABLE = 
+    "NOMINAL = N;
+  USEVARIABLES = N;
+  CLASSES = C(4);
+",
+
+  ANALYSIS = 
+    "estimator = mlr;
+     type = mixture;
+     starts = 0;
+     processors = 10;",
+
+  MODEL = 
+    glue(
+      "%C#1%
+       [N#1@{logit_cprobs[1,1]}];
+       [N#2@{logit_cprobs[1,2]}];
+       [N#3@{logit_cprobs[1,3]}];
+
+       %C#2%
+       [N#1@{logit_cprobs[2,1]}];
+       [N#2@{logit_cprobs[2,2]}];
+       [N#3@{logit_cprobs[2,3]}];
+
+       %C#3%
+       [N#1@{logit_cprobs[3,1]}];
+       [N#2@{logit_cprobs[3,2]}];
+       [N#3@{logit_cprobs[3,3]}];
+
+       %C#4%
+       [N#1@{logit_cprobs[4,1]}];
+       [N#2@{logit_cprobs[4,2]}];
+       [N#3@{logit_cprobs[4,3]}];"
+    ),
+
+  usevariables = colnames(savedata),
+  rdata = savedata
+)
+
+# Run the Step 2 model
+step2_fit <- mplusModeler(
+  step2,
+  dataout = here("3step", "4c_step2.dat"),
+  modelout = here("3step", "c4_step2.inp"),
+  check = TRUE,
+  run = TRUE,
+  hashfilename = FALSE,
+  writeData = "always"
+)
+
+# Return step2_fit
+step2_fit
+
+```
+
+After confirming the Step 2 output provides the same class solution as Step 1, we continue to Step 3
+
+```{r}
+#| label: "step-3"
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+library(MplusAutomation)
+library(glue)
+
+step3 <- mplusObject(
+  TITLE = "Step 3 - 3step Belonging LCA",
+  
+  VARIABLE = 
+    "nominal = N;
+      USEVARIABLES = WHITE GPA FIRSTGEN ESTEEM STRESS LATINX ASIAN N;
+     classes = c(4);",
+  
+  ANALYSIS = 
+    "estimator = mlr;
+     type = mixture;
+     starts = 0;
+     processors = 10;",
+  
+  MODEL = 
+    glue(
+      "%OVERALL%
+       C on FIRSTGEN WHITE LATINX ASIAN;
+       GPA ESTEEM STRESS on FIRSTGEN WHITE LATINX ASIAN;
+       [GPA];
+       GPA;
+       [STRESS];
+       STRESS;
+       [ESTEEM];
+       ESTEEM;
+       
+       %C#1%
+       [N#1@{logit_cprobs[1,1]}];
+       [N#2@{logit_cprobs[1,2]}];
+       [N#3@{logit_cprobs[1,3]}];
+       [GPA] (GPA1);
+       GPA;
+       [STRESS] (STRESS1);
+       STRESS;
+       [ESTEEM] (ESTEEM1);
+       ESTEEM;
+       
+       %C#2%
+       [N#1@{logit_cprobs[2,1]}];
+       [N#2@{logit_cprobs[2,2]}];
+       [N#3@{logit_cprobs[2,3]}];
+       [GPA] (GPA2);
+       GPA;
+       [STRESS] (STRESS2);
+       STRESS;
+       [ESTEEM] (ESTEEM2);
+       ESTEEM;
+       
+       %C#3%
+       [N#1@{logit_cprobs[3,1]}];
+       [N#2@{logit_cprobs[3,2]}];
+       [N#3@{logit_cprobs[3,3]}];
+       [GPA] (GPA3);
+       GPA;
+       [STRESS] (STRESS3);
+       STRESS;
+       [ESTEEM] (ESTEEM3);
+       ESTEEM;
+       
+       %C#4%
+       [N#1@{logit_cprobs[4,1]}];
+       [N#2@{logit_cprobs[4,2]}];
+       [N#3@{logit_cprobs[4,3]}];
+       [GPA] (GPA4);
+       GPA;
+       [STRESS] (STRESS4);
+       STRESS;
+       [ESTEEM] (ESTEEM4);
+       ESTEEM;"
+    ),
+  
+  MODELTEST = 
+    "!0 = GPA1-GPA2;
+     !0 = GPA1-GPA3;
+     !0 = GPA1-GPA4;
+     !0 = STRESS1-STRESS2;
+     !0 = STRESS1-STRESS3;
+     !0 = STRESS1-STRESS4;
+     !0 = ESTEEM1-ESTEEM2;
+     !0 = ESTEEM1-ESTEEM3;
+     !0 = ESTEEM1-ESTEEM4;",
+  
+  MODELCONSTRAINT = 
+    "NEW(GPA12 GPA13 GPA14 GPA23 GPA24 GPA34 STRESS12 STRESS13 STRESS14
+        STRESS23 STRESS24 STRESS34 ESTEEM12 ESTEEM13 ESTEEM14
+        ESTEEM23 ESTEEM24 ESTEEM34);
+     GPA12 = GPA1-GPA2;
+     GPA13 = GPA1-GPA3;
+     GPA14 = GPA1-GPA4;
+     GPA23 = GPA2-GPA3;
+     GPA24 = GPA2-GPA4;
+     GPA34 = GPA3-GPA4;
+     STRESS12 = STRESS1-STRESS2;
+     STRESS13 = STRESS1-STRESS3;
+     STRESS14 = STRESS1-STRESS4;
+     STRESS23 = STRESS2-STRESS3;
+     STRESS24 = STRESS2-STRESS4;
+     STRESS34 = STRESS3-STRESS4;
+     ESTEEM12 = ESTEEM1-ESTEEM2;
+     ESTEEM13 = ESTEEM1-ESTEEM3;
+     ESTEEM14 = ESTEEM1-ESTEEM4;
+     ESTEEM23 = ESTEEM2-ESTEEM3;
+     ESTEEM24 = ESTEEM2-ESTEEM4;
+     ESTEEM34 = ESTEEM3-ESTEEM4;",
+
+  OUTPUT = 
+    "tech1 tech8 STANDARDIZED CINTERVAL Residual;",
+
+  rdata = savedata
+)
+
+step3_fit <- mplusModeler(
+  step3,
+  dataout = here("3step", "4c_step3.dat"),
+  modelout = here("3step", "c4_step3.inp"),
+  check = TRUE,
+  run = TRUE,
+  hashfilename = FALSE,
+  writeData = "always"
+)
+
+step3_fit
+
+```
+
+### COVARIATE ANALYSIS
+
+This step analyzes covariates (e.g., generation status, ethnicity) to predict membership in the four latent classes identified from polytomous social and academic belonging data. By examining demographic influences early, this analysis provides context for how student characteristics shape belonging profiles before exploring their impact on distal outcomes like GPA, self-esteem, and stress.
+
+First Scrape and transform Covariate Results from the output file
+
+```{r}
+
+# Source the scraping and transformation scripts
+source("functions/scrape_covariates.R")
+source("functions/transform_covariates.R")
+```
+
+Print covariate table
+
+```{r, results='asis'}
+library(gt)
+
+# Create the covariate analysis table
+cov_table <- results %>%
+  mutate(
+    LogOdds_Est = LogOdds_Est,  # Already formatted with significance
+    Odds_Ratio = round(Odds_Ratio, 3),
+    SE = round(SE, 3),
+    Lower_95CI = round(Lower_95CI, 3),
+    Upper_95CI = round(Upper_95CI, 3),
+    P_Value = round(P_Value, 3)
+  ) %>%
+  gt() %>%
+  tab_header(
+    title = "Covariate Analysis of Latent Class Comparisons",
+    subtitle = "Log-Odds Estimates and Odds Ratios from Mplus Output"
+  ) %>%
+  cols_label(
+    Comparison = "Comparison",
+    Covariate = "Covariate",
+    LogOdds_Est = "Log-Odds Estimate",
+    Odds_Ratio = "Odds Ratio",
+    SE = "S.E.",
+    Lower_95CI = "Lower 95% CI",
+    Upper_95CI = "Upper 95% CI",
+    P_Value = "p-Value"
+  ) %>%
+  tab_style(
+    style = cell_text(align = "center"),
+    locations = cells_body()
+  )
+
+# Print the table
+invisible(print(cov_table))
+```
+
+\
+OMINBUS TESTS
+
+This step performs omnibus tests, akin to ANOVA, to determine if the four latent classes differ significantly in distal outcomes (GPA, self-esteem, stress) based on polytomous belonging data. Significant results indicate meaningful class differences, allowing researchers to proceed with pairwise comparisons to explore specific outcome variations.
+
+```{r}
+#| label: "GPA-OMNIBUS"
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+library(MplusAutomation)
+library(glue)
+
+gpa <- mplusObject(
+  TITLE = "Step 3 - 3step Belonging LCA",
+  
+  VARIABLE = 
+    "nominal = N;
+     classes = c(4);",
+  
+  ANALYSIS = 
+    "estimator = mlr;
+     type = mixture;
+     starts = 0;
+     processors = 10;",
+  
+  MODEL = 
+    glue(
+      "%OVERALL%
+       C on FIRSTGEN WHITE LATINX ASIAN;
+       GPA ESTEEM STRESS on FIRSTGEN WHITE LATINX ASIAN;
+       [GPA];
+       GPA;
+       [STRESS];
+       STRESS;
+       [ESTEEM];
+       ESTEEM;
+       
+       %C#1%
+       [N#1@{logit_cprobs[1,1]}];
+       [N#2@{logit_cprobs[1,2]}];
+       [N#3@{logit_cprobs[1,3]}];
+       [GPA] (GPA1);
+       GPA;
+       [STRESS] (STRESS1);
+       STRESS;
+       [ESTEEM] (ESTEEM1);
+       ESTEEM;
+       
+       %C#2%
+       [N#1@{logit_cprobs[2,1]}];
+       [N#2@{logit_cprobs[2,2]}];
+       [N#3@{logit_cprobs[2,3]}];
+       [GPA] (GPA2);
+       GPA;
+       [STRESS] (STRESS2);
+       STRESS;
+       [ESTEEM] (ESTEEM2);
+       ESTEEM;
+       
+       %C#3%
+       [N#1@{logit_cprobs[3,1]}];
+       [N#2@{logit_cprobs[3,2]}];
+       [N#3@{logit_cprobs[3,3]}];
+       [GPA] (GPA3);
+       GPA;
+       [STRESS] (STRESS3);
+       STRESS;
+       [ESTEEM] (ESTEEM3);
+       ESTEEM;
+       
+       %C#4%
+       [N#1@{logit_cprobs[4,1]}];
+       [N#2@{logit_cprobs[4,2]}];
+       [N#3@{logit_cprobs[4,3]}];
+       [GPA] (GPA4);
+       GPA;
+       [STRESS] (STRESS4);
+       STRESS;
+       [ESTEEM] (ESTEEM4);
+       ESTEEM;"
+    ),
+  
+  MODELTEST = 
+    "0 = GPA1-GPA2;
+     0 = GPA2-GPA3;
+     0 = GPA3-GPA4;
+     !0 = STRESS1-STRESS2;
+     !0 = STRESS1-STRESS3;
+     !0 = STRESS1-STRESS4;
+     !0 = ESTEEM1-ESTEEM2;
+     !0 = ESTEEM1-ESTEEM3;
+     !0 = ESTEEM1-ESTEEM4;",
+  
+  MODELCONSTRAINT = 
+    "NEW(GPA12 GPA13 GPA14 GPA23 GPA24 GPA34 STRESS12 STRESS13 STRESS14
+        STRESS23 STRESS24 STRESS34 ESTEEM12 ESTEEM13 ESTEEM14
+        ESTEEM23 ESTEEM24 ESTEEM34);
+     GPA12 = GPA1-GPA2;
+     GPA13 = GPA1-GPA3;
+     GPA14 = GPA1-GPA4;
+     GPA23 = GPA2-GPA3;
+     GPA24 = GPA2-GPA4;
+     GPA34 = GPA3-GPA4;
+     STRESS12 = STRESS1-STRESS2;
+     STRESS13 = STRESS1-STRESS3;
+     STRESS14 = STRESS1-STRESS4;
+     STRESS23 = STRESS2-STRESS3;
+     STRESS24 = STRESS2-STRESS4;
+     STRESS34 = STRESS3-STRESS4;
+     ESTEEM12 = ESTEEM1-ESTEEM2;
+     ESTEEM13 = ESTEEM1-ESTEEM3;
+     ESTEEM14 = ESTEEM1-ESTEEM4;
+     ESTEEM23 = ESTEEM2-ESTEEM3;
+     ESTEEM24 = ESTEEM2-ESTEEM4;
+     ESTEEM34 = ESTEEM3-ESTEEM4;",
+
+  OUTPUT = 
+    "tech1 tech8 standardized;",
+
+  usevariables = colnames(savedata),
+  rdata = savedata
+)
+
+step3_gpa <- mplusModeler(
+  gpa,
+  dataout = here("3step", "GPA_step3.dat"),
+  modelout = here("3step", "GPA_step3.inp"),
+  check = TRUE,
+  run = TRUE,
+  hashfilename = FALSE,
+  writeData = "always"
+)
+
+step3_gpa
+```
+
+OMINBUS STRESS![]()
+
+```{r}
+#| label: "STRESS-OMNIBUS"
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+library(MplusAutomation)
+library(glue)
+
+stress <- mplusObject(
+  TITLE = "Step 3 - 3step Belonging LCA",
+  
+  VARIABLE = 
+    "nominal = N;
+     classes = c(4);",
+  
+  ANALYSIS = 
+    "estimator = mlr;
+     type = mixture;
+     starts = 0;
+     processors = 10;",
+  
+  MODEL = 
+    glue(
+      "%OVERALL%
+       C on FIRSTGEN WHITE LATINX ASIAN;
+       GPA ESTEEM STRESS on FIRSTGEN WHITE LATINX ASIAN;
+       [GPA];
+       GPA;
+       [STRESS];
+       STRESS;
+       [ESTEEM];
+       ESTEEM;
+       
+       %C#1%
+       [N#1@{logit_cprobs[1,1]}];
+       [N#2@{logit_cprobs[1,2]}];
+       [N#3@{logit_cprobs[1,3]}];
+       [GPA] (GPA1);
+       GPA;
+       [STRESS] (STRESS1);
+       STRESS;
+       [ESTEEM] (ESTEEM1);
+       ESTEEM;
+       
+       %C#2%
+       [N#1@{logit_cprobs[2,1]}];
+       [N#2@{logit_cprobs[2,2]}];
+       [N#3@{logit_cprobs[2,3]}];
+       [GPA] (GPA2);
+       GPA;
+       [STRESS] (STRESS2);
+       STRESS;
+       [ESTEEM] (ESTEEM2);
+       ESTEEM;
+       
+       %C#3%
+       [N#1@{logit_cprobs[3,1]}];
+       [N#2@{logit_cprobs[3,2]}];
+       [N#3@{logit_cprobs[3,3]}];
+       [GPA] (GPA3);
+       GPA;
+       [STRESS] (STRESS3);
+       STRESS;
+       [ESTEEM] (ESTEEM3);
+       ESTEEM;
+       
+       %C#4%
+       [N#1@{logit_cprobs[4,1]}];
+       [N#2@{logit_cprobs[4,2]}];
+       [N#3@{logit_cprobs[4,3]}];
+       [GPA] (GPA4);
+       GPA;
+       [STRESS] (STRESS4);
+       STRESS;
+       [ESTEEM] (ESTEEM4);
+       ESTEEM;"
+    ),
+  
+  MODELTEST = 
+    "!0 = GPA1-GPA2;
+     !0 = GPA1-GPA3;
+     !0 = GPA1-GPA4;
+     0 = STRESS1-STRESS2;
+     0 = STRESS2-STRESS3;
+     0 = STRESS3-STRESS4;
+     !0 = ESTEEM1-ESTEEM2;
+     !0 = ESTEEM1-ESTEEM3;
+     !0 = ESTEEM1-ESTEEM4;",
+  
+  MODELCONSTRAINT = 
+    "NEW(GPA12 GPA13 GPA14 GPA23 GPA24 GPA34 STRESS12 STRESS13 STRESS14
+        STRESS23 STRESS24 STRESS34 ESTEEM12 ESTEEM13 ESTEEM14
+        ESTEEM23 ESTEEM24 ESTEEM34);
+     GPA12 = GPA1-GPA2;
+     GPA13 = GPA1-GPA3;
+     GPA14 = GPA1-GPA4;
+     GPA23 = GPA2-GPA3;
+     GPA24 = GPA2-GPA4;
+     GPA34 = GPA3-GPA4;
+     STRESS12 = STRESS1-STRESS2;
+     STRESS13 = STRESS1-STRESS3;
+     STRESS14 = STRESS1-STRESS4;
+     STRESS23 = STRESS2-STRESS3;
+     STRESS24 = STRESS2-STRESS4;
+     STRESS34 = STRESS3-STRESS4;
+     ESTEEM12 = ESTEEM1-ESTEEM2;
+     ESTEEM13 = ESTEEM1-ESTEEM3;
+     ESTEEM14 = ESTEEM1-ESTEEM4;
+     ESTEEM23 = ESTEEM2-ESTEEM3;
+     ESTEEM24 = ESTEEM2-ESTEEM4;
+     ESTEEM34 = ESTEEM3-ESTEEM4;",
+
+  OUTPUT = 
+    "tech1 tech8 standardized;",
+
+  usevariables = colnames(savedata),
+  rdata = savedata
+)
+
+step3_stress <- mplusModeler(
+  stress,
+  dataout = here("3step", "stress_s3.dat"),
+  modelout = here("3step", "stress_s3.inp"),
+  check = TRUE,
+  run = TRUE,
+  hashfilename = FALSE,
+  writeData = "always"
+)
+
+step3_stress
+```
+
+Omnibus Esteem\
+
+```{r}
+#| label: "Esteem-OMNIBUS"
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+library(MplusAutomation)
+library(glue)
+
+esteem <- mplusObject(
+  TITLE = "Step 3 - 3step Belonging LCA",
+  
+  VARIABLE = 
+    "nominal = N;
+     classes = c(4);",
+  
+  ANALYSIS = 
+    "estimator = mlr;
+     type = mixture;
+     starts = 0;
+     processors = 10;",
+  
+  MODEL = 
+    glue(
+      "%OVERALL%
+       C on FIRSTGEN WHITE LATINX ASIAN;
+       GPA ESTEEM STRESS on FIRSTGEN WHITE LATINX ASIAN;
+       [GPA];
+       GPA;
+       [STRESS];
+       STRESS;
+       [ESTEEM];
+       ESTEEM;
+       
+       %C#1%
+       [N#1@{logit_cprobs[1,1]}];
+       [N#2@{logit_cprobs[1,2]}];
+       [N#3@{logit_cprobs[1,3]}];
+       [GPA] (GPA1);
+       GPA;
+       [STRESS] (STRESS1);
+       STRESS;
+       [ESTEEM] (ESTEEM1);
+       ESTEEM;
+       
+       %C#2%
+       [N#1@{logit_cprobs[2,1]}];
+       [N#2@{logit_cprobs[2,2]}];
+       [N#3@{logit_cprobs[2,3]}];
+       [GPA] (GPA2);
+       GPA;
+       [STRESS] (STRESS2);
+       STRESS;
+       [ESTEEM] (ESTEEM2);
+       ESTEEM;
+       
+       %C#3%
+       [N#1@{logit_cprobs[3,1]}];
+       [N#2@{logit_cprobs[3,2]}];
+       [N#3@{logit_cprobs[3,3]}];
+       [GPA] (GPA3);
+       GPA;
+       [STRESS] (STRESS3);
+       STRESS;
+       [ESTEEM] (ESTEEM3);
+       ESTEEM;
+       
+       %C#4%
+       [N#1@{logit_cprobs[4,1]}];
+       [N#2@{logit_cprobs[4,2]}];
+       [N#3@{logit_cprobs[4,3]}];
+       [GPA] (GPA4);
+       GPA;
+       [STRESS] (STRESS4);
+       STRESS;
+       [ESTEEM] (ESTEEM4);
+       ESTEEM;"
+    ),
+  
+  MODELTEST = 
+    "!0 = GPA1-GPA2;
+     !0 = GPA1-GPA3;
+     !0 = GPA1-GPA4;
+     !0 = STRESS1-STRESS2;
+     !0 = STRESS2-STRESS3;
+     !0 = STRESS3-STRESS4;
+     0 = ESTEEM1-ESTEEM2;
+     0 = ESTEEM2-ESTEEM3;
+     0 = ESTEEM3-ESTEEM4;",
+  
+  MODELCONSTRAINT = 
+    "NEW(GPA12 GPA13 GPA14 GPA23 GPA24 GPA34 STRESS12 STRESS13 STRESS14
+        STRESS23 STRESS24 STRESS34 ESTEEM12 ESTEEM13 ESTEEM14
+        ESTEEM23 ESTEEM24 ESTEEM34);
+     GPA12 = GPA1-GPA2;
+     GPA13 = GPA1-GPA3;
+     GPA14 = GPA1-GPA4;
+     GPA23 = GPA2-GPA3;
+     GPA24 = GPA2-GPA4;
+     GPA34 = GPA3-GPA4;
+     STRESS12 = STRESS1-STRESS2;
+     STRESS13 = STRESS1-STRESS3;
+     STRESS14 = STRESS1-STRESS4;
+     STRESS23 = STRESS2-STRESS3;
+     STRESS24 = STRESS2-STRESS4;
+     STRESS34 = STRESS3-STRESS4;
+     ESTEEM12 = ESTEEM1-ESTEEM2;
+     ESTEEM13 = ESTEEM1-ESTEEM3;
+     ESTEEM14 = ESTEEM1-ESTEEM4;
+     ESTEEM23 = ESTEEM2-ESTEEM3;
+     ESTEEM24 = ESTEEM2-ESTEEM4;
+     ESTEEM34 = ESTEEM3-ESTEEM4;",
+
+  OUTPUT = 
+    "tech1 tech8 standardized;",
+
+  usevariables = colnames(savedata),
+  rdata = savedata
+)
+
+step3_esteem <- mplusModeler(
+  esteem,
+  dataout = here("3step", "esteem_s3.dat"),
+  modelout = here("3step", "esteem_s3.inp"),
+  check = TRUE,
+  run = TRUE,
+  hashfilename = FALSE,
+  writeData = "always"
+)
+
+step3_esteem
+```
+
+Create a plot of the three Omnibus Tests and examine for significance.
+
+```{r}
+library(gt)
+
+# Function to scrape Wald Test
+scrape_wald_test <- function(model_object) {
+  wald_header <- grep("Wald Test of Parameter Constraints", model_object$results$output)
+  wald_block <- model_object$results$output[(wald_header):(wald_header + 5)]
+  
+  extract_last_number <- function(line) {
+    as.numeric(tail(strsplit(gsub(",", "", trimws(line)), "\\s+")[[1]], 1))
+  }
+  
+  value_line <- grep("Value", wald_block, value = TRUE)[1]
+  df_line    <- grep("Degrees of Freedom", wald_block, value = TRUE)[1]
+  pval_line  <- grep("P-Value", wald_block, value = TRUE)[1]
+  
+  wald_value <- extract_last_number(value_line)
+  wald_df    <- extract_last_number(df_line)
+  wald_p     <- extract_last_number(pval_line)
+  
+  list(
+    ChiSq = wald_value,
+    df = wald_df,
+    p = wald_p
+  )
+}
+
+# Run for each model
+gpa_wald_result    <- scrape_wald_test(step3_gpa)
+stress_wald_result <- scrape_wald_test(step3_stress)
+esteem_wald_result <- scrape_wald_test(step3_esteem)
+
+# Create small table
+wald_table <- data.frame(
+  Outcome = c("GPA", "Stress", "Esteem"),
+  ChiSq   = c(gpa_wald_result$ChiSq, stress_wald_result$ChiSq, esteem_wald_result$ChiSq),
+  df      = c(gpa_wald_result$df, stress_wald_result$df, esteem_wald_result$df),
+  p       = c(gpa_wald_result$p, stress_wald_result$p, esteem_wald_result$p)
+)
+
+# Format nicely with gt
+wald_gt <- wald_table %>%
+  gt() %>%
+  fmt_number(
+    columns = c(ChiSq, p),
+    decimals = 3
+  ) %>%
+  cols_label(
+    Outcome = "Outcome",
+    ChiSq   = "Wald χ²",
+    df      = "df",
+    p       = "p-value"
+  ) %>%
+  tab_header(
+    title = md("**Omnibus Wald Tests**")
+  )
+
+# Print gt table
+wald_gt
+
+```
+
+### Prepare data for Distal Visualization
+
+### **Extract Parameters from Mplus Output**
+
+We read the Mplus output file from the 3-step LCA procedure and extract unstandardized intercept parameters for GPA, self-esteem, and stress, along with their standard errors, for the four-class model.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+# Read in the Mplus output file
+mplus_output <- readModels(here("3step", "c4_step3.out"))
+
+# Extract the unstandardized parameters
+parameters <- mplus_output$parameters$unstandardized
+
+# Filter for the Intercepts related to GPA, ESTEEM, and STRESS, and extract both est and se
+intercepts <- parameters %>%
+  filter(grepl("GPA|ESTEEM|STRESS", param) & grepl("Intercepts", paramHeader)) %>%
+  select(param, est, se)
+
+
+
+```
+
+**Create Data Frame for Plotting**
+
+We create a data frame by assigning class labels (High Social/High Academic, Low Social/High Academic, High Social/Low Academic, Low Social/Low Academic) and outcome names (GPA, Self-Esteem, Stress) to the extracted intercepts, renaming “ESTEEM” to “Self-Esteem,” and calculating error bar bounds using estimates and standard errors.
+
+```{r}
+# Create the data frame for plotting
+data <- intercepts %>%
+  mutate(
+    Class = rep(c("High Social, High Academic", "Low Social, High Academic", 
+                  "High Social, Low Academic", "Low Social, Low Academic"), each = 3),
+    Outcome = rep(c("GPA", "Self-Esteem", "Stress"), times = 4),
+    lower = est - se,  # Lower bound for error bars
+    upper = est + se   # Upper bound for error bars
+  ) %>%
+  mutate(Outcome = recode(Outcome, "ESTEEM" = "Self-Esteem"))  # Rename ESTEEM to Self-Esteem
+```
+
+**Generate Faceted Bar Plot**
+
+We generate a faceted bar plot showing mean estimates of GPA, self-esteem, and stress across the four LCA classes, with error bars, customized y-axis ranges (0–5 for GPA, 1–7 for self-esteem and stress), distinct colors, and panel labels (Panel A: GPA, Panel B: Self-Esteem, Panel C: Stress).
+
+```{r}
+# 1) your dummy_limits stays the same:
+dummy_limits <- data.frame(
+  Class   = str_wrap(levels(factor(data$Class))[1], width = 15),
+  est     = c(0, 5,    1, 7,    1, 7),           # 0–5 for GPA; 1–7 elsewhere
+  Outcome = factor(
+    c("GPA","GPA", "Self-Esteem","Self-Esteem", "Stress","Stress"),
+    levels = c("GPA","Self-Esteem","Stress")
+  )
+)
+
+# 2) add geom_blank() + scale_y_continuous(expand=0) into your plot:
+p <- ggplot(data, aes(x = str_wrap(Class, width = 15), y = est, fill = Outcome)) +
+  geom_bar(stat = "identity", width = 0.7) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2) +
+
+  geom_blank(data = dummy_limits, aes(x = Class, y = est)) +     # ← forces each facet’s y‐range
+  scale_y_continuous(
+    expand = expansion(mult = 0),                               # no padding beyond your dummy points
+    breaks = c(1, 2, 3, 4, 5, 6, 7)                                       # optional: ticks at 1,3,5,7
+  ) +
+
+  facet_wrap(~ Outcome, ncol = 1, scales = "free_y",
+             labeller = labeller(Outcome = c(
+               "GPA"         = "Panel A: GPA",
+               "Self-Esteem" = "Panel B: Self-Esteem",
+               "Stress"      = "Panel C: Stress"
+             ))) +
+  scale_fill_manual(values = c(
+    "GPA"         = "#FFC107",
+    "Self-Esteem" = "#F44336",
+    "Stress"      = "#3F51B5"
+  )) +
+  labs(x = NULL, y = NULL) +
+  theme_minimal() +
+  theme(
+    legend.position    = "none",
+    strip.text         = element_text(size = 12, face = "bold"),
+    axis.text.x        = element_text(size = 10),
+    axis.text.y        = element_text(size = 10),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor   = element_blank(),
+    strip.background   = element_rect(fill = "white", color = "black")
+  )
+
+print(p)
+
+```
+
+### Calculate the Lanza Tan and Bray - Omega
+
+### **Explanation of Values Used in the Analysis**
+
+This section calculates the Lanza Tan and Bray Omega (LTB-ω) and Cohen’s (d) effect sizes to quantify the association between latent classes and distal outcomes (GPA, self-esteem, stress) in a 3-step Latent Class Analysis (LCA) with four classes. Using values from the Mplus output file c4_step3.out, these metrics assess the practical significance of class differences based on polytomous belonging data.
+
+-   **Class Probabilities (**
+
+    **`\pi_c`**
+
+    **)**: These represent the proportion of individuals assigned to each latent class, used to weight the means in the LTB-ω calculation.
+
+    -   Class 1: 0.34903
+
+    -   Class 2: 0.15447
+
+    -   Class 3: 0.37825
+
+    -   Class 4: 0.11826
+
+    -   Source: Extracted from the "Prob" column of the "INTERCEPTS" table in c4_step3.out.
+
+-   **Class Sizes (**
+
+    **`n_c`**
+
+    **)**: These are the expected counts of individuals in each class, based on the class probabilities, used in the computation of Cohen’s (d).
+
+    -   Class 1: 291.433939
+
+    -   Class 2: 128.890071
+
+    -   Class 3: 315.835881
+
+    -   Class 4: 98.744414
+
+    -   Source: Extracted from the "N-size" column of the "INTERCEPTS" table in c4_step3.out.
+
+-   **Class-Specific Means (**
+
+    **`\mu_c`**
+
+    **)**: These are the unstandardized intercepts representing the mean of each distal outcome (GPA, self-esteem, and stress) for each class, used in both LTB-ω and Cohen’s (d) calculations.
+
+    -   GPA:
+
+        -   Class 1: 3.254
+
+        -   Class 2: 3.247
+
+        -   Class 3: 3.066
+
+        -   Class 4: 2.847
+
+    -   Self-Esteem (labeled as ESTEEM in Mplus output):
+
+        -   Class 1: 5.782
+
+        -   Class 2: 4.711
+
+        -   Class 3: 4.667
+
+        -   Class 4: 3.539
+
+    -   Stress:
+
+        -   Class 1: 3.688
+
+        -   Class 2: 4.189
+
+        -   Class 3: 4.468
+
+        -   Class 4: 4.808
+
+    -   Source: Extracted from the "mean-GM" column of the "INTERCEPTS" table in c4_step3.out.
+
+-   **Standard Errors of the Means**: These are the standard errors of the intercepts for each distal outcome, used to compute the confidence intervals for Cohen’s (d).
+
+    -   GPA:
+
+        -   Class 1: 0.158
+
+        -   Class 2: 0.121
+
+        -   Class 3: 0.139
+
+        -   Class 4: 0.249
+
+    -   Self-Esteem:
+
+        -   Class 1: 0.111
+
+        -   Class 2: 0.104
+
+        -   Class 3: 0.101
+
+        -   Class 4: 0.114
+
+    -   Stress:
+
+        -   Class 1: 0.600
+
+        -   Class 2: 0.690
+
+        -   Class 3: 0.180
+
+        -   Class 4: 0.520
+
+    -   Source: Extracted from the "mean-GM/2" column of the "INTERCEPTS" table in c4_step3.out.
+
+-   **Class-Specific Variances**: These are the variances of each distal outcome within each class, used to compute the pooled standard deviations for Cohen’s (d).
+
+    -   GPA:
+
+        -   Class 1: 0.229
+
+        -   Class 2: 0.192
+
+        -   Class 3: 0.244
+
+        -   Class 4: 0.471
+
+    -   Self-Esteem:
+
+        -   Class 1: 0.109
+
+        -   Class 2: 0.220
+
+        -   Class 3: 0.179
+
+        -   Class 4: 0.584
+
+    -   Stress:
+
+        -   Class 1: 0.891
+
+        -   Class 2: 0.890
+
+        -   Class 3: 0.851
+
+        -   Class 4: 0.584
+
+    -   Source: Extracted from the "Model Estimated Covariances" section under "RESIDUAL OUTPUT" in c4_step3.out using the R package MplusAutomation (specifically, from mplus_output\$residuals\$CLASS.\[1-4\]\$covarianceEst).
+
+These values were used to compute the LTB-ω effect size, which measures the strength of association between the latent class variable and each distal outcome, and Cohen’s (d) effect sizes with 95% confidence intervals for pairwise class comparisons, focusing on outcomes with significant Wald test results (GPA, self-esteem, and stress).
+
+```{r}
+# Load required packages
+library(dplyr)  # For data manipulation
+library(gt)     # For creating formatted tables
+
+# Define the values used for the analysis
+class_probs <- c(C1 = 0.34903, C2 = 0.15447, C3 = 0.37825, C4 = 0.11826)
+class_sizes <- c(C1 = 291.433939, C2 = 128.890071, C3 = 315.835881, C4 = 98.744414)
+
+means <- data.frame(
+  Class = paste0("Class", 1:4),
+  GPA = c(3.254, 3.247, 3.066, 2.847),
+  ESTEEM = c(5.782, 4.711, 4.667, 3.539),
+  STRESS = c(3.688, 4.189, 4.468, 4.808)
+)
+
+se <- data.frame(
+  Class = paste0("Class", 1:4),
+  GPA = c(0.158, 0.121, 0.139, 0.249),
+  ESTEEM = c(0.111, 0.104, 0.101, 0.114),
+  STRESS = c(0.600, 0.690, 0.180, 0.520)
+)
+
+variances_df <- data.frame(
+  GPA = c(0.229, 0.192, 0.244, 0.471),
+  ESTEEM = c(0.109, 0.220, 0.179, 0.584),
+  STRESS = c(0.891, 0.890, 0.851, 0.584),
+  row.names = paste0("Class", 1:4)
+)
+
+# --- Calculations Section ---
+
+# Step 1: Calculate the overall mean (mu_bar) for each outcome
+# This is the weighted mean of the class-specific means, using class probabilities
+overall_means <- sapply(c("GPA", "ESTEEM", "STRESS"), function(outcome) {
+  sum(class_probs * means[[outcome]])
+})
+names(overall_means) <- c("GPA", "ESTEEM", "STRESS")
+
+# Step 2: Compute LTB-ω effect size for each outcome
+# LTB-ω measures the strength of association between the latent class variable and each outcome
+# Formula: sqrt(sum(pi_c * (mu_c - mu_bar)^2))
+ltb_omega <- sapply(c("GPA", "ESTEEM", "STRESS"), function(outcome) {
+  squared_diff <- (means[[outcome]] - overall_means[outcome])^2
+  weighted_sum <- sum(class_probs * squared_diff)
+  sqrt(weighted_sum)
+})
+
+# Create a data frame for LTB-ω results
+ltb_omega_df <- data.frame(
+  Outcome = c("GPA", "Self-Esteem", "Stress"),
+  LTB_Omega = ltb_omega,
+  Interpretation = sapply(ltb_omega, function(x) {
+    if (x < 0.20) "Small"
+    else if (x < 0.50) "Medium"
+    else if (x < 0.80) "Medium to Large"
+    else "Large"
+  }),
+  row.names = NULL
+)
+
+# Step 3: Compute Cohen's d for pairwise class comparisons with 95% CIs
+# Cohen's d measures the standardized difference between class means for each outcome
+# We compute this for all pairwise comparisons between classes
+outcomes <- c("GPA", "ESTEEM", "STRESS")
+pairwise_comparisons <- combn(1:4, 2, simplify = FALSE)
+
+cohen_d_dfs <- list()
+
+for (outcome in outcomes) {
+  # Initialize a data frame to store Cohen's d results for the current outcome
+  d_results <- data.frame(
+    Comparison = character(),
+    Cohens_d = numeric(),
+    CI_Lower = numeric(),
+    CI_Upper = numeric(),
+    stringsAsFactors = FALSE
+  )
+  
+  for (pair in pairwise_comparisons) {
+    class1 <- pair[1]
+    class2 <- pair[2]
+    comparison <- paste0("Class", class1, "-Class", class2)
+    
+    # Extract values for the pair
+    mu1 <- means[[outcome]][class1]
+    mu2 <- means[[outcome]][class2]
+    var1 <- variances_df[[outcome]][class1]
+    var2 <- variances_df[[outcome]][class2]
+    se1 <- se[[outcome]][class1]
+    se2 <- se[[outcome]][class2]
+    n1 <- class_sizes[class1]
+    n2 <- class_sizes[class2]
+    
+    # Compute pooled standard deviation for Cohen's d
+    sd_pooled <- sqrt(((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2))
+    
+    # Compute Cohen's d
+    d <- (mu1 - mu2) / sd_pooled
+    
+    # Compute standard error of Cohen's d (approximation)
+    se_d <- sqrt((n1 + n2) / (n1 * n2) + (d^2) / (2 * (n1 + n2)))
+    
+    # Compute 95% confidence interval
+    z <- 1.96
+    ci_lower <- d - z * se_d
+    ci_upper <- d + z * se_d
+    
+    # Store results in the data frame
+    d_results <- rbind(d_results, data.frame(
+      Comparison = comparison,
+      Cohens_d = d,
+      CI_Lower = ci_lower,
+      CI_Upper = ci_upper,
+      stringsAsFactors = FALSE
+    ))
+  }
+  
+  # Store the data frame for this outcome
+  cohen_d_dfs[[outcome]] <- d_results
+}
+
+
+```
+
+Visualize the LTB - OMEGA and COhens D\
+
+```{r, results='asis'}
+library(gt)
+
+# Print LTB-ω table
+ltb_omega_gt <- ltb_omega_df %>%
+  mutate(LTB_Omega = round(LTB_Omega, 3)) %>%
+  gt() %>%
+  tab_header(
+    title = "LTB-ω Effect Sizes for Distal Outcomes",
+    subtitle = "Interpreted using Cohen's d metric"
+  ) %>%
+  cols_label(
+    Outcome = "Outcome",
+    LTB_Omega = "LTB-ω",
+    Interpretation = "Interpretation"
+  ) %>%
+  tab_style(
+    style = cell_text(align = "center"),
+    locations = cells_body()
+  )
+invisible(print(ltb_omega_gt))
+
+# Print Cohen's d tables
+cohen_d_tables <- list()
+outcomes <- c("GPA", "ESTEEM", "STRESS")
+
+for (outcome in outcomes) {
+  cohen_d_tables[[outcome]] <- cohen_d_dfs[[outcome]] %>%
+    mutate(
+      Cohens_d = round(Cohens_d, 3),
+      CI_Lower = round(CI_Lower, 3),
+      CI_Upper = round(CI_Upper, 3)
+    ) %>%
+    gt() %>%
+    tab_header(
+      title = paste("Cohen's d Effect Sizes for", outcome),
+      subtitle = "Pairwise Class Comparisons with 95% Confidence Intervals"
+    ) %>%
+    cols_label(
+      Comparison = "Comparison",
+      Cohens_d = "Cohen's d",
+      CI_Lower = "95% CI Lower",
+      CI_Upper = "95% CI Upper"
+    ) %>%
+    tab_style(
+      style = cell_text(align = "center"),
+      locations = cells_body()
+    )
+  invisible(print(cohen_d_tables[[outcome]]))
+}
+```
+
+Pairwise comparions for GPA, ESTEEM, and Stress\
+\
+
+```{r, results='asis'}
+library(MplusAutomation)
+library(dplyr)
+library(gt)
+
+# Read Mplus output file from the 3step folder
+mplus_output <- readModels("3step/c4_step3.out")
+
+# Extract the "New/Additional Parameters" from MODEL RESULTS
+new_params <- mplus_output$parameters$unstandardized[
+  grepl("^(GPA|ESTEEM|STRESS)[0-9]{2}$", mplus_output$parameters$unstandardized$param),
+]
+
+# Define outcomes and comparisons
+outcomes <- c("GPA", "ESTEEM", "STRESS")
+comparisons <- c("12", "13", "14", "23", "24", "34")
+comparison_map <- c(
+  "12" = "Class1-Class2",
+  "13" = "Class1-Class3",
+  "14" = "Class1-Class4",
+  "23" = "Class2-Class3",
+  "24" = "Class2-Class4",
+  "34" = "Class3-Class4"
+)
+
+# Create a data frame for the results
+results <- data.frame(
+  Comparison = character(),
+  Outcome = character(),
+  Mean_Diff = numeric(),
+  T_Value = numeric(),
+  P_Value = numeric(),
+  stringsAsFactors = FALSE
+)
+
+# Extract pairwise comparisons
+for (outcome in outcomes) {
+  for (comp in comparisons) {
+    param_name <- paste0(outcome, comp)
+    param_row <- new_params[new_params$param == param_name, ]
+    
+    if (nrow(param_row) > 0) {
+      results <- rbind(results, data.frame(
+        Comparison = comparison_map[comp],
+        Outcome = outcome,
+        Mean_Diff = param_row$est,
+        T_Value = param_row$est_se,
+        P_Value = param_row$pval,
+        stringsAsFactors = FALSE
+      ))
+    }
+  }
+}
+
+# Create the significance testing table
+sig_table <- results %>%
+  mutate(
+    Mean_Diff = round(Mean_Diff, 3),
+    T_Value = round(T_Value, 3),
+    P_Value = round(P_Value, 3),
+    Outcome = recode(Outcome, "ESTEEM" = "Self-Esteem", "STRESS" = "Stress", "GPA" = "GPA")
+  ) %>%
+  gt() %>%
+  tab_header(
+    title = "Significance Testing of Pairwise Class Comparisons for Distal Outcomes",
+    subtitle = "Mean Differences with t-Statistics and p-Values from Mplus Output"
+  ) %>%
+  cols_label(
+    Comparison = "Comparison",
+    Outcome = "Outcome",
+    Mean_Diff = "Mean Difference",
+    T_Value = "t-Value",
+    P_Value = "p-Value"
+  ) %>%
+  tab_style(
+    style = cell_text(align = "center"),
+    locations = cells_body()
+  )
+
+# Print the table
+invisible(print(sig_table))
+```
+
+### 

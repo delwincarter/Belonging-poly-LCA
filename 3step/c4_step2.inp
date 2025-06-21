@@ -1,0 +1,37 @@
+TITLE:
+Step 2 - 3step Belonging LCA
+DATA:
+FILE = "/Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/3step/4c_step2.dat";
+ 
+VARIABLE:
+NAMES = WHITE GPA FIRSTGEN ESTEEM STRESS LATINX ASIAN N; 
+ MISSING=.;
+ NOMINAL = N;
+  USEVARIABLES = N;
+  CLASSES = C(4);
+
+ANALYSIS:
+estimator = mlr;
+     type = mixture;
+     starts = 0;
+     processors = 10;
+MODEL:
+%C#1%
+[N#1@9.699];
+[N#2@4.809];
+[N#3@7.068];
+
+%C#2%
+[N#1@-0.348];
+[N#2@3.008];
+[N#3@0.509];
+
+%C#3%
+[N#1@1.493];
+[N#2@0.807];
+[N#3@4.279];
+
+%C#4%
+[N#1@-11.152];
+[N#2@-2.775];
+[N#3@-2.501];

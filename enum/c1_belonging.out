@@ -1,0 +1,466 @@
+Mplus VERSION 8.11 (Mac)
+MUTHEN & MUTHEN
+05/01/2025   7:40 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+  1-Class LCA for Belonging Variables
+  DATA:
+  FILE = "/Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/enum/belonging.dat";
+
+  VARIABLE:
+  NAMES = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+   MISSING=.;
+   categorical = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+  usevar = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+  missing = all(999);
+  classes = c(1);
+  ANALYSIS:
+
+        estimator = mlr;
+        type = mixture;
+        starts = 1000 100;
+        processors = 10;
+  OUTPUT:
+  sampstat; residual; tech11; tech14;
+  PLOT:
+
+        type = plot3;
+        series = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R(*);
+
+
+
+*** WARNING in OUTPUT command
+  SAMPSTAT option is not available when all outcomes are censored, ordered
+  categorical, unordered categorical (nominal), count or continuous-time
+  survival variables.  Request for SAMPSTAT is ignored.
+*** WARNING in OUTPUT command
+  TECH11 option is not available for TYPE=MIXTURE with only one class.
+  Request for TECH11 is ignored.
+*** WARNING in OUTPUT command
+  TECH14 option is not available for TYPE=MIXTURE with only one class.
+  Request for TECH14 is ignored.
+   3 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+1-Class LCA for Belonging Variables
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         837
+
+Number of dependent variables                                    8
+Number of independent variables                                  0
+Number of continuous latent variables                            0
+Number of categorical latent variables                           1
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   SSAF2R      SSAF4R      SSAF7       SSAF11      AUS3        AUS2R
+   AUS5        AUS6R
+
+Categorical latent variables
+   C
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-06
+    Relative loglikelihood change                        0.100D-06
+    Derivative                                           0.100D-05
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-05
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-05
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Random Starts Specifications
+  Number of initial stage random starts                       1000
+  Number of final stage optimizations                          100
+  Number of initial stage iterations                            10
+  Initial stage convergence criterion                    0.100D+01
+  Random starts scale                                    0.500D+01
+  Random seed for generating random starts                       0
+Link                                                         LOGIT
+
+Input data file(s)
+  /Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/enum/belonging.d
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+     Number of y missing data patterns           0
+     Number of u missing data patterns           1
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    SSAF2R
+      Category 1    0.239          200.000
+      Category 2    0.123          103.000
+      Category 3    0.638          534.000
+    SSAF4R
+      Category 1    0.142          119.000
+      Category 2    0.134          112.000
+      Category 3    0.724          606.000
+    SSAF7
+      Category 1    0.050           42.000
+      Category 2    0.097           81.000
+      Category 3    0.853          714.000
+    SSAF11
+      Category 1    0.057           48.000
+      Category 2    0.186          156.000
+      Category 3    0.756          633.000
+    AUS3
+      Category 1    0.234          196.000
+      Category 2    0.219          183.000
+      Category 3    0.547          458.000
+    AUS2R
+      Category 1    0.570          477.000
+      Category 2    0.098           82.000
+      Category 3    0.332          278.000
+    AUS5
+      Category 1    0.166          139.000
+      Category 2    0.170          142.000
+      Category 3    0.664          556.000
+    AUS6R
+      Category 1    0.299          250.000
+      Category 2    0.179          150.000
+      Category 3    0.522          437.000
+
+
+RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST LOGLIKELIHOOD VALUES
+
+Final stage loglikelihood values at local maxima, seeds, and initial stage start numbers:
+
+           -5576.542  118438           601
+           -5576.542  342019           301
+           -5576.542  964570           701
+           -5576.542  246794           801
+           -5576.542  700349           401
+           -5576.542  36714            201
+           -5576.542  371246           101
+           -5576.542  137888           901
+           -5576.542  294669           501
+           -5576.542  379729           512
+           -5576.542  7959             256
+           -5576.542  314034           513
+           -5576.542  147440           514
+           -5576.542  164305           128
+           -5576.542  871851           257
+           -5576.542  140849           515
+           -5576.542  689529           516
+           -5576.542  188498           258
+           -5576.542  79212            517
+           -5576.542  327475           518
+           -5576.542  814975           129
+           -5576.542  622860           259
+           -5576.542  161421           519
+           -5576.542  489927           520
+           -5576.542  804660           260
+           -5576.542  509733           130
+           -5576.542  616917           261
+           -5576.542  520177           262
+           -5576.542  468036           131
+           -5576.542  349263           263
+           -5576.542  358488           264
+           -5576.542  313407           132
+           -5576.542  321390           133
+           -5576.542  903369           134
+           -5576.542  437181           135
+           -5576.542  232559           136
+           -5576.542  848356           602
+           -5576.542  383979           603
+           -5576.542  402699           604
+           -5576.542  679832           302
+           -5576.542  213189           605
+           -5576.542  588923           606
+           -5576.542  790452           303
+           -5576.542  824956           607
+           -5576.542  881886           608
+           -5576.542  92689            304
+           -5576.542  941525           609
+           -5576.542  15270            610
+           -5576.542  81117            305
+           -5576.542  484687           306
+           -5576.542  534864           307
+           -5576.542  692169           308
+           -5576.542  879338           309
+           -5576.542  996231           310
+           -5576.542  531546           702
+           -5576.542  35191            703
+           -5576.542  926762           704
+           -5576.542  476393           705
+           -5576.542  579138           706
+           -5576.542  49293            707
+           -5576.542  114433           708
+           -5576.542  765586           709
+           -5576.542  117391           710
+           -5576.542  391368           802
+           -5576.542  432513           803
+           -5576.542  7886             804
+           -5576.542  971853           402
+           -5576.542  845580           805
+           -5576.542  203508           806
+           -5576.542  471040           403
+           -5576.542  739214           807
+           -5576.542  496344           808
+           -5576.542  605565           404
+           -5576.542  544077           809
+           -5576.542  200041           810
+           -5576.542  596257           405
+           -5576.542  926797           406
+           -5576.542  772131           407
+           -5576.542  55115            408
+           -5576.542  605161           409
+           -5576.542  746978           410
+           -5576.542  695453           902
+           -5576.542  298201           903
+           -5576.542  494209           904
+           -5576.542  379823           905
+           -5576.542  663090           906
+           -5576.542  81951            907
+           -5576.542  327927           908
+           -5576.542  105656           909
+           -5576.542  98068            998
+           -5576.542  462953           7
+           -5576.542  27071            15
+           -5576.542  227563           63
+           -5576.542  153942           31
+           -5576.542  unperturbed      0
+           -5576.542  311214           64
+           -5576.542  565819           65
+           -5576.542  626891           32
+           -5576.542  93468            3
+           -5576.542  285380           1
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       16
+
+Loglikelihood
+
+          H0 Value                       -5576.542
+          H0 Scaling Correction Factor      1.0000
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   11185.084
+          Bayesian (BIC)                 11260.761
+          Sample-Size Adjusted BIC       11209.950
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit for the Binary and Ordered Categorical
+(Ordinal) Outcomes**
+
+          Pearson Chi-Square
+
+          Value                           6120.019
+          Degrees of Freedom                  6479
+          P-Value                           0.9993
+
+          Likelihood Ratio Chi-Square
+
+          Value                           2001.167
+          Degrees of Freedom                  6479
+          P-Value                           1.0000
+
+** Of the 6561 cells in the latent class indicator table, 65
+   were deleted in the calculation of chi-square due to extreme values.
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THE ESTIMATED MODEL
+
+    Latent
+   Classes
+
+       1        837.00000          1.00000
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON ESTIMATED POSTERIOR PROBABILITIES
+
+    Latent
+   Classes
+
+       1        837.00000          1.00000
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THEIR MOST LIKELY LATENT CLASS MEMBERSHIP
+
+Class Counts and Proportions
+
+    Latent
+   Classes
+
+       1              837          1.00000
+
+
+Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
+by Latent Class (Column)
+
+           1
+
+    1   1.000
+
+
+Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+           1
+
+    1   1.000
+
+
+Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+              1
+
+    1      0.000
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ Thresholds
+    SSAF2R$1          -1.158      0.081    -14.292      0.000
+    SSAF2R$2          -0.567      0.072     -7.879      0.000
+    SSAF4R$1          -1.797      0.099    -18.160      0.000
+    SSAF4R$2          -0.964      0.077    -12.473      0.000
+    SSAF7$1           -2.941      0.158    -18.573      0.000
+    SSAF7$2           -1.759      0.098    -18.015      0.000
+    SSAF11$1          -2.800      0.149    -18.832      0.000
+    SSAF11$2          -1.132      0.081    -14.065      0.000
+    AUS3$1            -1.185      0.082    -14.517      0.000
+    AUS3$2            -0.189      0.069     -2.727      0.006
+    AUS2R$1            0.281      0.070      4.031      0.000
+    AUS2R$2            0.699      0.073      9.518      0.000
+    AUS5$1            -1.614      0.093    -17.374      0.000
+    AUS5$2            -0.682      0.073     -9.323      0.000
+    AUS6R$1           -0.854      0.076    -11.302      0.000
+    AUS6R$2           -0.088      0.069     -1.278      0.201
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.181E-01
+       (ratio of smallest to largest eigenvalue)
+
+
+RESULTS IN PROBABILITY SCALE
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ SSAF2R
+    Category 1         0.239      0.015     16.211      0.000
+    Category 2         0.123      0.011     10.838      0.000
+    Category 3         0.638      0.017     38.407      0.000
+ SSAF4R
+    Category 1         0.142      0.012     11.778      0.000
+    Category 2         0.134      0.012     11.371      0.000
+    Category 3         0.724      0.015     46.859      0.000
+ SSAF7
+    Category 1         0.050      0.008      6.650      0.000
+    Category 2         0.097      0.010      9.470      0.000
+    Category 3         0.853      0.012     69.704      0.000
+ SSAF11
+    Category 1         0.057      0.008      7.136      0.000
+    Category 2         0.186      0.013     13.847      0.000
+    Category 3         0.756      0.015     50.962      0.000
+ AUS3
+    Category 1         0.234      0.015     15.998      0.000
+    Category 2         0.219      0.014     15.304      0.000
+    Category 3         0.547      0.017     31.804      0.000
+ AUS2R
+    Category 1         0.570      0.017     33.302      0.000
+    Category 2         0.098      0.010      9.534      0.000
+    Category 3         0.332      0.016     20.402      0.000
+ AUS5
+    Category 1         0.166      0.013     12.910      0.000
+    Category 2         0.170      0.013     13.077      0.000
+    Category 3         0.664      0.016     40.696      0.000
+ AUS6R
+    Category 1         0.299      0.016     18.881      0.000
+    Category 2         0.179      0.013     13.519      0.000
+    Category 3         0.522      0.017     30.239      0.000
+
+
+RESIDUAL OUTPUT
+
+
+     RESIDUAL OUTPUT IS NOT AVAILABLE FOR THIS MODEL.  ADDITIONAL OUTPUT FOR
+     CATEGORICAL, COUNT, AND NOMINAL VARIABLES MAY BE AVAILABLE USING TECH10.
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+  Sample proportions and estimated probabilities
+
+     Beginning Time:  19:40:52
+        Ending Time:  19:40:54
+       Elapsed Time:  00:00:02
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2024 Muthen & Muthen

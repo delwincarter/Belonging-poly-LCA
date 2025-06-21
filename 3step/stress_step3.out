@@ -1,0 +1,134 @@
+Mplus VERSION 8.11 (Mac)
+MUTHEN & MUTHEN
+04/27/2025   6:27 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+  Step 3 - 3step Belonging LCA
+  DATA:
+  FILE = "/Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/3step/stress_step3.d
+
+  VARIABLE:
+  NAMES = WHITE GPA FIRSTGEN ESTEEM_R STRESS_R LATINX ASIAN N;
+   MISSING=.;
+   nominal = N;
+       classes = c(4);
+  ANALYSIS:
+  estimator = mlr;
+       type = mixture;
+       starts = 0;
+       processors = 10;
+  MODEL:
+  %OVERALL%
+  C on FIRSTGEN WHITE LATINX ASIAN;
+  GPA ESTEEM_R STRESS_R on FIRSTGEN WHITE LATINX ASIAN;
+  [GPA];
+  GPA;
+  [STRESS_R];
+  STRESS_R;
+  [ESTEEM_R];
+  ESTEEM_R;
+
+  %C#1%
+  [N#1@9.699];
+  [N#2@4.809];
+  [N#3@7.068];
+  [GPA] (GPA1);
+  GPA;
+  [STRESS_R] (STRESS1);
+  STRESS_R;
+  [ESTEEM_R] (ESTEEM1);
+  ESTEEM_R;
+
+  %C#2%
+  [N#1@-0.348];
+  [N#2@3.008];
+  [N#3@0.509];
+  [GPA] (GPA2);
+  GPA;
+  [STRESS_R] (STRESS2);
+  STRESS_R;
+  [ESTEEM_R] (ESTEEM2);
+  ESTEEM_R;
+
+  %C#3%
+  [N#1@1.493];
+  [N#2@0.807];
+  [N#3@4.279];
+  [GPA] (GPA3);
+  GPA;
+  [STRESS_R] (STRESS3);
+  STRESS_R;
+  [ESTEEM_R] (ESTEEM3);
+  ESTEEM_R;
+
+  %C#4%
+  [N#1@-11.152];
+  [N#2@-2.775];
+  [N#3@-2.501];
+  [GPA] (GPA4);
+  GPA;
+  [STRESS_R] (STRESS4);
+  STRESS_R;
+  [ESTEEM_R] (ESTEEM4);
+  ESTEEM_R;
+  MODEL CONSTRAINT:
+  NEW(GPA12 GPA13 GPA14 GPA23 GPA24 GPA34 STRESS12 STRESS13 STRESS14
+          STRESS23 STRESS24 STRESS34 ESTEEM12 ESTEEM13 ESTEEM14
+          ESTEEM23 ESTEEM24 ESTEEM34);
+       GPA12 = GPA1-GPA2;
+       GPA13 = GPA1-GPA3;
+       GPA14 = GPA1-GPA4;
+       GPA23 = GPA2-GPA3;
+       GPA24 = GPA2-GPA4;
+       GPA34 = GPA3-GPA4;
+       STRESS12 = STRESS1-STRESS2;
+       STRESS13 = STRESS1-STRESS3;
+       STRESS14 = STRESS1-STRESS4;
+       STRESS23 = STRESS2-STRESS3;
+       STRESS24 = STRESS2-STRESS4;
+       STRESS34 = STRESS3-STRESS4;
+       ESTEEM12 = ESTEEM1-ESTEEM2;
+       ESTEEM13 = ESTEEM1-ESTEEM3;
+       ESTEEM14 = ESTEEM1-ESTEEM4;
+       ESTEEM23 = ESTEEM2-ESTEEM3;
+       ESTEEM24 = ESTEEM2-ESTEEM4;
+       ESTEEM34 = ESTEEM3-ESTEEM4;
+  MODEL TEST:
+  !0 = GPA1-GPA2;
+       !0 = GPA1-GPA3;
+       !0 = GPA1-GPA4;
+       0 = STRESS1-STRESS2;
+       0 = STRESS2-STRESS3;
+       0 = STRESS3-STRESS4;
+       !0 = ESTEEM1-ESTEEM2;
+       !0 = ESTEEM1-ESTEEM3;
+       !0 = ESTEEM1-ESTEEM4;
+  OUTPUT:
+  tech1 tech8 standardized;
+
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+  FILE = "/Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/3step/stress_step3.da
+*** WARNING in DATA command
+  Statement not terminated by a semicolon:
+  FILE = "/Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/3step/stress_step3.da
+*** WARNING in DATA command
+  Mismatched quotation in FILE option.  A quotation mark will be assumed at
+  the end of the line.
+*** ERROR in DATA command
+  The file specified for the FILE option cannot be found.  Check that this
+  file exists:  /Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/3step/stress_step3.da
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2024 Muthen & Muthen

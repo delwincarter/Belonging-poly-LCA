@@ -1,0 +1,998 @@
+Mplus VERSION 8.11 (Mac)
+MUTHEN & MUTHEN
+05/01/2025   7:41 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+  5-Class LCA for Belonging Variables
+  DATA:
+  FILE = "/Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/enum/belonging.dat";
+
+  VARIABLE:
+  NAMES = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+   MISSING=.;
+   categorical = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+  usevar = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R;
+  missing = all(999);
+  classes = c(5);
+  ANALYSIS:
+
+        estimator = mlr;
+        type = mixture;
+        starts = 1000 100;
+        processors = 10;
+  OUTPUT:
+  sampstat; residual; tech11; tech14;
+  PLOT:
+
+        type = plot3;
+        series = SSAF2R SSAF4R SSAF7 SSAF11 AUS3 AUS2R AUS5 AUS6R(*);
+
+
+
+*** WARNING in OUTPUT command
+  SAMPSTAT option is not available when all outcomes are censored, ordered
+  categorical, unordered categorical (nominal), count or continuous-time
+  survival variables.  Request for SAMPSTAT is ignored.
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+5-Class LCA for Belonging Variables
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         837
+
+Number of dependent variables                                    8
+Number of independent variables                                  0
+Number of continuous latent variables                            0
+Number of categorical latent variables                           1
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   SSAF2R      SSAF4R      SSAF7       SSAF11      AUS3        AUS2R
+   AUS5        AUS6R
+
+Categorical latent variables
+   C
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-06
+    Relative loglikelihood change                        0.100D-06
+    Derivative                                           0.100D-05
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-05
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-05
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Random Starts Specifications
+  Number of initial stage random starts                       1000
+  Number of final stage optimizations                          100
+  Number of initial stage iterations                            10
+  Initial stage convergence criterion                    0.100D+01
+  Random starts scale                                    0.500D+01
+  Random seed for generating random starts                       0
+Link                                                         LOGIT
+
+Input data file(s)
+  /Users/brucecarter/Library/CloudStorage/Box-Box/Belonging-S&D/enum/belonging.d
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+     Number of y missing data patterns           0
+     Number of u missing data patterns           1
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    SSAF2R
+      Category 1    0.239          200.000
+      Category 2    0.123          103.000
+      Category 3    0.638          534.000
+    SSAF4R
+      Category 1    0.142          119.000
+      Category 2    0.134          112.000
+      Category 3    0.724          606.000
+    SSAF7
+      Category 1    0.050           42.000
+      Category 2    0.097           81.000
+      Category 3    0.853          714.000
+    SSAF11
+      Category 1    0.057           48.000
+      Category 2    0.186          156.000
+      Category 3    0.756          633.000
+    AUS3
+      Category 1    0.234          196.000
+      Category 2    0.219          183.000
+      Category 3    0.547          458.000
+    AUS2R
+      Category 1    0.570          477.000
+      Category 2    0.098           82.000
+      Category 3    0.332          278.000
+    AUS5
+      Category 1    0.166          139.000
+      Category 2    0.170          142.000
+      Category 3    0.664          556.000
+    AUS6R
+      Category 1    0.299          250.000
+      Category 2    0.179          150.000
+      Category 3    0.522          437.000
+
+
+RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST LOGLIKELIHOOD VALUES
+
+Final stage loglikelihood values at local maxima, seeds, and initial stage start numbers:
+
+           -4768.098  534864           307
+           -4768.098  595759           997
+           -4768.098  214681           824
+           -4768.098  875667           367
+           -4768.098  22874            588
+           -4768.098  960438           116
+           -4768.098  140849           515
+           -4768.098  642386           662
+           -4768.098  200041           810
+           -4768.098  461687           833
+           -4768.098  752476           614
+           -4768.098  496710           386
+           -4768.345  991329           182
+           -4768.648  137305           379
+           -4768.648  436460           89
+           -4768.648  471398           74
+           -4768.648  97300            640
+           -4768.648  313407           132
+           -4768.648  134830           780
+           -4768.648  347515           24
+           -4768.648  789985           67
+           -4768.648  638977           643
+           -4768.659  915642           40
+           -4768.659  606576           151
+           -4768.659  301717           823
+           -4768.659  879338           309
+           -4768.659  366533           484
+           -4768.661  699810           571
+           -4768.840  94610            884
+           -4768.840  988761           475
+           -4768.840  677062           680
+           -4768.840  823392           479
+           -4769.093  153942           31
+           -4769.093  30098            209
+           -4769.093  483369           270
+           -4769.289  673496           218
+           -4769.305  726744           939
+           -4769.305  193847           354
+
+62 perturbed starting value run(s) did not converge or were rejected in the third stage.
+
+
+
+THE BEST LOGLIKELIHOOD VALUE HAS BEEN REPLICATED.  RERUN WITH AT LEAST TWICE THE
+RANDOM STARTS TO CHECK THAT THE BEST LOGLIKELIHOOD IS STILL OBTAINED AND REPLICATED.
+
+     IN THE OPTIMIZATION, ONE OR MORE LOGIT THRESHOLDS APPROACHED EXTREME VALUES
+     OF -15.000 AND 15.000 AND WERE FIXED TO STABILIZE MODEL ESTIMATION.  THESE
+     VALUES IMPLY PROBABILITIES OF 0 AND 1.  IN THE MODEL RESULTS SECTION, THESE
+     PARAMETERS HAVE 0 STANDARD ERRORS AND 999 IN THE Z-SCORE AND P-VALUE COLUMNS.
+
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       84
+
+Loglikelihood
+
+          H0 Value                       -4768.098
+          H0 Scaling Correction Factor      1.1269
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    9704.195
+          Bayesian (BIC)                 10101.500
+          Sample-Size Adjusted BIC        9834.744
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit for the Binary and Ordered Categorical
+(Ordinal) Outcomes**
+
+          Pearson Chi-Square
+
+          Value                           3226.266
+          Degrees of Freedom                  6463
+          P-Value                           1.0000
+
+          Likelihood Ratio Chi-Square
+
+          Value                           1192.248
+          Degrees of Freedom                  6463
+          P-Value                           1.0000
+
+** Of the 6561 cells in the latent class indicator table, 13
+   were deleted in the calculation of chi-square due to extreme values.
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THE ESTIMATED MODEL
+
+    Latent
+   Classes
+
+       1        292.84845          0.34988
+       2         39.64713          0.04737
+       3        296.18598          0.35387
+       4        105.97616          0.12661
+       5        102.34229          0.12227
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON ESTIMATED POSTERIOR PROBABILITIES
+
+    Latent
+   Classes
+
+       1        292.84845          0.34988
+       2         39.64713          0.04737
+       3        296.18598          0.35387
+       4        105.97616          0.12661
+       5        102.34229          0.12227
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THEIR MOST LIKELY LATENT CLASS MEMBERSHIP
+
+Class Counts and Proportions
+
+    Latent
+   Classes
+
+       1              296          0.35364
+       2               38          0.04540
+       3              297          0.35484
+       4              106          0.12664
+       5              100          0.11947
+
+
+CLASSIFICATION QUALITY
+
+     Entropy                         0.816
+
+
+Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
+by Latent Class (Column)
+
+           1        2        3        4        5
+
+    1   0.883    0.001    0.062    0.021    0.033
+    2   0.005    0.879    0.006    0.016    0.095
+    3   0.060    0.005    0.926    0.000    0.009
+    4   0.033    0.011    0.000    0.896    0.059
+    5   0.100    0.035    0.025    0.042    0.798
+
+
+Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+           1        2        3        4        5
+
+    1   0.892    0.001    0.061    0.012    0.034
+    2   0.004    0.842    0.036    0.030    0.088
+    3   0.062    0.001    0.929    0.000    0.008
+    4   0.058    0.006    0.000    0.896    0.040
+    5   0.096    0.035    0.027    0.061    0.780
+
+
+Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+              1        2        3        4        5
+
+    1      3.260   -3.956    0.570   -1.050    0.000
+    2     -3.051    2.259   -0.902   -1.070    0.000
+    3      2.002   -2.431    4.705   -5.033    0.000
+    4      0.382   -1.967   -7.479    3.116    0.000
+    5     -2.090   -3.095   -3.347   -2.543    0.000
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ Thresholds
+    SSAF2R$1          -2.441      0.345     -7.067      0.000
+    SSAF2R$2          -1.445      0.324     -4.455      0.000
+    SSAF4R$1          -3.808      0.630     -6.043      0.000
+    SSAF4R$2          -2.289      0.498     -4.595      0.000
+    SSAF7$1           -5.197      0.975     -5.330      0.000
+    SSAF7$2           -3.542      0.688     -5.145      0.000
+    SSAF11$1          -8.790     44.508     -0.197      0.843
+    SSAF11$2          -2.606      0.423     -6.159      0.000
+    AUS3$1            -0.685      0.188     -3.642      0.000
+    AUS3$2             0.897      0.198      4.519      0.000
+    AUS2R$1            2.048      0.341      5.998      0.000
+    AUS2R$2            3.474      0.696      4.988      0.000
+    AUS5$1            -1.259      0.197     -6.396      0.000
+    AUS5$2            -0.083      0.154     -0.540      0.589
+    AUS6R$1           -0.167      0.165     -1.013      0.311
+    AUS6R$2            0.867      0.192      4.507      0.000
+
+Latent Class 2
+
+ Thresholds
+    SSAF2R$1           1.558      1.309      1.190      0.234
+    SSAF2R$2           2.588      0.956      2.706      0.007
+    SSAF4R$1           1.024      1.051      0.974      0.330
+    SSAF4R$2           2.552      1.076      2.372      0.018
+    SSAF7$1           -1.166      0.547     -2.132      0.033
+    SSAF7$2           -0.292      0.494     -0.591      0.555
+    SSAF11$1          -0.846      0.576     -1.468      0.142
+    SSAF11$2           0.334      0.598      0.559      0.576
+    AUS3$1           -15.000      0.000    999.000    999.000
+    AUS3$2            -2.818      1.126     -2.503      0.012
+    AUS2R$1           -1.412      0.680     -2.077      0.038
+    AUS2R$2           -1.006      0.540     -1.861      0.063
+    AUS5$1           -15.000      0.000    999.000    999.000
+    AUS5$2           -15.000      0.000    999.000    999.000
+    AUS6R$1           -1.630      0.607     -2.687      0.007
+    AUS6R$2           -1.353      0.565     -2.395      0.017
+
+Latent Class 3
+
+ Thresholds
+    SSAF2R$1          -3.012      0.335     -8.999      0.000
+    SSAF2R$2          -2.133      0.241     -8.852      0.000
+    SSAF4R$1         -15.000      0.000    999.000    999.000
+    SSAF4R$2          -4.183      0.787     -5.314      0.000
+    SSAF7$1          -15.000      0.000    999.000    999.000
+    SSAF7$2          -15.000      0.000    999.000    999.000
+    SSAF11$1          -5.724      1.052     -5.439      0.000
+    SSAF11$2          -2.575      0.268     -9.625      0.000
+    AUS3$1            -4.288      0.700     -6.128      0.000
+    AUS3$2            -2.571      0.343     -7.495      0.000
+    AUS2R$1           -1.570      0.240     -6.532      0.000
+    AUS2R$2           -0.974      0.196     -4.974      0.000
+    AUS5$1            -2.718      0.285     -9.522      0.000
+    AUS5$2            -2.297      0.266     -8.641      0.000
+    AUS6R$1           -3.236      0.414     -7.821      0.000
+    AUS6R$2           -2.123      0.259     -8.196      0.000
+
+Latent Class 4
+
+ Thresholds
+    SSAF2R$1           1.726      0.507      3.404      0.001
+    SSAF2R$2           2.407      0.795      3.029      0.002
+    SSAF4R$1           0.526      0.328      1.604      0.109
+    SSAF4R$2           1.399      0.505      2.769      0.006
+    SSAF7$1           -1.246      0.274     -4.541      0.000
+    SSAF7$2            0.179      0.277      0.646      0.518
+    SSAF11$1          -0.822      0.256     -3.206      0.001
+    SSAF11$2           1.189      0.346      3.436      0.001
+    AUS3$1             1.144      0.399      2.870      0.004
+    AUS3$2             2.380      0.561      4.239      0.000
+    AUS2R$1            4.436      1.984      2.236      0.025
+    AUS2R$2           15.000      0.000    999.000    999.000
+    AUS5$1            -0.112      0.292     -0.384      0.701
+    AUS5$2             0.810      0.284      2.847      0.004
+    AUS6R$1            0.895      0.314      2.846      0.004
+    AUS6R$2            1.670      0.395      4.223      0.000
+
+Latent Class 5
+
+ Thresholds
+    SSAF2R$1          -0.447      0.488     -0.916      0.360
+    SSAF2R$2           1.373      0.495      2.773      0.006
+    SSAF4R$1          -1.623      0.610     -2.662      0.008
+    SSAF4R$2           1.155      0.502      2.299      0.022
+    SSAF7$1           -2.567      0.669     -3.839      0.000
+    SSAF7$2           -0.440      0.545     -0.808      0.419
+    SSAF11$1          -3.596      0.883     -4.074      0.000
+    SSAF11$2           0.291      0.662      0.440      0.660
+    AUS3$1            -1.888      0.515     -3.667      0.000
+    AUS3$2            -0.018      0.351     -0.051      0.960
+    AUS2R$1            0.114      0.442      0.258      0.796
+    AUS2R$2            1.122      0.516      2.172      0.030
+    AUS5$1            -2.795      0.563     -4.962      0.000
+    AUS5$2            -0.434      0.435     -0.997      0.319
+    AUS6R$1           -1.245      0.648     -1.923      0.054
+    AUS6R$2            0.548      0.508      1.078      0.281
+
+Categorical Latent Variables
+
+ Means
+    C#1                1.051      0.375      2.802      0.005
+    C#2               -0.948      0.577     -1.642      0.101
+    C#3                1.063      0.309      3.441      0.001
+    C#4                0.035      0.318      0.110      0.913
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.420E-05
+       (ratio of smallest to largest eigenvalue)
+
+
+RESULTS IN PROBABILITY SCALE
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ SSAF2R
+    Category 1         0.080      0.025      3.147      0.002
+    Category 2         0.111      0.037      3.020      0.003
+    Category 3         0.809      0.050     16.160      0.000
+ SSAF4R
+    Category 1         0.022      0.013      1.622      0.105
+    Category 2         0.070      0.036      1.932      0.053
+    Category 3         0.908      0.042     21.810      0.000
+ SSAF7
+    Category 1         0.006      0.005      1.031      0.302
+    Category 2         0.023      0.018      1.267      0.205
+    Category 3         0.972      0.019     51.609      0.000
+ SSAF11
+    Category 1         0.000      0.007      0.022      0.982
+    Category 2         0.069      0.024      2.811      0.005
+    Category 3         0.931      0.027     34.374      0.000
+ AUS3
+    Category 1         0.335      0.042      7.999      0.000
+    Category 2         0.375      0.033     11.336      0.000
+    Category 3         0.290      0.041      7.094      0.000
+ AUS2R
+    Category 1         0.886      0.035     25.633      0.000
+    Category 2         0.084      0.024      3.512      0.000
+    Category 3         0.030      0.020      1.481      0.139
+ AUS5
+    Category 1         0.221      0.034      6.521      0.000
+    Category 2         0.258      0.030      8.702      0.000
+    Category 3         0.521      0.038     13.552      0.000
+ AUS6R
+    Category 1         0.458      0.041     11.169      0.000
+    Category 2         0.246      0.030      8.102      0.000
+    Category 3         0.296      0.040      7.388      0.000
+
+Latent Class 2
+
+ SSAF2R
+    Category 1         0.826      0.188      4.392      0.000
+    Category 2         0.104      0.160      0.652      0.515
+    Category 3         0.070      0.062      1.124      0.261
+ SSAF4R
+    Category 1         0.736      0.204      3.602      0.000
+    Category 2         0.192      0.183      1.049      0.294
+    Category 3         0.072      0.072      1.002      0.316
+ SSAF7
+    Category 1         0.238      0.099      2.398      0.016
+    Category 2         0.190      0.082      2.307      0.021
+    Category 3         0.572      0.121      4.732      0.000
+ SSAF11
+    Category 1         0.300      0.121      2.479      0.013
+    Category 2         0.283      0.098      2.895      0.004
+    Category 3         0.417      0.146      2.867      0.004
+ AUS3
+    Category 1         0.000      0.000      0.000      1.000
+    Category 2         0.056      0.060      0.941      0.347
+    Category 3         0.944      0.060     15.758      0.000
+ AUS2R
+    Category 1         0.196      0.107      1.830      0.067
+    Category 2         0.072      0.056      1.279      0.201
+    Category 3         0.732      0.106      6.910      0.000
+ AUS5
+    Category 1         0.000      0.000      0.000      1.000
+    Category 2         0.000      0.000      0.000      1.000
+    Category 3         1.000      0.000      0.000      1.000
+ AUS6R
+    Category 1         0.164      0.083      1.971      0.049
+    Category 2         0.042      0.045      0.927      0.354
+    Category 3         0.795      0.092      8.619      0.000
+
+Latent Class 3
+
+ SSAF2R
+    Category 1         0.047      0.015      3.135      0.002
+    Category 2         0.059      0.017      3.480      0.001
+    Category 3         0.894      0.023     39.168      0.000
+ SSAF4R
+    Category 1         0.000      0.000      0.000      1.000
+    Category 2         0.015      0.012      1.290      0.197
+    Category 3         0.985      0.012     84.547      0.000
+ SSAF7
+    Category 1         0.000      0.000      0.000      1.000
+    Category 2         0.000      0.000      0.000      1.000
+    Category 3         1.000      0.000      0.000      1.000
+ SSAF11
+    Category 1         0.003      0.003      0.953      0.340
+    Category 2         0.067      0.017      3.901      0.000
+    Category 3         0.929      0.018     52.830      0.000
+ AUS3
+    Category 1         0.014      0.009      1.449      0.147
+    Category 2         0.057      0.020      2.890      0.004
+    Category 3         0.929      0.023     41.038      0.000
+ AUS2R
+    Category 1         0.172      0.034      5.027      0.000
+    Category 2         0.102      0.021      4.841      0.000
+    Category 3         0.726      0.039     18.632      0.000
+ AUS5
+    Category 1         0.062      0.017      3.734      0.000
+    Category 2         0.029      0.014      2.161      0.031
+    Category 3         0.909      0.022     41.165      0.000
+ AUS6R
+    Category 1         0.038      0.015      2.512      0.012
+    Category 2         0.069      0.019      3.586      0.000
+    Category 3         0.893      0.025     36.121      0.000
+
+Latent Class 4
+
+ SSAF2R
+    Category 1         0.849      0.065     13.053      0.000
+    Category 2         0.068      0.036      1.903      0.057
+    Category 3         0.083      0.060      1.372      0.170
+ SSAF4R
+    Category 1         0.628      0.077      8.215      0.000
+    Category 2         0.174      0.048      3.634      0.000
+    Category 3         0.198      0.080      2.468      0.014
+ SSAF7
+    Category 1         0.223      0.048      4.692      0.000
+    Category 2         0.321      0.058      5.554      0.000
+    Category 3         0.455      0.069      6.627      0.000
+ SSAF11
+    Category 1         0.305      0.054      5.613      0.000
+    Category 2         0.461      0.064      7.151      0.000
+    Category 3         0.233      0.062      3.770      0.000
+ AUS3
+    Category 1         0.758      0.073     10.384      0.000
+    Category 2         0.157      0.051      3.061      0.002
+    Category 3         0.085      0.044      1.946      0.052
+ AUS2R
+    Category 1         0.988      0.023     43.076      0.000
+    Category 2         0.012      0.023      0.510      0.610
+    Category 3         0.000      0.000      0.000      1.000
+ AUS5
+    Category 1         0.472      0.073      6.481      0.000
+    Category 2         0.220      0.058      3.792      0.000
+    Category 3         0.308      0.061      5.081      0.000
+ AUS6R
+    Category 1         0.710      0.065     10.964      0.000
+    Category 2         0.132      0.049      2.698      0.007
+    Category 3         0.158      0.053      3.005      0.003
+
+Latent Class 5
+
+ SSAF2R
+    Category 1         0.390      0.116      3.362      0.001
+    Category 2         0.408      0.085      4.806      0.000
+    Category 3         0.202      0.080      2.531      0.011
+ SSAF4R
+    Category 1         0.165      0.084      1.964      0.050
+    Category 2         0.596      0.077      7.761      0.000
+    Category 3         0.240      0.092      2.618      0.009
+ SSAF7
+    Category 1         0.071      0.044      1.611      0.107
+    Category 2         0.320      0.101      3.168      0.002
+    Category 3         0.608      0.130      4.683      0.000
+ SSAF11
+    Category 1         0.027      0.023      1.164      0.244
+    Category 2         0.546      0.151      3.614      0.000
+    Category 3         0.428      0.162      2.640      0.008
+ AUS3
+    Category 1         0.132      0.059      2.237      0.025
+    Category 2         0.364      0.075      4.874      0.000
+    Category 3         0.504      0.088      5.750      0.000
+ AUS2R
+    Category 1         0.529      0.110      4.799      0.000
+    Category 2         0.226      0.068      3.341      0.001
+    Category 3         0.246      0.096      2.567      0.010
+ AUS5
+    Category 1         0.058      0.031      1.884      0.060
+    Category 2         0.336      0.106      3.153      0.002
+    Category 3         0.607      0.104      5.845      0.000
+ AUS6R
+    Category 1         0.224      0.112      1.989      0.047
+    Category 2         0.410      0.116      3.532      0.000
+    Category 3         0.366      0.118      3.106      0.002
+
+
+LATENT CLASS INDICATOR ODDS RATIOS FOR THE LATENT CLASSES
+
+                                                95% C.I.
+                    Estimate       S.E.  Lower 2.5% Upper 2.5%
+
+Latent Class 1 Compared to Latent Class 2
+
+ SSAF2R
+    Category > 1      54.550     75.036      3.680    808.519
+    Category > 2      56.411     56.994      7.787    408.677
+ SSAF4R
+    Category > 1     125.370    155.516     11.023   1425.902
+    Category > 2     126.534    150.991     12.203   1312.049
+ SSAF7
+    Category > 1      56.309     61.436      6.635    477.861
+    Category > 2      25.783     22.608      4.623    143.794
+ SSAF11
+    Category > 1    2817.083  *********      0.000  *********
+    Category > 2      18.921     14.379      4.266     83.910
+ AUS3
+    Category > 1       0.000      0.000      0.000      0.000
+    Category > 2       0.024      0.028      0.003      0.235
+ AUS2R
+    Category > 1       0.031      0.024      0.007      0.143
+    Category > 2       0.011      0.010      0.002      0.061
+ AUS5
+    Category > 1       0.000      0.000      0.000      0.000
+    Category > 2       0.000      0.000      0.000      0.000
+ AUS6R
+    Category > 1       0.232      0.143      0.069      0.778
+    Category > 2       0.109      0.063      0.035      0.339
+
+Latent Class 1 Compared to Latent Class 3
+
+ SSAF2R
+    Category > 1       0.565      0.285      0.210      1.519
+    Category > 2       0.503      0.204      0.227      1.114
+ SSAF4R
+    Category > 1       0.000      0.000      0.000      0.000
+    Category > 2       0.150      0.135      0.026      0.872
+ SSAF7
+    Category > 1       0.000      0.000      0.000      0.000
+    Category > 2       0.000      0.000      0.000      0.000
+ SSAF11
+    Category > 1      21.458    955.696      0.000  *********
+    Category > 2       1.031      0.532      0.375      2.837
+ AUS3
+    Category > 1       0.027      0.020      0.006      0.115
+    Category > 2       0.031      0.012      0.015      0.066
+ AUS2R
+    Category > 1       0.027      0.010      0.013      0.057
+    Category > 2       0.012      0.008      0.003      0.045
+ AUS5
+    Category > 1       0.232      0.083      0.115      0.469
+    Category > 2       0.109      0.033      0.060      0.199
+ AUS6R
+    Category > 1       0.046      0.020      0.020      0.109
+    Category > 2       0.050      0.015      0.028      0.092
+
+Latent Class 1 Compared to Latent Class 4
+
+ SSAF2R
+    Category > 1      64.516     36.004     21.609    192.622
+    Category > 2      47.094     39.836      8.973    247.165
+ SSAF4R
+    Category > 1      76.192     53.509     19.235    301.796
+    Category > 2      39.967     28.405      9.925    160.946
+ SSAF7
+    Category > 1      51.983     52.046      7.305    369.926
+    Category > 2      41.292     30.687      9.622    177.199
+ SSAF11
+    Category > 1    2886.056  *********      0.000  *********
+    Category > 2      44.473     24.148     15.343    128.912
+ AUS3
+    Category > 1       6.227      3.064      2.374     16.335
+    Category > 2       4.406      2.762      1.290     15.052
+ AUS2R
+    Category > 1      10.893     22.673      0.184    644.046
+    Category > 2   *********      0.000  *********  *********
+ AUS5
+    Category > 1       3.149      1.240      1.455      6.812
+    Category > 2       2.442      0.828      1.256      4.747
+ AUS6R
+    Category > 1       2.893      1.058      1.413      5.924
+    Category > 2       2.233      1.023      0.910      5.481
+
+Latent Class 1 Compared to Latent Class 5
+
+ SSAF2R
+    Category > 1       7.346      4.334      2.312     23.346
+    Category > 2      16.748      9.980      5.209     53.850
+ SSAF4R
+    Category > 1       8.889      8.065      1.502     52.618
+    Category > 2      31.297     19.959      8.967    109.232
+ SSAF7
+    Category > 1      13.874     17.235      1.216    158.344
+    Category > 2      22.230     17.751      4.647    106.332
+ SSAF11
+    Category > 1     180.147   8040.693      0.000  *********
+    Category > 2      18.125     13.491      4.214     77.962
+ AUS3
+    Category > 1       0.300      0.168      0.101      0.896
+    Category > 2       0.401      0.176      0.169      0.948
+ AUS2R
+    Category > 1       0.145      0.086      0.045      0.466
+    Category > 2       0.095      0.093      0.014      0.642
+ AUS5
+    Category > 1       0.215      0.129      0.067      0.695
+    Category > 2       0.704      0.352      0.265      1.875
+ AUS6R
+    Category > 1       0.340      0.241      0.085      1.360
+    Category > 2       0.727      0.434      0.226      2.344
+
+Latent Class 2 Compared to Latent Class 3
+
+ SSAF2R
+    Category > 1       0.010      0.014      0.001      0.145
+    Category > 2       0.009      0.009      0.001      0.064
+ SSAF4R
+    Category > 1       0.000      0.000      0.000      0.000
+    Category > 2       0.001      0.002      0.000      0.016
+ SSAF7
+    Category > 1       0.000      0.000      0.000      0.000
+    Category > 2       0.000      0.000      0.000      0.000
+ SSAF11
+    Category > 1       0.008      0.009      0.001      0.079
+    Category > 2       0.054      0.037      0.015      0.204
+ AUS3
+    Category > 1   44905.629      0.000  44905.633  44905.633
+    Category > 2       1.280      1.510      0.127     12.924
+ AUS2R
+    Category > 1       0.854      0.617      0.207      3.517
+    Category > 2       1.032      0.596      0.333      3.200
+ AUS5
+    Category > 1   *********      0.000  *********  *********
+    Category > 2   *********      0.000  *********  *********
+ AUS6R
+    Category > 1       0.201      0.150      0.047      0.865
+    Category > 2       0.463      0.288      0.137      1.566
+
+Latent Class 2 Compared to Latent Class 4
+
+ SSAF2R
+    Category > 1       1.183      1.620      0.081     17.327
+    Category > 2       0.835      0.995      0.081      8.623
+ SSAF4R
+    Category > 1       0.608      0.658      0.073      5.071
+    Category > 2       0.316      0.375      0.031      3.243
+ SSAF7
+    Category > 1       0.923      0.565      0.278      3.063
+    Category > 2       1.602      0.875      0.549      4.673
+ SSAF11
+    Category > 1       1.024      0.680      0.279      3.760
+    Category > 2       2.351      1.516      0.664      8.324
+ AUS3
+    Category > 1   *********      0.000  *********  *********
+    Category > 2     180.854    217.890     17.053   1918.042
+ AUS2R
+    Category > 1     346.410    717.559      5.975  20082.350
+    Category > 2   *********      0.000  *********  *********
+ AUS5
+    Category > 1   *********      0.000  *********  *********
+    Category > 2   *********      0.000  *********  *********
+ AUS6R
+    Category > 1      12.493      8.188      3.458     45.138
+    Category > 2      20.558     14.127      5.346     79.054
+
+Latent Class 2 Compared to Latent Class 5
+
+ SSAF2R
+    Category > 1       0.135      0.221      0.005      3.372
+    Category > 2       0.297      0.370      0.026      3.422
+ SSAF4R
+    Category > 1       0.071      0.103      0.004      1.231
+    Category > 2       0.247      0.313      0.021      2.951
+ SSAF7
+    Category > 1       0.246      0.245      0.035      1.728
+    Category > 2       0.862      0.758      0.154      4.834
+ SSAF11
+    Category > 1       0.064      0.076      0.006      0.648
+    Category > 2       0.958      1.076      0.106      8.663
+ AUS3
+    Category > 1   *********      0.000  *********  *********
+    Category > 2      16.448     18.822      1.746    154.951
+ AUS2R
+    Category > 1       4.598      4.001      0.836     25.307
+    Category > 2       8.395      6.850      1.696     41.549
+ AUS5
+    Category > 1   *********      0.000  *********  *********
+    Category > 2   *********      0.000  *********  *********
+ AUS6R
+    Category > 1       1.469      1.514      0.195     11.078
+    Category > 2       6.692      5.610      1.294     34.605
+
+Latent Class 3 Compared to Latent Class 4
+
+ SSAF2R
+    Category > 1     114.176     71.122     33.678    387.087
+    Category > 2      93.652     79.458     17.754    493.995
+ SSAF4R
+    Category > 1   *********      0.000  *********  *********
+    Category > 2     265.620    258.355     39.475   1787.290
+ SSAF7
+    Category > 1   *********      0.000  *********  *********
+    Category > 2   *********      0.000  *********  *********
+ SSAF11
+    Category > 1     134.498    146.030     16.015   1129.574
+    Category > 2      43.134     19.112     18.099    102.798
+ AUS3
+    Category > 1     228.524    181.112     48.341   1080.304
+    Category > 2     141.240     92.910     38.906    512.746
+ AUS2R
+    Category > 1     405.789    806.650      8.245  19970.871
+    Category > 2   *********      0.000  *********  *********
+ AUS5
+    Category > 1      13.543      5.608      6.016     30.491
+    Category > 2      22.339      8.678     10.433     47.834
+ AUS6R
+    Category > 1      62.261     32.908     22.096    175.439
+    Category > 2      44.395     20.131     18.253    107.976
+
+Latent Class 3 Compared to Latent Class 5
+
+ SSAF2R
+    Category > 1      13.000      7.550      4.165     40.578
+    Category > 2      33.305     16.974     12.266     90.432
+ SSAF4R
+    Category > 1   *********      0.000  *********  *********
+    Category > 2     208.004    172.525     40.930   1057.060
+ SSAF7
+    Category > 1   *********      0.000  *********  *********
+    Category > 2   *********      0.000  *********  *********
+ SSAF11
+    Category > 1       8.395     11.595      0.560    125.795
+    Category > 2      17.579     12.120      4.551     67.902
+ AUS3
+    Category > 1      11.025      9.725      1.957     62.123
+    Category > 2      12.846      6.273      4.932     33.454
+ AUS2R
+    Category > 1       5.387      2.847      1.912     15.176
+    Category > 2       8.135      4.618      2.674     24.749
+ AUS5
+    Category > 1       0.926      0.581      0.271      3.164
+    Category > 2       6.445      3.397      2.293     18.109
+ AUS6R
+    Category > 1       7.323      5.643      1.617     33.162
+    Category > 2      14.452      8.510      4.557     45.830
+
+Latent Class 4 Compared to Latent Class 5
+
+ SSAF2R
+    Category > 1       0.114      0.089      0.025      0.523
+    Category > 2       0.356      0.361      0.049      2.602
+ SSAF4R
+    Category > 1       0.117      0.087      0.027      0.507
+    Category > 2       0.783      0.603      0.173      3.547
+ SSAF7
+    Category > 1       0.267      0.205      0.059      1.199
+    Category > 2       0.538      0.375      0.138      2.106
+ SSAF11
+    Category > 1       0.062      0.057      0.011      0.369
+    Category > 2       0.408      0.341      0.079      2.103
+ AUS3
+    Category > 1       0.048      0.031      0.014      0.169
+    Category > 2       0.091      0.056      0.027      0.301
+ AUS2R
+    Category > 1       0.013      0.028      0.000      0.796
+    Category > 2       0.000      0.000      0.000      0.000
+ AUS5
+    Category > 1       0.068      0.045      0.019      0.245
+    Category > 2       0.288      0.151      0.103      0.804
+ AUS6R
+    Category > 1       0.118      0.093      0.025      0.557
+    Category > 2       0.326      0.224      0.084      1.255
+
+
+RESIDUAL OUTPUT
+
+
+     RESIDUAL OUTPUT IS NOT AVAILABLE FOR THIS MODEL.  ADDITIONAL OUTPUT FOR
+     CATEGORICAL, COUNT, AND NOMINAL VARIABLES MAY BE AVAILABLE USING TECH10.
+
+
+TECHNICAL 11 OUTPUT
+
+     Random Starts Specifications for the k-1 Class Analysis Model
+        Number of initial stage random starts                1000
+        Number of final stage optimizations                   100
+
+
+
+     VUONG-LO-MENDELL-RUBIN LIKELIHOOD RATIO TEST FOR 4 (H0) VERSUS 5 CLASSES
+
+          H0 Loglikelihood Value                        -4803.396
+          2 Times the Loglikelihood Difference             70.597
+          Difference in the Number of Parameters               17
+          Mean                                             63.829
+          Standard Deviation                               57.732
+          P-Value                                          0.3272
+
+     LO-MENDELL-RUBIN ADJUSTED LRT TEST
+
+          Value                                            69.986
+          P-Value                                          0.3311
+
+
+TECHNICAL 14 OUTPUT
+
+     Random Starts Specifications for the k-1 Class Analysis Model
+        Number of initial stage random starts                1000
+        Number of final stage optimizations                   100
+
+     Random Starts Specification for the k-1 Class Model for Generated Data
+        Number of initial stage random starts                   0
+        Number of final stage optimizations for the
+           initial stage random starts                          0
+     Random Starts Specification for the k Class Model for Generated Data
+        Number of initial stage random starts                  40
+        Number of final stage optimizations                     8
+     Number of bootstrap draws requested                   Varies
+
+
+     PARAMETRIC BOOTSTRAPPED LIKELIHOOD RATIO TEST FOR 4 (H0) VERSUS 5 CLASSES
+
+          H0 Loglikelihood Value                        -4803.396
+          2 Times the Loglikelihood Difference             70.597
+          Difference in the Number of Parameters               17
+          Approximate P-Value                              0.0000
+          Successful Bootstrap Draws                           20
+
+     WARNING:  OF THE 20 BOOTSTRAP DRAWS, 11 DRAWS HAD BOTH A SMALLER LRT VALUE THAN THE
+     OBSERVED LRT VALUE AND NOT A REPLICATED BEST LOGLIKELIHOOD VALUE FOR THE 5-CLASS MODEL.
+     THIS MEANS THAT THE P-VALUE MAY NOT BE TRUSTWORTHY DUE TO LOCAL MAXIMA.
+     INCREASE THE NUMBER OF RANDOM STARTS USING THE LRTSTARTS OPTION.
+
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+  Sample proportions and estimated probabilities
+
+     Beginning Time:  19:41:11
+        Ending Time:  19:41:23
+       Elapsed Time:  00:00:12
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2024 Muthen & Muthen
