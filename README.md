@@ -67,7 +67,7 @@ All code is written in `R` using [Quarto](https://quarto.org/). Analysis assumes
 
 ---
 
-## 📚 Citation
+## 📚 Source
 
 Smaranda Ioana Lawrie¹*†, Delwin B. Carter²†,  
 Karen Nylund-Gibson², and Heejung S. Kim³⁴*  
