@@ -63,7 +63,7 @@ library(tidyr)
 library(haven)
 ```
 
-### **Latent Class Analysis Model Visualization of Social and Academic Belonging**
+## **Latent Class Analysis Model Visualization of Social and Academic Belonging**
 
 This section presents a directed graph to visualize the Latent Class Analysis (LCA) model, illustrating how polytomous social and academic belonging indicators, covariates (e.g., gender, ethnicity), and distal outcomes (GPA, self-esteem, stress) are linked. The diagram clarifies the structure of the LCA model, helping researchers understand how latent classes are formed from categorical data and how they relate to key variables in the context of university student experiences.
 
@@ -426,6 +426,7 @@ Save table
 
 ```{r}
 #| label: "save-sample-table"
+#| eval: false
 #| echo: false
 #| message: false
 #| warning: false
@@ -658,6 +659,7 @@ Save warnings table
 
 ```{r,eval=FALSE}
 #| label: "save-warnings"
+#| eval: false
 #| echo: false
 #| message: false
 #| warning: false
@@ -718,6 +720,7 @@ Save the Error Table
 
 ```{r}
 #| label: "save-errors"
+#| eval: false
 #| message: false
 #| warning: false
 #| echo: false
@@ -769,6 +772,7 @@ Save convergence table
 
 ```{r, eval = FALSE}
 #| label: "save-convergence-table"
+#| eval: false
 #| echo: true
 #| message: false
 #| warning: false
@@ -816,6 +820,7 @@ Save Tables
 
 ```{r}
 #| label: "save-ll-replication-table"
+#| eval: false
 #| echo: true
 #| message: false
 #| warning: false
@@ -984,6 +989,7 @@ Save LCA fit Table
 
 ```{r, eval=FALSE}
 #| label: "save-lca-final-fit-table"
+#| eval: false
 #| echo: true
 #| message: false
 #| warning: false
